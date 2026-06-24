@@ -118,6 +118,42 @@ const TRAINER_MODES = [
   }
 ];
 
+const SUBJECT_LAUNCHERS = [
+  {
+    subject: "math",
+    icon: "🧮",
+    title: "Математика",
+    text: "Разогреть счет, таблицу умножения и задачи до легкости.",
+    note: "Сегодня хорошо подойдет 5 минут счета.",
+    actions: [
+      { label: "Счет до 100", action: "fast100" },
+      { label: "Таблица", action: "multiply", variant: "hard" }
+    ]
+  },
+  {
+    subject: "russian",
+    icon: "🔎",
+    title: "Русский",
+    text: "Расследовать слова, буквы, звуки и словарные хитрости.",
+    note: "Можно начать с детектива слов.",
+    actions: [
+      { label: "Детектив слов", action: "wordDetective" },
+      { label: "Словарные", action: "dictionary" }
+    ]
+  },
+  {
+    subject: "reading",
+    icon: "📖",
+    title: "Чтение",
+    text: "Поймать главную мысль, порядок событий и точные детали.",
+    note: "Короткий текст, но внимательные глаза.",
+    actions: [
+      { label: "Сыщик", action: "readingQuest" },
+      { label: "Огонек дня", action: "daily" }
+    ]
+  }
+];
+
 const state = loadState();
 let session = null;
 
@@ -128,6 +164,8 @@ const streakDays = document.querySelector("#streakDays");
 const streakFlame = document.querySelector("#streakFlame");
 const todayStatus = document.querySelector("#todayStatus");
 const todayFocus = document.querySelector("#todayFocus");
+const subjectLaunchGrid = document.querySelector("#subjectLaunchGrid");
+const subjectLaunch = document.querySelector(".subject-launch");
 const todayGuideCard = document.querySelector("#todayGuideCard");
 const trainerGuideCard = document.querySelector("#trainerGuideCard");
 const startSessionBtn = document.querySelector("#startSessionBtn");
@@ -220,6 +258,14 @@ function render() {
 }
 
 function renderToday() {
+  const trainingActive = Boolean(session);
+  const finishVisible = !finishPanel.classList.contains("hidden");
+  const focusMode = trainingActive || finishVisible;
+  startSessionBtn.closest(".today-card").classList.toggle("hidden", focusMode);
+  subjectLaunch.classList.toggle("hidden", focusMode);
+  todayGuideCard.classList.toggle("hidden", focusMode);
+  questPanel.classList.toggle("hidden", !trainingActive);
+
   const today = dateKey(new Date());
   const todaysSessions = state.dailySessions.filter((item) => item.date === today);
   if (todaysSessions.length) {
@@ -231,7 +277,52 @@ function renderToday() {
     todayFocus.textContent = "10 заданий: математика, русский, чтение и повтор ошибок.";
     startSessionBtn.textContent = "Зажечь огонек";
   }
+  renderSubjectLaunchers();
   renderGuide(todayGuideCard, "today");
+}
+
+function renderSubjectLaunchers() {
+  subjectLaunchGrid.innerHTML = "";
+  const dayBalance = getSubjectDayBalance(7);
+  SUBJECT_LAUNCHERS.forEach((launcher) => {
+    const subject = SUBJECTS[launcher.subject];
+    const goal = WEEKLY_SUBJECT_GOALS[launcher.subject] || 0;
+    const done = dayBalance[launcher.subject] || 0;
+    const progress = goal ? Math.min(100, Math.round((done / goal) * 100)) : 0;
+    const card = document.createElement("article");
+    card.className = "subject-card";
+    card.style.setProperty("--subject-color", subject.color);
+    card.innerHTML = `
+      <div class="subject-card__top">
+        <div class="subject-card__icon">${launcher.icon}</div>
+        <div>
+          <p class="eyebrow">${subject.label}</p>
+          <h3>${launcher.title}</h3>
+        </div>
+      </div>
+      <p>${launcher.text}</p>
+      <div class="subject-card__meter" aria-label="${subject.label}: ${done} из ${goal} дней"><span style="width:${progress}%"></span></div>
+      <div class="subject-card__note">${launcher.note} ${goal ? `Неделя: ${done}/${goal}.` : ""}</div>
+      <div class="subject-card__actions">
+        ${launcher.actions.map((item, index) => `
+          <button class="${index === 0 ? "subject-action" : "subject-action subject-action--soft"}" data-subject-action="${item.action}" data-subject-variant="${item.variant || ""}">
+            ${item.label}
+          </button>
+        `).join("")}
+      </div>
+    `;
+    card.querySelectorAll("[data-subject-action]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const action = button.dataset.subjectAction;
+        if (action === "daily") {
+          startSession();
+        } else {
+          startTrainer(action, button.dataset.subjectVariant || "");
+        }
+      });
+    });
+    subjectLaunchGrid.append(card);
+  });
 }
 
 function renderTrainers() {
@@ -499,6 +590,8 @@ function startSession(options = {}) {
 
   showView("today");
   startSessionBtn.closest(".today-card").classList.add("hidden");
+  subjectLaunch.classList.add("hidden");
+  todayGuideCard.classList.add("hidden");
   finishPanel.classList.add("hidden");
   questPanel.classList.remove("hidden");
   renderQuestion();
