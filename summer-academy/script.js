@@ -13,6 +13,12 @@ const SUBJECTS = {
   world: { label: "Окружающий мир", icon: "🌿", color: "#f6b443" }
 };
 
+const WEEKLY_SUBJECT_GOALS = {
+  math: 3,
+  russian: 3,
+  reading: 2
+};
+
 const SKILLS = {
   numbers100: { subject: "math", title: "Числа до 100", description: "Сравнение, десятки и единицы" },
   addSub100: { subject: "math", title: "Сложение и вычитание", description: "Устные и письменные вычисления" },
@@ -101,6 +107,14 @@ const TRAINER_MODES = [
     title: "Игровая комната",
     description: "Мини-ребусы, собери слово и словесные загадки.",
     chips: ["игра", "ребусы", "кроссвордный дух"]
+  },
+  {
+    id: "readingQuest",
+    subject: "reading",
+    icon: "📖",
+    title: "Читательский сыщик",
+    description: "Короткие тексты, главная мысль, порядок событий и точные ответы.",
+    chips: ["смысл", "внимание", "без спешки"]
   }
 ];
 
@@ -277,6 +291,24 @@ function renderGuide(container, place) {
 
 function getGuideSuggestion() {
   const balance = getSubjectBalance(7);
+  const dayBalance = getSubjectDayBalance(7);
+  const weekGap = getWeeklySubjectGap(dayBalance);
+  if (weekGap) {
+    const absentDays = getDaysSinceSubject(weekGap.subject);
+    let absentLine = `${SUBJECTS[weekGap.subject].label} еще ждет первого визита на этой неделе.`;
+    if (absentDays === 0) {
+      absentLine = `${SUBJECTS[weekGap.subject].label} сегодня уже была, можно добавить еще один короткий подход.`;
+    } else if (absentDays !== null) {
+      absentLine = `${SUBJECTS[weekGap.subject].label} не появлялась ${absentDays} ${dayWord(absentDays)}.`;
+    }
+    return {
+      title: getSubjectGuideTitle(weekGap.subject),
+      text: `${absentLine} Для ровного маршрута хватит короткой тренировки.`,
+      action: subjectToTrainerAction(weekGap.subject),
+      button: getSubjectGuideButton(weekGap.subject)
+    };
+  }
+
   const missing = ["math", "russian", "reading"].find((subject) => balance[subject] === 0);
   if (missing === "math") {
     return {
@@ -297,9 +329,9 @@ function getGuideSuggestion() {
   if (missing === "reading") {
     return {
       title: "Книжная тропинка зовет",
-      text: "В огоньке дня есть задания на понимание текста, чтобы мысли становились цепкими.",
-      action: "daily",
-      button: "Зажечь огонек дня"
+      text: "Понимание текста помогает ловить главную мысль, порядок событий и точные детали.",
+      action: "readingQuest",
+      button: "Открыть читательского сыщика"
     };
   }
 
@@ -334,7 +366,7 @@ function getGuideSuggestion() {
 
   return {
     title: "Маршрут выглядит ровно",
-    text: "Можно выбрать любимую комнату: быстрый счет, словарные слова или веселые ребусы.",
+    text: "Можно выбрать любимую комнату: быстрый счет, словарные слова, читательский сыщик или веселые ребусы.",
     action: "playroom",
     button: "На веселую перемену"
   };
@@ -353,10 +385,68 @@ function getSubjectBalance(daysBack) {
   return balance;
 }
 
+function getSubjectDayBalance(daysBack) {
+  const since = new Date();
+  since.setDate(since.getDate() - daysBack + 1);
+  since.setHours(0, 0, 0, 0);
+  const days = { math: new Set(), russian: new Set(), reading: new Set(), world: new Set() };
+  state.attempts.forEach((attempt) => {
+    if (new Date(attempt.timestamp) >= since && days[attempt.subject]) {
+      days[attempt.subject].add(attempt.date || dateKey(new Date(attempt.timestamp)));
+    }
+  });
+  return Object.fromEntries(Object.entries(days).map(([subject, values]) => [subject, values.size]));
+}
+
+function getWeeklySubjectGap(dayBalance) {
+  return Object.entries(WEEKLY_SUBJECT_GOALS)
+    .map(([subject, goal]) => ({ subject, goal, days: dayBalance[subject] || 0, gap: goal - (dayBalance[subject] || 0) }))
+    .filter((item) => item.gap > 0)
+    .sort((a, b) => b.gap - a.gap || b.goal - a.goal)[0] || null;
+}
+
+function getDaysSinceSubject(subject) {
+  const attempts = state.attempts
+    .filter((attempt) => attempt.subject === subject)
+    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  if (!attempts.length) return null;
+  const last = new Date(attempts[0].timestamp);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  last.setHours(0, 0, 0, 0);
+  return Math.round((today - last) / 86400000);
+}
+
+function subjectToTrainerAction(subject) {
+  if (subject === "math") return "fast100";
+  if (subject === "russian") return "wordDetective";
+  if (subject === "reading") return "readingQuest";
+  return "daily";
+}
+
+function getSubjectGuideTitle(subject) {
+  const titles = {
+    math: "Числовой маяк просит внимания",
+    russian: "Слова зовут на расследование",
+    reading: "Книжная тропинка ждет сыщика"
+  };
+  return titles[subject] || "Маршрут просит маленький шаг";
+}
+
+function getSubjectGuideButton(subject) {
+  const buttons = {
+    math: "5 минут счета",
+    russian: "Открыть детектив слов",
+    reading: "Потренировать чтение"
+  };
+  return buttons[subject] || "Зажечь огонек";
+}
+
 function skillToTrainerAction(skillId) {
   if (["addSub100", "numbers100", "measures", "orderActions"].includes(skillId)) return "fast100";
   if (skillId === "multiplication50") return "multiply";
   if (skillId === "dictionaryWords") return "dictionary";
+  if (skillId === "readingMeaning") return "readingQuest";
   if (["wordLogic", "soundLetters", "spellingPairs", "unstressedVowels", "consonants", "separators", "prepositions"].includes(skillId)) return "wordDetective";
   return "daily";
 }
@@ -454,7 +544,8 @@ function buildTrainerTasks(modeId, variant) {
     multiply: () => Array.from({ length: 12 }, () => makeMultiplicationTask(variant)),
     dictionary: () => Array.from({ length: 10 }, () => sample([makeDictionaryTask, makeDictionaryMissingTask])()),
     wordDetective: () => Array.from({ length: 10 }, () => sample([makeOddWordTask, makeLetterSwapTask, makeSoundLettersTask, makeStressTask])()),
-    playroom: () => Array.from({ length: 8 }, () => sample([makeMiniRebusTask, makeBuildWordTask, makeOddWordTask, makeDictionaryMissingTask])())
+    playroom: () => Array.from({ length: 8 }, () => sample([makeMiniRebusTask, makeBuildWordTask, makeOddWordTask, makeDictionaryMissingTask])()),
+    readingQuest: () => Array.from({ length: 8 }, () => makeReadingTask())
   };
   return (builders[modeId] || builders.fast100)();
 }
@@ -635,9 +726,9 @@ function finishSession() {
   const slowCount = session.results.filter((item) => item.speedStatus === "slow").length;
   const fastCount = session.results.filter((item) => item.speedStatus === "fast").length;
   const speedLine = fastCount
-    ? ` Быстрых ответов сегодня: ${fastCount}.`
+    ? ` Ответов, которые уже идут легко: ${fastCount}.`
     : slowCount
-      ? " Несколько верных ответов еще хотят стать легче и быстрее."
+      ? " Несколько верных ответов уже получились, теперь будем делать их легче."
       : "";
   finishText.textContent = mistakes
     ? `${POSITIVE_LINES[correct % POSITIVE_LINES.length]} Лучше всего сегодня: ${bestSkill}. ${mistakes} задания вернутся для доброго повторения.${speedLine} ${sample(ACADEMY_JOKES)}`
@@ -745,6 +836,7 @@ function renderKidReport() {
   const best = topSkills(weekAttempts, true);
   const review = topSkills(weekAttempts, false);
   const improvement = getImprovementSkill();
+  const subjectPlan = getWeeklySubjectPlan();
 
   if (!weekAttempts.length) {
     kidReport.innerHTML = `<div class="empty-state">Недельный отчет появится после первой тренировки.</div>`;
@@ -770,6 +862,10 @@ function renderKidReport() {
       <p>${review.length ? review.map(formatSkillName).join(", ") : "Сложных зон пока немного. Отличный старт."}</p>
     </div>
     <div class="report-card">
+      <strong>Маршрут на неделю</strong>
+      <p>${formatKidSubjectPlan(subjectPlan)}</p>
+    </div>
+    <div class="report-card">
       <strong>Медаль недели</strong>
       <p>${getWeeklyMedal(weekAttempts)}</p>
     </div>
@@ -789,6 +885,7 @@ function renderParentReport() {
   const accuracy = Math.round((correct / total) * 100);
   const days = uniqueDays(weekSessions).length;
   const minutes = weekSessions.reduce((sum, item) => sum + item.minutes, 0);
+  const subjectPlan = getWeeklySubjectPlan();
   const skillRows = Object.entries(groupBySkill(weekAttempts))
     .map(([skillId, items]) => {
       const right = items.filter((item) => item.correct).length;
@@ -814,9 +911,13 @@ function renderParentReport() {
       <strong>Где стоит поработать</strong>
       <p>${topSkills(weekAttempts, false).map(formatSkillName).join(", ") || "Явных сложностей пока нет."}</p>
     </div>
+    <div class="stat-card">
+      <strong>Баланс недели</strong>
+      <p>${formatParentSubjectPlan(subjectPlan)}</p>
+    </div>
     <table class="parent-table">
       <thead>
-        <tr><th>Навык</th><th>Заданий</th><th>Верно</th><th>С подсказкой</th><th>Быстро</th><th>Медленно</th><th>Среднее время</th><th>Точность</th></tr>
+        <tr><th>Навык</th><th>Заданий</th><th>Верно</th><th>С подсказкой</th><th>Легко</th><th>Нужна легкость</th><th>Среднее время</th><th>Точность</th></tr>
       </thead>
       <tbody>
         ${skillRows.map((row) => `
@@ -1132,25 +1233,48 @@ function makeReadingTask() {
   const texts = [
     {
       text: "Маша посадила у окна фасоль. Каждый день она поливала росток и записывала, как он меняется. Через неделю появился зеленый лист.",
-      question: "Что помогло ростку вырасти?",
-      answer: "уход Маши",
-      choices: ["уход Маши", "сильный ветер", "новая тетрадь"]
+      tasks: [
+        ["Что помогло ростку вырасти?", "уход Маши", ["уход Маши", "сильный ветер", "новая тетрадь"]],
+        ["Что произошло сначала?", "Маша посадила фасоль", ["появился лист", "Маша посадила фасоль", "она забыла про росток"]],
+        ["Какой заголовок подойдет?", "Фасоль у окна", ["Фасоль у окна", "Потерянная тетрадь", "Ветер в классе"]]
+      ]
     },
     {
       text: "Петя увидел на дорожке маленького жука. Он не стал трогать его руками, а аккуратно обошел стороной.",
-      question: "Какой поступок совершил Петя?",
-      answer: "бережный",
-      choices: ["бережный", "жадный", "невнимательный"]
+      tasks: [
+        ["Какой поступок совершил Петя?", "бережный", ["бережный", "жадный", "невнимательный"]],
+        ["Почему Петя обошел жука стороной?", "чтобы не навредить", ["чтобы не навредить", "чтобы быстрее добежать", "чтобы спрятать жука"]],
+        ["Какая главная мысль?", "маленьких существ нужно беречь", ["маленьких существ нужно беречь", "жуков нужно ловить", "дорожки бывают длинными"]]
+      ]
     },
     {
       text: "Летом ребята устроили библиотеку во дворе. Каждый принес книгу, а потом они обменивались историями и советовали друг другу самое интересное.",
-      question: "Какая главная мысль текста?",
-      answer: "книгами интересно делиться",
-      choices: ["книгами интересно делиться", "летом нельзя читать", "книги нужно прятать"]
+      tasks: [
+        ["Какая главная мысль текста?", "книгами интересно делиться", ["книгами интересно делиться", "летом нельзя читать", "книги нужно прятать"]],
+        ["Что сделали ребята сначала?", "устроили библиотеку", ["устроили библиотеку", "потеряли книги", "закрыли двор"]],
+        ["Что помогло ребятам выбрать новые истории?", "советы друг друга", ["советы друг друга", "дождь", "спор"]]
+      ]
+    },
+    {
+      text: "Утром Катя нашла на столе записку: «Полей цветы, пожалуйста». Она налила воду в маленькую лейку и заметила, что фиалка подняла листочки.",
+      tasks: [
+        ["Что попросили сделать в записке?", "полить цветы", ["полить цветы", "убрать книги", "нарисовать фиалку"]],
+        ["Какой предмет помог Кате?", "лейка", ["линейка", "лейка", "фонарик"]],
+        ["Как можно назвать этот текст?", "Забота о цветах", ["Забота о цветах", "Ночная прогулка", "Секретный звонок"]]
+      ]
+    },
+    {
+      text: "На перемене Дима хотел первым взять мяч, но увидел, что Лена грустит у скамейки. Он позвал ее играть вместе, и команда стала веселее.",
+      tasks: [
+        ["Почему команда стала веселее?", "Дима позвал Лену играть", ["Дима позвал Лену играть", "мяч укатился", "перемена закончилась"]],
+        ["Какой Дима в этом тексте?", "внимательный", ["внимательный", "равнодушный", "сердитый"]],
+        ["Какая главная мысль?", "важно замечать чувства других", ["важно замечать чувства других", "мяч всегда главный", "на перемене нельзя играть"]]
+      ]
     }
   ];
   const item = sample(texts);
-  return choiceTask("readingMeaning", `${item.text} ${item.question}`, item.answer, item.choices, "Найди ответ в смысле текста, а не только в одном слове.");
+  const [question, answer, choices] = sample(item.tasks);
+  return choiceTask("readingMeaning", `${item.text} ${question}`, answer, choices, "Найди ответ в смысле текста, а не только в одном слове.");
 }
 
 function makeWorldTask() {
@@ -1238,6 +1362,34 @@ function groupBySkill(attempts) {
   }, {});
 }
 
+function getWeeklySubjectPlan() {
+  const dayBalance = getSubjectDayBalance(7);
+  return Object.entries(WEEKLY_SUBJECT_GOALS).map(([subject, goal]) => ({
+    subject,
+    goal,
+    days: dayBalance[subject] || 0,
+    left: Math.max(0, goal - (dayBalance[subject] || 0))
+  }));
+}
+
+function formatKidSubjectPlan(plan) {
+  const ready = plan.filter((item) => item.left === 0).map((item) => SUBJECTS[item.subject].label);
+  const next = plan.filter((item) => item.left > 0).sort((a, b) => b.left - a.left)[0];
+  if (!next) return "Все главные острова недели уже получили внимание. Можно выбрать любимый тренажер.";
+  const readyLine = ready.length ? `Уже бодро: ${ready.join(", ")}. ` : "";
+  return `${readyLine}Следующий маленький шаг: ${SUBJECTS[next.subject].label}, еще ${next.left} ${dayWord(next.left)} внимания на этой неделе.`;
+}
+
+function formatParentSubjectPlan(plan) {
+  return plan
+    .map((item) => {
+      const subject = SUBJECTS[item.subject].label;
+      if (item.left === 0) return `${subject}: план закрыт (${item.days}/${item.goal} дней)`;
+      return `${subject}: желательно еще ${item.left} ${dayWord(item.left)} (${item.days}/${item.goal})`;
+    })
+    .join(". ");
+}
+
 function getBestSkill(results) {
   const best = topSkills(results, true)[0];
   return best ? formatSkillName(best) : "старательность";
@@ -1283,7 +1435,7 @@ function buildParentRecommendation(rows) {
     return `На следующей неделе добавить мягкое повторение: ${weak.map((row) => formatSkillName(row.skillId)).join(", ")}. Оптимально 2-3 задания по каждой теме в день.`;
   }
   if (slow.length) {
-    return `Точность хорошая. Для автоматизации стоит потренировать скорость: ${slow.map((row) => formatSkillName(row.skillId)).join(", ")}.`;
+    return `Точность хорошая. Для автоматизации стоит спокойно повторить до легкости: ${slow.map((row) => formatSkillName(row.skillId)).join(", ")}.`;
   }
   return "Сохранить короткий ежедневный формат: 10-12 минут, смешанные задания, немного повторения и игровые задания.";
 }
