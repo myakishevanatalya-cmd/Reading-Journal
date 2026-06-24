@@ -7,10 +7,10 @@ const isParentMode = urlParams.get("parent") === "1";
 const STORAGE_KEY = `summer-academy-v1:${childId}`;
 
 const SUBJECTS = {
-  math: { label: "Математика", icon: "math", color: "#7db9df" },
-  russian: { label: "Русский", icon: "russian", color: "#d9718f" },
-  reading: { label: "Чтение", icon: "reading", color: "#84c8a7" },
-  world: { label: "Окружающий мир", icon: "world", color: "#f6b443" }
+  math: { label: "Математика", icon: "🧮", color: "#7db9df" },
+  russian: { label: "Русский", icon: "✍️", color: "#d9718f" },
+  reading: { label: "Чтение", icon: "📚", color: "#84c8a7" },
+  world: { label: "Окружающий мир", icon: "🌿", color: "#f6b443" }
 };
 
 const WEEKLY_SUBJECT_GOALS = {
@@ -63,7 +63,7 @@ const TRAINER_MODES = [
   {
     id: "fast10",
     subject: "math",
-    icon: "fast10",
+    icon: "⏱️",
     title: "Быстрый счет до 10",
     description: "Короткий забег на точность и легкость.",
     chips: ["10 примеров", "время", "без спешки"]
@@ -71,7 +71,7 @@ const TRAINER_MODES = [
   {
     id: "fast100",
     subject: "math",
-    icon: "fast100",
+    icon: "⚡",
     title: "Счет в пределах 100",
     description: "Сложение, вычитание и круглые десятки.",
     chips: ["12 примеров", "автоматизация", "до 100"]
@@ -79,7 +79,7 @@ const TRAINER_MODES = [
   {
     id: "multiply",
     subject: "math",
-    icon: "multiply",
+    icon: "✖️",
     title: "Таблица умножения",
     description: "Можно тренировать все примеры или сложные случаи.",
     chips: ["на 2-9", "сложные", "быстрота"]
@@ -87,7 +87,7 @@ const TRAINER_MODES = [
   {
     id: "dictionary",
     subject: "russian",
-    icon: "dictionary",
+    icon: "📝",
     title: "Словарные слова",
     description: "Вставь букву, найди ошибку, запомни красивый образ.",
     chips: ["орфография", "слова Кати", "память"]
@@ -95,7 +95,7 @@ const TRAINER_MODES = [
   {
     id: "wordDetective",
     subject: "russian",
-    icon: "wordDetective",
+    icon: "🔎",
     title: "Детектив слов",
     description: "Лишнее слово, замена буквы, звуки и буквы.",
     chips: ["логика", "смысл", "звуки"]
@@ -103,7 +103,7 @@ const TRAINER_MODES = [
   {
     id: "playroom",
     subject: "russian",
-    icon: "playroom",
+    icon: "🧩",
     title: "Игровая комната",
     description: "Мини-ребусы, собери слово и словесные загадки.",
     chips: ["игра", "ребусы", "кроссвордный дух"]
@@ -111,7 +111,7 @@ const TRAINER_MODES = [
   {
     id: "readingQuest",
     subject: "reading",
-    icon: "readingQuest",
+    icon: "📖",
     title: "Читательский сыщик",
     description: "Короткие тексты, главная мысль, порядок событий и точные ответы.",
     chips: ["смысл", "внимание", "без спешки"]
@@ -121,7 +121,7 @@ const TRAINER_MODES = [
 const SUBJECT_LAUNCHERS = [
   {
     subject: "math",
-    icon: "math",
+    icon: "🧮",
     title: "Математика",
     text: "Разогреть счет, таблицу умножения и задачи до легкости.",
     note: "Сегодня хорошо подойдет 5 минут счета.",
@@ -132,7 +132,7 @@ const SUBJECT_LAUNCHERS = [
   },
   {
     subject: "russian",
-    icon: "russian",
+    icon: "🔎",
     title: "Русский",
     text: "Расследовать слова, буквы, звуки и словарные хитрости.",
     note: "Можно начать с детектива слов.",
@@ -143,7 +143,7 @@ const SUBJECT_LAUNCHERS = [
   },
   {
     subject: "reading",
-    icon: "reading",
+    icon: "📖",
     title: "Чтение",
     text: "Поймать главную мысль, порядок событий и точные детали.",
     note: "Короткий текст, но внимательные глаза.",
@@ -257,79 +257,6 @@ function render() {
   renderParentReport();
 }
 
-function iconSvg(name) {
-  const icons = {
-    owl: `
-      <path d="M15 27c0-11 7-18 17-18s17 7 17 18v14c0 8-7 14-17 14s-17-6-17-14V27Z" fill="currentColor" opacity=".16"/>
-      <path d="M18 19 10 12c1 8 4 13 9 15" fill="currentColor" opacity=".32"/>
-      <path d="M46 19l8-7c-1 8-4 13-9 15" fill="currentColor" opacity=".32"/>
-      <circle cx="25" cy="29" r="8" fill="#fff"/><circle cx="39" cy="29" r="8" fill="#fff"/>
-      <circle cx="25" cy="30" r="3.2" fill="currentColor"/><circle cx="39" cy="30" r="3.2" fill="currentColor"/>
-      <path d="M32 36 27 31h10l-5 5Z" fill="#f6b443"/>
-      <path d="M24 44h16M28 49h8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-    `,
-    math: `
-      <rect x="13" y="10" width="38" height="44" rx="10" fill="currentColor" opacity=".16"/>
-      <rect x="19" y="16" width="26" height="10" rx="3" fill="#fff"/>
-      <path d="M22 35h20M32 25v20" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-      <circle cx="23" cy="45" r="3" fill="currentColor"/><circle cx="41" cy="45" r="3" fill="currentColor"/>
-    `,
-    russian: `
-      <circle cx="27" cy="27" r="13" fill="currentColor" opacity=".16"/>
-      <path d="m37 37 12 12" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
-      <path d="M20 34c5-12 9-12 14 0M23 29h8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-      <path d="M16 49c10-2 20-2 30 0" stroke="currentColor" stroke-width="4" stroke-linecap="round" opacity=".42"/>
-    `,
-    reading: `
-      <path d="M11 17c8-3 15-2 21 3v31c-6-5-13-6-21-3V17Z" fill="currentColor" opacity=".16"/>
-      <path d="M53 17c-8-3-15-2-21 3v31c6-5 13-6 21-3V17Z" fill="currentColor" opacity=".28"/>
-      <path d="M18 25h8M18 33h8M38 25h8M38 33h8" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-      <path d="M32 20v31" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-    `,
-    world: `
-      <circle cx="32" cy="32" r="19" fill="currentColor" opacity=".16"/>
-      <path d="M15 32h34M32 13c7 7 7 31 0 38M32 13c-7 7-7 31 0 38" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-      <path d="M41 15c-1 8-8 13-17 13 1-8 8-13 17-13Z" fill="#84c8a7"/>
-    `,
-    fast10: `
-      <circle cx="32" cy="34" r="19" fill="currentColor" opacity=".16"/>
-      <path d="M32 15v-5M24 10h16M32 34l9-8" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
-      <path d="M20 48c7 5 17 5 24 0" stroke="currentColor" stroke-width="4" stroke-linecap="round" opacity=".45"/>
-    `,
-    fast100: `
-      <path d="M36 6 15 35h15l-4 23 23-32H34l2-20Z" fill="currentColor" opacity=".26"/>
-      <path d="M36 6 15 35h15l-4 23 23-32H34l2-20Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
-    `,
-    multiply: `
-      <rect x="12" y="12" width="40" height="40" rx="12" fill="currentColor" opacity=".16"/>
-      <path d="m23 23 18 18M41 23 23 41" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
-      <circle cx="20" cy="46" r="3" fill="#f6b443"/><circle cx="44" cy="18" r="3" fill="#f6b443"/>
-    `,
-    dictionary: `
-      <path d="M18 10h26a6 6 0 0 1 6 6v38H20a6 6 0 0 1-6-6V14a4 4 0 0 1 4-4Z" fill="currentColor" opacity=".16"/>
-      <path d="M22 18h22M22 29h18M22 40h22" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-      <path d="M44 10v16l-5-4-5 4V10" fill="#f6b443"/>
-    `,
-    wordDetective: `
-      <circle cx="27" cy="26" r="14" fill="currentColor" opacity=".16"/>
-      <circle cx="27" cy="26" r="14" stroke="currentColor" stroke-width="5"/>
-      <path d="m38 38 12 12" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
-      <path d="M21 28h12M24 21h6" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-    `,
-    playroom: `
-      <path d="M17 18h12v8a5 5 0 1 0 6 0v-8h12v12h-8a5 5 0 1 0 0 6h8v12H17V36h8a5 5 0 1 0 0-6h-8V18Z" fill="currentColor" opacity=".18"/>
-      <path d="M17 18h12v8a5 5 0 1 0 6 0v-8h12v12h-8a5 5 0 1 0 0 6h8v12H17V36h8a5 5 0 1 0 0-6h-8V18Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
-    `,
-    readingQuest: `
-      <path d="M13 17c7-3 14-2 19 3v28c-5-5-12-6-19-3V17Z" fill="currentColor" opacity=".16"/>
-      <path d="M51 17c-7-3-14-2-19 3v28c5-5 12-6 19-3V17Z" fill="currentColor" opacity=".28"/>
-      <circle cx="42" cy="37" r="8" fill="#fff" stroke="currentColor" stroke-width="4"/>
-      <path d="m48 43 7 7M19 27h8M19 35h7" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-    `
-  };
-  return `<svg class="visual-icon" viewBox="0 0 64 64" aria-hidden="true" focusable="false">${icons[name] || icons.reading}</svg>`;
-}
-
 function renderToday() {
   const trainingActive = Boolean(session);
   const finishVisible = !finishPanel.classList.contains("hidden");
@@ -367,7 +294,7 @@ function renderSubjectLaunchers() {
     card.style.setProperty("--subject-color", subject.color);
     card.innerHTML = `
       <div class="subject-card__top">
-        <div class="subject-card__icon">${iconSvg(launcher.icon)}</div>
+        <div class="subject-card__icon">${launcher.icon}</div>
         <div>
           <p class="eyebrow">${subject.label}</p>
           <h3>${launcher.title}</h3>
@@ -408,7 +335,7 @@ function renderTrainers() {
     card.style.setProperty("--trainer-color", subject.color);
     card.innerHTML = `
       <div class="trainer-card__top">
-        <div class="trainer-card__icon">${iconSvg(mode.icon)}</div>
+        <div class="trainer-card__icon">${mode.icon}</div>
         <div>
           <h3>${mode.title}</h3>
           <p>${mode.description}</p>
@@ -435,7 +362,7 @@ function renderGuide(container, place) {
     : "Выбор свободный, но хороший маршрут иногда просит заглянуть не только в любимую комнату.";
 
   container.innerHTML = `
-    <div class="guide-card__avatar" aria-hidden="true">${iconSvg("owl")}</div>
+    <div class="guide-card__avatar" aria-hidden="true">🦉</div>
     <div>
       <p class="eyebrow">Филин Академик</p>
       <h3>${guide.title}</h3>
@@ -758,8 +685,7 @@ function renderQuestion() {
   session.usedHint = false;
   session.questionStartedAt = Date.now();
   questCounter.textContent = `Задание ${session.index + 1} из ${session.tasks.length}`;
-  const subject = SUBJECTS[SKILLS[task.skillId].subject];
-  questSkill.innerHTML = `${iconSvg(subject.icon)}<span>${SKILLS[task.skillId].title}</span>`;
+  questSkill.textContent = `${SUBJECTS[SKILLS[task.skillId].subject].icon} ${SKILLS[task.skillId].title}`;
   questProgressBar.style.width = `${(session.index / session.tasks.length) * 100}%`;
   questPrompt.textContent = task.prompt;
   feedbackBox.classList.add("hidden");
@@ -957,7 +883,7 @@ function renderMap() {
     card.className = "island-card";
     card.style.setProperty("--island-color", subject.color);
     card.innerHTML = `
-      <div class="island-icon">${iconSvg(subject.icon)}</div>
+      <div class="island-icon">${subject.icon}</div>
       <div>
         <h3>${skill.title}</h3>
         <p>${skill.description}</p>
@@ -986,7 +912,7 @@ function renderMistakes() {
     const card = document.createElement("article");
     card.className = "mistake-card";
     card.innerHTML = `
-      <strong><span class="inline-icon">${iconSvg(subject.icon)}</span>${skill.title}</strong>
+      <strong>${subject.icon} ${skill.title}</strong>
       <p>${mistake.prompt}</p>
       <div class="pill-row">
         <span class="pill">Ответ: ${mistake.answer}</span>
