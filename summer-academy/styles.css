@@ -150,6 +150,38 @@ h3 {
   font-size: 1.45rem;
 }
 
+.visual-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: var(--subject-color, var(--trainer-color, var(--island-color, var(--icon-color, var(--ink)))));
+}
+
+.trainer-card__icon .visual-icon,
+.island-icon .visual-icon {
+  color: var(--ink);
+}
+
+#questSkill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#questSkill .visual-icon {
+  width: 22px;
+  height: 22px;
+  color: var(--muted);
+}
+
+.inline-icon {
+  display: inline-grid;
+  width: 24px;
+  height: 24px;
+  margin-right: 7px;
+  vertical-align: middle;
+}
+
 .today-card,
 .quest-panel,
 .finish-panel,
@@ -192,6 +224,7 @@ h3 {
   place-items: center;
   border-radius: 18px;
   background: #fff1d3;
+  --icon-color: #8d5a22;
   font-size: 1.7rem;
 }
 
@@ -518,6 +551,7 @@ h3 {
   place-items: center;
   border-radius: 16px;
   background: var(--trainer-color, #edf6ff);
+  --icon-color: var(--ink);
   font-size: 1.45rem;
 }
 
@@ -577,6 +611,7 @@ h3 {
   place-items: center;
   border-radius: 18px;
   background: var(--island-color, #edf6ff);
+  --icon-color: var(--ink);
   font-size: 1.55rem;
 }
 
