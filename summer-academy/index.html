@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f6b443" />
+    <title>Летняя Академия Кати</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <div class="hero__image" aria-hidden="true"></div>
+        <div class="hero__content">
+          <p class="eyebrow">Летний квест после 2 класса</p>
+          <h1>Летняя Академия Кати</h1>
+          <p id="heroMessage">Сегодня можно зажечь огонек знаний.</p>
+        </div>
+      </header>
+
+      <main>
+        <section class="view active" id="view-today" aria-labelledby="todayTitle">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Сегодня</p>
+              <h2 id="todayTitle">Огонек знаний</h2>
+            </div>
+            <div class="flame-meter" aria-label="Огонек знаний">
+              <span id="streakFlame">🔥</span>
+              <strong id="streakDays">0</strong>
+            </div>
+          </div>
+
+          <div class="today-card">
+            <div>
+              <p id="todayStatus">Готова к короткой тренировке?</p>
+              <h3 id="todayFocus">10 заданий: математика, русский, чтение</h3>
+            </div>
+            <button class="primary-action" id="startSessionBtn">Зажечь огонек</button>
+          </div>
+
+          <div class="quest-panel hidden" id="questPanel">
+            <div class="quest-topline">
+              <span id="questCounter">Задание 1 из 10</span>
+              <span id="questSkill">Математика</span>
+            </div>
+            <div class="quest-progress">
+              <span id="questProgressBar"></span>
+            </div>
+            <p class="quest-prompt" id="questPrompt"></p>
+            <div class="answer-area" id="answerArea"></div>
+            <div class="feedback hidden" id="feedbackBox"></div>
+            <button class="primary-action hidden" id="nextQuestionBtn">Дальше</button>
+          </div>
+
+          <div class="finish-panel hidden" id="finishPanel">
+            <p class="eyebrow">Тренировка завершена</p>
+            <h2 id="finishTitle">Катя, огонек знаний горит!</h2>
+            <p id="finishText"></p>
+            <div class="result-grid">
+              <div><strong id="finishCorrect">0</strong><span>верно</span></div>
+              <div><strong id="finishMistakes">0</strong><span>на повтор</span></div>
+              <div><strong id="finishMinutes">0</strong><span>минут</span></div>
+            </div>
+            <button class="primary-action" id="againSessionBtn">Еще короткая тренировка</button>
+            <button class="secondary-action" id="reviewMistakesBtn">Посмотреть, что повторить</button>
+          </div>
+        </section>
+
+        <section class="view" id="view-map" aria-labelledby="mapTitle">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Академия</p>
+              <h2 id="mapTitle">Острова навыков</h2>
+            </div>
+          </div>
+          <div class="academy-map" id="academyMap"></div>
+        </section>
+
+        <section class="view" id="view-errors" aria-labelledby="errorsTitle">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Повторение</p>
+              <h2 id="errorsTitle">Задания, которые хотят вернуться</h2>
+            </div>
+          </div>
+          <div class="mistake-list" id="mistakeList"></div>
+        </section>
+
+        <section class="view" id="view-week" aria-labelledby="weekTitle">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Моя неделя</p>
+              <h2 id="weekTitle">Отчет для Кати</h2>
+            </div>
+          </div>
+          <div class="kid-report" id="kidReport"></div>
+        </section>
+
+        <section class="view" id="view-parent" aria-labelledby="parentTitle">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Для родителя</p>
+              <h2 id="parentTitle">Недельный анализ</h2>
+            </div>
+          </div>
+          <div class="parent-report" id="parentReport"></div>
+          <div class="parent-actions">
+            <button class="secondary-action" id="exportBtn">Экспорт JSON</button>
+            <label class="file-import">
+              Импорт JSON
+              <input type="file" id="importInput" accept="application/json" />
+            </label>
+            <button class="danger-action" id="resetBtn">Сбросить прогресс</button>
+          </div>
+        </section>
+      </main>
+
+      <nav class="bottom-nav" aria-label="Разделы академии">
+        <button class="nav-button active" data-view="today"><span>🔥</span>Сегодня</button>
+        <button class="nav-button" data-view="map"><span>🗺️</span>Академия</button>
+        <button class="nav-button" data-view="errors"><span>🔁</span>Повтор</button>
+        <button class="nav-button" data-view="week"><span>🏅</span>Неделя</button>
+        <button class="nav-button" data-view="parent"><span>📊</span>Родителю</button>
+      </nav>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
