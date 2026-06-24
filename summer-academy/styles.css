@@ -331,6 +331,73 @@ h3 {
   gap: 12px;
 }
 
+.trainer-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.trainer-card {
+  display: grid;
+  gap: 10px;
+  border: 1px solid rgba(37, 48, 68, 0.08);
+  border-radius: 20px;
+  padding: 16px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(56, 64, 82, 0.09);
+}
+
+.trainer-card__top {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.trainer-card__icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 16px;
+  background: var(--trainer-color, #edf6ff);
+  font-size: 1.45rem;
+}
+
+.trainer-card p {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.trainer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.trainer-chip {
+  min-height: 38px;
+  border-radius: 999px;
+  padding: 8px 12px;
+  color: var(--ink);
+  background: #f1f5f9;
+  font-weight: 800;
+}
+
+.fun-break {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+  border: 1px solid rgba(37, 48, 68, 0.08);
+  border-radius: 20px;
+  padding: 16px;
+  background: #fff8df;
+  box-shadow: 0 8px 24px rgba(56, 64, 82, 0.09);
+}
+
+.fun-break .eyebrow {
+  color: var(--sun-strong);
+}
+
 .island-card {
   position: relative;
   display: grid;
@@ -543,6 +610,10 @@ h3 {
   }
 
   .academy-map {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .trainer-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 

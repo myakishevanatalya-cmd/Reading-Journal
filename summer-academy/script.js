@@ -28,6 +28,8 @@ const SKILLS = {
   dictionaryWords: { subject: "russian", title: "Словарные слова", description: "Непроверяемые написания" },
   separators: { subject: "russian", title: "Разделительные знаки", description: "Разделительные ь и ъ" },
   prepositions: { subject: "russian", title: "Предлоги", description: "Раздельное написание предлогов" },
+  wordLogic: { subject: "russian", title: "Детектив слов", description: "Лишнее слово, смысл и замена буквы" },
+  soundLetters: { subject: "russian", title: "Звуки и буквы", description: "Звуки, буквы и хитрые гласные" },
   sentenceText: { subject: "russian", title: "Предложение и текст", description: "Тема, главная мысль, заголовок" },
   readingMeaning: { subject: "reading", title: "Понимание текста", description: "Главная мысль, герои, события" },
   worldFacts: { subject: "world", title: "Экспедиции", description: "Природа, карта, безопасность" }
@@ -39,6 +41,67 @@ const POSITIVE_LINES = [
   "Маленький шаг каждый день делает знания крепче.",
   "Ты не просто отвечала, ты училась замечать закономерности.",
   "Сегодня огонек знаний стал ярче."
+];
+
+const ACADEMY_JOKES = [
+  "Учебник математики сказал тетради: «Не переживай, мы все решим».",
+  "Запятая мечтала стать точкой, но любила оставлять место для продолжения.",
+  "Словарное слово пришло без проверки, зато в красивом костюме.",
+  "Пример 7 × 8 долго прятался, но Катя все равно найдет его по следам.",
+  "Буква Ё надела две точки и сказала: «Сегодня я при параде».",
+  "Карандаш решил стать писателем, но сначала наточил мысль.",
+  "Число 100 гордилось собой, пока не встретило задачу в два действия."
+];
+
+const TRAINER_MODES = [
+  {
+    id: "fast10",
+    subject: "math",
+    icon: "⏱️",
+    title: "Быстрый счет до 10",
+    description: "Короткий забег на точность и легкость.",
+    chips: ["10 примеров", "время", "без спешки"]
+  },
+  {
+    id: "fast100",
+    subject: "math",
+    icon: "⚡",
+    title: "Счет в пределах 100",
+    description: "Сложение, вычитание и круглые десятки.",
+    chips: ["12 примеров", "автоматизация", "до 100"]
+  },
+  {
+    id: "multiply",
+    subject: "math",
+    icon: "✖️",
+    title: "Таблица умножения",
+    description: "Можно тренировать все примеры или сложные случаи.",
+    chips: ["на 2-9", "сложные", "быстрота"]
+  },
+  {
+    id: "dictionary",
+    subject: "russian",
+    icon: "📝",
+    title: "Словарные слова",
+    description: "Вставь букву, найди ошибку, запомни красивый образ.",
+    chips: ["орфография", "слова Кати", "память"]
+  },
+  {
+    id: "wordDetective",
+    subject: "russian",
+    icon: "🔎",
+    title: "Детектив слов",
+    description: "Лишнее слово, замена буквы, звуки и буквы.",
+    chips: ["логика", "смысл", "звуки"]
+  },
+  {
+    id: "playroom",
+    subject: "russian",
+    icon: "🧩",
+    title: "Игровая комната",
+    description: "Мини-ребусы, собери слово и словесные загадки.",
+    chips: ["игра", "ребусы", "кроссвордный дух"]
+  }
 ];
 
 const state = loadState();
@@ -67,6 +130,9 @@ const finishCorrect = document.querySelector("#finishCorrect");
 const finishMistakes = document.querySelector("#finishMistakes");
 const finishMinutes = document.querySelector("#finishMinutes");
 const academyMap = document.querySelector("#academyMap");
+const trainerGrid = document.querySelector("#trainerGrid");
+const jokeLine = document.querySelector("#jokeLine");
+const newJokeBtn = document.querySelector("#newJokeBtn");
 const mistakeList = document.querySelector("#mistakeList");
 const kidReport = document.querySelector("#kidReport");
 const parentReport = document.querySelector("#parentReport");
@@ -85,10 +151,11 @@ navButtons.forEach((button) => {
   button.addEventListener("click", () => showView(button.dataset.view));
 });
 
-startSessionBtn.addEventListener("click", startSession);
-againSessionBtn.addEventListener("click", startSession);
+startSessionBtn.addEventListener("click", () => startSession());
+againSessionBtn.addEventListener("click", () => startSession());
 nextQuestionBtn.addEventListener("click", nextQuestion);
 reviewMistakesBtn.addEventListener("click", () => showView("errors"));
+newJokeBtn.addEventListener("click", renderJoke);
 exportBtn.addEventListener("click", exportProgress);
 importInput.addEventListener("change", importProgress);
 resetBtn.addEventListener("click", resetProgress);
@@ -129,6 +196,7 @@ function render() {
   streakFlame.textContent = streak >= 7 ? "🌟" : streak >= 3 ? "🔥" : "✨";
   heroMessage.textContent = getHeroLine(streak);
   renderToday();
+  renderTrainers();
   renderMap();
   renderMistakes();
   renderKidReport();
@@ -149,10 +217,66 @@ function renderToday() {
   }
 }
 
-function startSession() {
-  const tasks = buildDailySession();
+function renderTrainers() {
+  trainerGrid.innerHTML = "";
+  TRAINER_MODES.forEach((mode) => {
+    const subject = SUBJECTS[mode.subject];
+    const card = document.createElement("article");
+    card.className = "trainer-card";
+    card.style.setProperty("--trainer-color", subject.color);
+    card.innerHTML = `
+      <div class="trainer-card__top">
+        <div class="trainer-card__icon">${mode.icon}</div>
+        <div>
+          <h3>${mode.title}</h3>
+          <p>${mode.description}</p>
+        </div>
+      </div>
+      <div class="pill-row">
+        ${mode.chips.map((chip) => `<span class="pill">${chip}</span>`).join("")}
+      </div>
+      <div class="trainer-actions">
+        ${renderTrainerActions(mode)}
+      </div>
+    `;
+    card.querySelectorAll("[data-trainer]").forEach((button) => {
+      button.addEventListener("click", () => startTrainer(button.dataset.trainer, button.dataset.variant || ""));
+    });
+    trainerGrid.append(card);
+  });
+}
+
+function renderTrainerActions(mode) {
+  if (mode.id === "multiply") {
+    const numbers = ["all", "2", "3", "4", "5", "6", "7", "8", "9", "hard"];
+    return numbers.map((value) => {
+      const label = value === "all" ? "Все" : value === "hard" ? "Сложные" : `На ${value}`;
+      return `<button class="trainer-chip" data-trainer="${mode.id}" data-variant="${value}">${label}</button>`;
+    }).join("");
+  }
+  return `<button class="primary-action" data-trainer="${mode.id}">Начать</button>`;
+}
+
+function renderJoke() {
+  jokeLine.textContent = sample(ACADEMY_JOKES);
+}
+
+function startTrainer(modeId, variant) {
+  const mode = TRAINER_MODES.find((item) => item.id === modeId);
+  const tasks = buildTrainerTasks(modeId, variant);
+  startSession({
+    mode: "trainer",
+    title: mode ? mode.title : "Тренажер",
+    tasks
+  });
+}
+
+function startSession(options = {}) {
+  const tasks = options.tasks || buildDailySession();
   session = {
     id: cryptoRandomId(),
+    mode: options.mode || "daily",
+    title: options.title || "Огонек дня",
     startedAt: Date.now(),
     questionStartedAt: Date.now(),
     index: 0,
@@ -163,6 +287,7 @@ function startSession() {
     locked: false
   };
 
+  showView("today");
   startSessionBtn.closest(".today-card").classList.add("hidden");
   finishPanel.classList.add("hidden");
   questPanel.classList.remove("hidden");
@@ -186,6 +311,8 @@ function buildDailySession() {
     makeDictionaryTask,
     makeSeparatorTask,
     makePrepositionTask,
+    makeOddWordTask,
+    makeSoundLettersTask,
     makeSentenceTask,
     makeReadingTask,
     makeWorldTask
@@ -198,6 +325,18 @@ function buildDailySession() {
     });
   }
   return shuffle([...reviewTasks, ...freshTasks]);
+}
+
+function buildTrainerTasks(modeId, variant) {
+  const builders = {
+    fast10: () => Array.from({ length: 10 }, () => makeFastArithmeticTask("within10")),
+    fast100: () => Array.from({ length: 12 }, () => makeFastArithmeticTask(sample(["within20", "within100", "roundTens"]))),
+    multiply: () => Array.from({ length: 12 }, () => makeMultiplicationTask(variant)),
+    dictionary: () => Array.from({ length: 10 }, () => sample([makeDictionaryTask, makeDictionaryMissingTask])()),
+    wordDetective: () => Array.from({ length: 10 }, () => sample([makeOddWordTask, makeLetterSwapTask, makeSoundLettersTask, makeStressTask])()),
+    playroom: () => Array.from({ length: 8 }, () => sample([makeMiniRebusTask, makeBuildWordTask, makeOddWordTask, makeDictionaryMissingTask])())
+  };
+  return (builders[modeId] || builders.fast100)();
 }
 
 function taskFromMistake(mistake) {
@@ -226,6 +365,8 @@ function createTaskBySkill(skillId) {
     dictionaryWords: makeDictionaryTask,
     separators: makeSeparatorTask,
     prepositions: makePrepositionTask,
+    wordLogic: makeOddWordTask,
+    soundLetters: makeSoundLettersTask,
     sentenceText: makeSentenceTask,
     readingMeaning: makeReadingTask,
     worldFacts: makeWorldTask
@@ -311,6 +452,8 @@ function checkAnswer(rawAnswer, sourceElement) {
     ? `Верно! ${session.usedHint ? "Ты воспользовалась подсказкой и дошла до ответа." : task.success || "Так держать."}`
     : `Почти получилось. Правильный ответ: ${task.answer}. ${task.explanation}`;
   nextQuestionBtn.classList.remove("hidden");
+  const timeSpentSec = Math.round((Date.now() - session.questionStartedAt) / 1000);
+  const speedStatus = getSpeedStatus(task, timeSpentSec, correct);
 
   const attempt = {
     id: cryptoRandomId(),
@@ -326,7 +469,8 @@ function checkAnswer(rawAnswer, sourceElement) {
     isReview: Boolean(task.isReview),
     usedHint: session.usedHint,
     tries: session.tryCount,
-    timeSpentSec: Math.round((Date.now() - session.questionStartedAt) / 1000)
+    speedStatus,
+    timeSpentSec
   };
 
   session.results.push(attempt);
@@ -352,6 +496,8 @@ function finishSession() {
   const bestSkill = getBestSkill(session.results);
   state.dailySessions.push({
     id: session.id,
+    mode: session.mode,
+    title: session.title,
     date: dateKey(new Date()),
     startedAt: new Date(session.startedAt).toISOString(),
     finishedAt: new Date().toISOString(),
@@ -366,9 +512,16 @@ function finishSession() {
   questPanel.classList.add("hidden");
   finishPanel.classList.remove("hidden");
   finishTitle.textContent = `${childName}, огонек знаний горит!`;
+  const slowCount = session.results.filter((item) => item.speedStatus === "slow").length;
+  const fastCount = session.results.filter((item) => item.speedStatus === "fast").length;
+  const speedLine = fastCount
+    ? ` Быстрых ответов сегодня: ${fastCount}.`
+    : slowCount
+      ? " Несколько верных ответов еще хотят стать легче и быстрее."
+      : "";
   finishText.textContent = mistakes
-    ? `${POSITIVE_LINES[correct % POSITIVE_LINES.length]} Лучше всего сегодня: ${bestSkill}. ${mistakes} задания вернутся для доброго повторения.`
-    : `Все задания получились! ${childName}, сегодня твоя Академия сияет особенно ярко.`;
+    ? `${POSITIVE_LINES[correct % POSITIVE_LINES.length]} Лучше всего сегодня: ${bestSkill}. ${mistakes} задания вернутся для доброго повторения.${speedLine} ${sample(ACADEMY_JOKES)}`
+    : `Все задания получились! ${childName}, сегодня твоя Академия сияет особенно ярко.${speedLine} ${sample(ACADEMY_JOKES)}`;
   finishCorrect.textContent = String(correct);
   finishMistakes.textContent = String(mistakes);
   finishMinutes.textContent = String(minutes);
@@ -382,6 +535,9 @@ function updateSkillStats(attempt) {
     correct: 0,
     streak: 0,
     hints: 0,
+    fast: 0,
+    slow: 0,
+    totalTime: 0,
     mistakes: 0,
     lastAttempt: ""
   };
@@ -389,6 +545,9 @@ function updateSkillStats(attempt) {
   current.correct += attempt.correct ? 1 : 0;
   current.streak = attempt.correct ? current.streak + 1 : 0;
   current.hints += attempt.usedHint ? 1 : 0;
+  current.fast += attempt.speedStatus === "fast" ? 1 : 0;
+  current.slow += attempt.speedStatus === "slow" ? 1 : 0;
+  current.totalTime += attempt.timeSpentSec || 0;
   current.mistakes += attempt.correct ? 0 : 1;
   current.lastAttempt = attempt.timestamp;
   state.skillStats[attempt.skillId] = current;
@@ -514,7 +673,11 @@ function renderParentReport() {
     .map(([skillId, items]) => {
       const right = items.filter((item) => item.correct).length;
       const hints = items.filter((item) => item.usedHint).length;
-      return { skillId, total: items.length, correct: right, hints, accuracy: Math.round((right / items.length) * 100) };
+      const timed = items.filter((item) => typeof item.timeSpentSec === "number");
+      const avgTime = timed.length ? Math.round((timed.reduce((sum, item) => sum + item.timeSpentSec, 0) / timed.length) * 10) / 10 : 0;
+      const fast = items.filter((item) => item.speedStatus === "fast").length;
+      const slow = items.filter((item) => item.speedStatus === "slow").length;
+      return { skillId, total: items.length, correct: right, hints, fast, slow, avgTime, accuracy: Math.round((right / items.length) * 100) };
     })
     .sort((a, b) => a.accuracy - b.accuracy);
 
@@ -533,7 +696,7 @@ function renderParentReport() {
     </div>
     <table class="parent-table">
       <thead>
-        <tr><th>Навык</th><th>Заданий</th><th>Верно</th><th>С подсказкой</th><th>Точность</th></tr>
+        <tr><th>Навык</th><th>Заданий</th><th>Верно</th><th>С подсказкой</th><th>Быстро</th><th>Медленно</th><th>Среднее время</th><th>Точность</th></tr>
       </thead>
       <tbody>
         ${skillRows.map((row) => `
@@ -542,6 +705,9 @@ function renderParentReport() {
             <td>${row.total}</td>
             <td>${row.correct}</td>
             <td>${row.hints}</td>
+            <td>${row.fast}</td>
+            <td>${row.slow}</td>
+            <td>${row.avgTime} сек</td>
             <td>${row.accuracy}%</td>
           </tr>
         `).join("")}
@@ -566,19 +732,61 @@ function makeAddSubTask() {
   const a = rand(18, 78);
   const b = rand(6, plus ? 19 : Math.min(19, a - 1));
   const answer = plus ? a + b : a - b;
-  return inputTask("addSub100", `${a} ${plus ? "+" : "-"} ${b} = ?`, String(answer), plus ? "Складывай десятки и единицы." : "Вычитание можно проверить сложением.");
+  const task = inputTask("addSub100", `${a} ${plus ? "+" : "-"} ${b} = ?`, String(answer), plus ? "Складывай десятки и единицы." : "Вычитание можно проверить сложением.");
+  task.speedTargetSec = 7;
+  return task;
 }
 
-function makeMultiplicationTask() {
+function makeFastArithmeticTask(level) {
+  if (level === "within10") {
+    const plus = Math.random() > 0.45;
+    const a = rand(0, 9);
+    const b = plus ? rand(0, 10 - a) : rand(0, a);
+    const task = inputTask("addSub100", `${a} ${plus ? "+" : "-"} ${b} = ?`, String(plus ? a + b : a - b), "Сначала точно, потом быстрее.");
+    task.speedTargetSec = 3;
+    return task;
+  }
+
+  if (level === "within20") {
+    const plus = Math.random() > 0.5;
+    const a = rand(4, 19);
+    const b = plus ? rand(1, Math.max(1, 20 - a)) : rand(1, a);
+    const task = inputTask("addSub100", `${a} ${plus ? "+" : "-"} ${b} = ?`, String(plus ? a + b : a - b), "Держи в голове десяток и единицы.");
+    task.speedTargetSec = 4;
+    return task;
+  }
+
+  if (level === "roundTens") {
+    const a = sample([20, 30, 40, 50, 60, 70, 80, 90]);
+    const b = rand(1, 9);
+    const task = inputTask("addSub100", `${a} - ${b} = ?`, String(a - b), "Разбей десяток: например, 60 - 2 = 58.");
+    task.speedTargetSec = 6;
+    return task;
+  }
+
+  const plus = Math.random() > 0.5;
+  const a = rand(20, 89);
+  const b = plus ? rand(2, Math.min(10, 99 - a)) : rand(2, Math.min(10, a));
+  const task = inputTask("addSub100", `${a} ${plus ? "+" : "-"} ${b} = ?`, String(plus ? a + b : a - b), "Считай спокойно: десятки отдельно, единицы отдельно.");
+  task.speedTargetSec = 6;
+  return task;
+}
+
+function makeMultiplicationTask(variant = "all") {
   const pairs = [];
   for (let a = 2; a <= 9; a += 1) {
     for (let b = 2; b <= 9; b += 1) {
-      if (a * b <= 50) pairs.push([a, b]);
+      const fitsProgram = a * b <= 50;
+      const fitsVariant = variant === "all" || variant === "hard" || String(a) === String(variant) || String(b) === String(variant);
+      const hard = [6, 7, 8, 9].includes(a) || [6, 7, 8, 9].includes(b);
+      if (fitsProgram && fitsVariant && (variant !== "hard" || hard)) pairs.push([a, b]);
     }
   }
   const [a, b] = sample(pairs);
   const answer = a * b;
-  return inputTask("multiplication50", `${a} × ${b} = ?`, String(answer), "Умножение можно представить как несколько одинаковых групп.");
+  const task = inputTask("multiplication50", `${a} × ${b} = ?`, String(answer), "Умножение можно представить как несколько одинаковых групп.");
+  task.speedTargetSec = 5;
+  return task;
 }
 
 function makeDivisionTask() {
@@ -688,6 +896,84 @@ function makeDictionaryTask() {
   ];
   const [answer, choices, explanation] = sample(items);
   return choiceTask("dictionaryWords", "Выбери правильное словарное слово.", answer, choices, explanation);
+}
+
+function makeDictionaryMissingTask() {
+  const items = [
+    ["к...рова", "о", ["а", "о", "е", "и"], "Корова - словарное слово, запоминаем букву о."],
+    ["с...бака", "о", ["а", "о", "е", "и"], "Собака - словарное слово."],
+    ["м...локо", "о", ["а", "о", "е", "и"], "Молоко пишется с буквой о."],
+    ["т...традь", "е", ["а", "о", "е", "и"], "Тетрадь - словарное слово, первая гласная е."],
+    ["б...реза", "е", ["а", "о", "е", "и"], "Береза - словарное слово, запоминаем е."],
+    ["р...бота", "а", ["а", "о", "е", "и"], "Работа пишется с буквой а."],
+    ["м...газин", "а", ["а", "о", "е", "и"], "Магазин - словарное слово."]
+  ];
+  const [word, answer, choices, explanation] = sample(items);
+  return choiceTask("dictionaryWords", `Вставь букву: ${word}`, answer, choices, explanation);
+}
+
+function makeOddWordTask() {
+  const items = [
+    ["Кто лишний по смыслу?", "кузнечик", ["сорока", "воробей", "дятел", "кузнечик"], "Кузнечик - насекомое, остальные птицы."],
+    ["Кто лишний по смыслу?", "покупатель", ["писатель", "строитель", "водитель", "покупатель"], "Покупатель не профессия в этом ряду."],
+    ["Какое слово лишнее?", "молоко", ["карандаш", "тетрадь", "молоко", "пенал"], "Молоко не школьная принадлежность."],
+    ["Какое слово лишнее?", "зима", ["утро", "день", "вечер", "зима"], "Зима - время года, остальные части суток."]
+  ];
+  const [prompt, answer, choices, explanation] = sample(items);
+  return choiceTask("wordLogic", prompt, answer, choices, explanation);
+}
+
+function makeLetterSwapTask() {
+  const items = [
+    ["Если в слове мак заменить м на р, какое слово получится?", "рак", ["лак", "рак", "бак"], "Меняем только первую букву."],
+    ["Если в слове дом заменить д на с, какое слово получится?", "сом", ["сом", "сон", "сок"], "Получается новое слово: сом."],
+    ["Если в слове кот заменить к на р, какое слово получится?", "рот", ["рот", "род", "лот"], "Меняем только первую букву."],
+    ["Если в слове лук заменить л на ж, какое слово получится?", "жук", ["жук", "сук", "звук"], "Получается жук."]
+  ];
+  const [prompt, answer, choices, explanation] = sample(items);
+  return choiceTask("wordLogic", prompt, answer, choices, explanation);
+}
+
+function makeSoundLettersTask() {
+  const items = [
+    ["В каком слове звуков больше, чем букв?", "яма", ["кот", "сад", "яма"], "В начале слова я обозначает два звука."],
+    ["В каком слове букв больше, чем звуков?", "ель", ["ель", "юла", "моя"], "Мягкий знак звука не обозначает."],
+    ["Из чего состоят слова в устной речи?", "из звуков", ["из букв", "из звуков"], "Устную речь мы слышим и произносим."],
+    ["Из чего состоят слова в письменной речи?", "из букв", ["из букв", "из звуков"], "Письменную речь мы видим и пишем."]
+  ];
+  const [prompt, answer, choices, explanation] = sample(items);
+  return choiceTask("soundLetters", prompt, answer, choices, explanation);
+}
+
+function makeStressTask() {
+  const items = [
+    ["В каком слове ударение падает на второй слог?", "магазин", ["документ", "алфавит", "дремота", "магазин"], "Ма-га-зин: ударный второй слог."],
+    ["Где ударение на последнем слоге?", "алфавит", ["алфавит", "дремота", "яблоко"], "Алфавит - ударение на последний слог."],
+    ["Где ударение на первом слоге?", "яблоко", ["магазин", "яблоко", "документ"], "Яблоко - ударение на первый слог."]
+  ];
+  const [prompt, answer, choices, explanation] = sample(items);
+  return choiceTask("soundLetters", prompt, answer, choices, explanation);
+}
+
+function makeMiniRebusTask() {
+  const items = [
+    ["Мини-ребус: теле + фон. Какое слово спряталось?", "телефон", ["телефон", "телеграф", "фонарь"], "Соедини части слова: теле + фон."],
+    ["Мини-ребус: само + лет. Какое слово получилось?", "самолет", ["самолет", "самокат", "летчик"], "Две части вместе дают слово самолет."],
+    ["Мини-ребус: пар + ход. Какое слово получилось?", "пароход", ["пароход", "паровоз", "поход"], "Пар + ход превращаются в пароход."]
+  ];
+  const [prompt, answer, choices, explanation] = sample(items);
+  return choiceTask("wordLogic", prompt, answer, choices, explanation);
+}
+
+function makeBuildWordTask() {
+  const items = [
+    ["Собери слово из букв: О, С, Н", "сон", ["нос", "сон", "сено"], "Из этих букв можно собрать слово сон."],
+    ["Собери слово из букв: К, О, Т", "кот", ["кит", "кот", "ток"], "Кот - предметное слово из данных букв."],
+    ["Собери слово из букв: Л, Е, С", "лес", ["лес", "сел", "слон"], "Лес - слово из трех данных букв."],
+    ["Собери слово из букв: Р, А, К", "рак", ["рак", "рука", "карта"], "Берем только данные буквы."]
+  ];
+  const [prompt, answer, choices, explanation] = sample(items);
+  return choiceTask("wordLogic", prompt, answer, choices, explanation);
 }
 
 function makeSeparatorTask() {
@@ -872,8 +1158,35 @@ function getSkillStatus(stats) {
 
 function buildParentRecommendation(rows) {
   const weak = rows.filter((row) => row.total >= 2 && row.accuracy < 75).slice(0, 3);
-  if (!weak.length) return "Сохранить короткий ежедневный формат: 10-12 минут, смешанные задания и немного повторения.";
-  return `На следующей неделе добавить мягкое повторение: ${weak.map((row) => formatSkillName(row.skillId)).join(", ")}. Оптимально 2-3 задания по каждой теме в день.`;
+  const slow = rows.filter((row) => row.total >= 2 && row.slow > 0).sort((a, b) => b.slow - a.slow).slice(0, 2);
+  if (weak.length) {
+    return `На следующей неделе добавить мягкое повторение: ${weak.map((row) => formatSkillName(row.skillId)).join(", ")}. Оптимально 2-3 задания по каждой теме в день.`;
+  }
+  if (slow.length) {
+    return `Точность хорошая. Для автоматизации стоит потренировать скорость: ${slow.map((row) => formatSkillName(row.skillId)).join(", ")}.`;
+  }
+  return "Сохранить короткий ежедневный формат: 10-12 минут, смешанные задания, немного повторения и игровые задания.";
+}
+
+function getSpeedStatus(task, seconds, correct) {
+  if (!correct) return "mistake";
+  const target = task.speedTargetSec || getDefaultSpeedTarget(task.skillId);
+  if (!target) return "steady";
+  if (seconds <= target) return "fast";
+  if (seconds <= target * 1.7) return "steady";
+  return "slow";
+}
+
+function getDefaultSpeedTarget(skillId) {
+  const targets = {
+    addSub100: 7,
+    multiplication50: 5,
+    division50: 6,
+    numbers100: 5,
+    measures: 8,
+    orderActions: 8
+  };
+  return targets[skillId] || 0;
 }
 
 function exportProgress() {
