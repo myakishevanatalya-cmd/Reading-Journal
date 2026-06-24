@@ -1,0 +1,17 @@
+{
+  "name": "Книжная карта лета",
+  "short_name": "Карта книг",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#dff3fb",
+  "theme_color": "#51a7dc",
+  "description": "Интерактивный читательский дневник в формате карты приключений.",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

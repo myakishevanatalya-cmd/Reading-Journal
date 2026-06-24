@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#51a7dc" />
+    <title>Книжная карта лета</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="top-panel">
+        <div>
+          <p class="eyebrow">Книжное приключение</p>
+          <h1>Карта лета</h1>
+        </div>
+        <button class="icon-button" id="parentShortcut" type="button" aria-label="Родительский экран" title="Родительский экран">
+          <span aria-hidden="true">📋</span>
+        </button>
+      </header>
+
+      <section class="progress-panel" aria-label="Прогресс чтения">
+        <div class="progress-copy">
+          <strong id="progressText">Прочитано 0 из 32 книг</strong>
+          <span id="currentHint">Начинаем маршрут</span>
+        </div>
+        <div class="progress-track" aria-hidden="true">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="medals" id="medals" aria-label="Медали за чтение"></div>
+      </section>
+
+      <section class="quest-card" id="questCard" aria-label="Рекомендуемая книга">
+        <div>
+          <p class="eyebrow">Следующая станция</p>
+          <h2 id="questTitle">Выбери книгу</h2>
+          <p id="questMeta">Можно читать в любом порядке</p>
+        </div>
+        <button class="primary-small-button" id="openRecommendedBtn" type="button">Открыть</button>
+      </section>
+
+      <main>
+        <section class="screen is-active" id="mapScreen" aria-labelledby="mapTab">
+          <div class="map-ribbon" id="mapRoute"></div>
+        </section>
+
+        <section class="screen" id="shelfScreen" aria-labelledby="shelfTab">
+          <div class="segment-control" role="tablist" aria-label="Фильтр книг">
+            <button class="segment is-active" type="button" data-filter="todo" aria-label="Хочу прочитать">Хочу</button>
+            <button class="segment" type="button" data-filter="reading">Маршрут</button>
+            <button class="segment" type="button" data-filter="done" aria-label="Прочитано">Готово</button>
+          </div>
+          <div class="book-grid" id="bookGrid"></div>
+        </section>
+
+        <section class="screen" id="heroesScreen" aria-labelledby="heroesTab">
+          <div class="section-heading">
+            <h2>Коллекция героев</h2>
+            <span id="heroesCount">0</span>
+          </div>
+          <div class="hero-grid" id="heroGrid"></div>
+        </section>
+
+        <section class="screen" id="progressScreen" aria-labelledby="progressTab">
+          <div class="section-heading">
+            <h2>Мой прогресс</h2>
+            <span id="progressBadge">0%</span>
+          </div>
+          <div class="progress-dashboard" id="progressDashboard"></div>
+        </section>
+
+        <section class="screen" id="parentScreen" aria-labelledby="parentScreenTitle">
+          <div class="section-heading">
+            <h2 id="parentScreenTitle">Родительский экран</h2>
+            <div class="parent-actions">
+              <button class="ghost-button" id="backToMapBtn" type="button">К карте</button>
+              <button class="ghost-button" id="exportBtn" type="button">Экспорт JSON</button>
+              <button class="ghost-button" id="importBtn" type="button">Импорт JSON</button>
+              <button class="danger-button" id="resetBtn" type="button">Сбросить прогресс</button>
+              <input class="visually-hidden" id="importInput" type="file" accept="application/json,.json" />
+            </div>
+          </div>
+          <div class="analytics" id="analytics"></div>
+        </section>
+      </main>
+
+      <nav class="bottom-nav" aria-label="Основная навигация">
+        <button class="nav-item is-active" id="mapTab" type="button" data-screen="mapScreen">
+          <span aria-hidden="true">🗺️</span>
+          <span>Карта</span>
+        </button>
+        <button class="nav-item" id="shelfTab" type="button" data-screen="shelfScreen">
+          <span aria-hidden="true">📚</span>
+          <span>Полка</span>
+        </button>
+        <button class="nav-item" id="heroesTab" type="button" data-screen="heroesScreen">
+          <span aria-hidden="true">⭐</span>
+          <span>Герои</span>
+        </button>
+        <button class="nav-item" id="progressTab" type="button" data-screen="progressScreen">
+          <span aria-hidden="true">🏆</span>
+          <span>Прогресс</span>
+        </button>
+      </nav>
+    </div>
+
+    <dialog class="diary-modal" id="diaryModal">
+      <form class="diary-card" id="diaryForm" method="dialog">
+        <div class="modal-top">
+          <div>
+            <p class="eyebrow" id="modalTheme">Станция</p>
+            <h2 id="modalTitle">Книга</h2>
+            <p id="modalAuthor"></p>
+          </div>
+          <button class="icon-button" id="closeModal" type="button" aria-label="Закрыть" title="Закрыть">
+            <span aria-hidden="true">✕</span>
+          </button>
+        </div>
+
+        <label class="field">
+          <span>Кто главный герой?</span>
+          <input id="heroInput" name="hero" type="text" maxlength="60" autocomplete="off" placeholder="Например: Незнайка" />
+        </label>
+
+        <label class="field">
+          <span>Что понравилось в книге?</span>
+          <textarea id="likedInput" name="liked" maxlength="360" rows="4" placeholder="Напиши 1-2 предложения"></textarea>
+        </label>
+
+        <div class="field">
+          <span>Настроение</span>
+          <div class="mood-options" id="moodOptions"></div>
+        </div>
+
+        <div class="field">
+          <span>Оценка</span>
+          <div class="stars" id="stars" aria-label="Оценка книги"></div>
+        </div>
+
+        <div class="diary-actions">
+          <button class="ghost-button" id="openQuestionsBtn" type="button">Ответить на вопросы</button>
+          <button class="danger-button" id="undoDoneBtn" type="button">Снять отметку</button>
+        </div>
+
+        <button class="primary-button" id="saveDiary" type="submit">Сохранить приключение</button>
+      </form>
+    </dialog>
+
+    <dialog class="celebration-modal" id="celebrationModal">
+      <form class="celebration-card" method="dialog">
+        <p class="eyebrow">Квест выполнен</p>
+        <h2 id="celebrationTitle">Катя умничка!</h2>
+        <p id="celebrationText">Так держать.</p>
+        <div class="discussion-box">
+          <strong>Давай ответим на вопросы?</strong>
+          <p class="question-counter" id="questCounter">1 из 4</p>
+          <p class="question-text" id="questQuestionText"></p>
+          <textarea id="questAnswerInput" class="question-answer" rows="4" maxlength="360" placeholder="Можно написать ответ здесь"></textarea>
+          <div class="question-actions">
+            <button class="ghost-button" id="prevQuestionBtn" type="button">Назад</button>
+            <button class="primary-small-button" id="nextQuestionBtn" type="button">Дальше</button>
+          </div>
+        </div>
+        <div class="celebration-actions">
+          <button class="ghost-button" id="closeCelebrationBtn" type="button">К карте</button>
+          <button class="primary-small-button" id="heroesCelebrationBtn" type="button">К героям</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="reset-modal" id="resetModal">
+      <form class="reset-card" method="dialog">
+        <p class="eyebrow">Только для взрослого</p>
+        <h2>Сбросить прогресс?</h2>
+        <p>Прочитанные книги, герои и отзывы этого профиля будут удалены с устройства.</p>
+        <div class="reset-actions">
+          <button class="ghost-button" id="cancelResetBtn" type="button">Оставить</button>
+          <button class="danger-button" id="confirmResetBtn" type="button">Да, сбросить</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="script.js"></script>
+  </body>
+</html>
