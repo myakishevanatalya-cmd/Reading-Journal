@@ -114,6 +114,8 @@ const streakDays = document.querySelector("#streakDays");
 const streakFlame = document.querySelector("#streakFlame");
 const todayStatus = document.querySelector("#todayStatus");
 const todayFocus = document.querySelector("#todayFocus");
+const todayGuideCard = document.querySelector("#todayGuideCard");
+const trainerGuideCard = document.querySelector("#trainerGuideCard");
 const startSessionBtn = document.querySelector("#startSessionBtn");
 const questPanel = document.querySelector("#questPanel");
 const finishPanel = document.querySelector("#finishPanel");
@@ -215,9 +217,11 @@ function renderToday() {
     todayFocus.textContent = "10 заданий: математика, русский, чтение и повтор ошибок.";
     startSessionBtn.textContent = "Зажечь огонек";
   }
+  renderGuide(todayGuideCard, "today");
 }
 
 function renderTrainers() {
+  renderGuide(trainerGuideCard, "trainers");
   trainerGrid.innerHTML = "";
   TRAINER_MODES.forEach((mode) => {
     const subject = SUBJECTS[mode.subject];
@@ -244,6 +248,122 @@ function renderTrainers() {
     });
     trainerGrid.append(card);
   });
+}
+
+function renderGuide(container, place) {
+  const guide = getGuideSuggestion();
+  const placeLine = place === "today"
+    ? "Можно выбрать самой, а я тихонько слежу, чтобы все острова Академии получали внимание."
+    : "Выбор свободный, но хороший маршрут иногда просит заглянуть не только в любимую комнату.";
+
+  container.innerHTML = `
+    <div class="guide-card__avatar" aria-hidden="true">🦉</div>
+    <div>
+      <p class="eyebrow">Филин Академик</p>
+      <h3>${guide.title}</h3>
+      <p>${guide.text} ${placeLine}</p>
+      <button class="secondary-action" data-guide-action="${guide.action}" data-guide-variant="${guide.variant || ""}">${guide.button}</button>
+    </div>
+  `;
+
+  container.querySelector("button").addEventListener("click", () => {
+    if (guide.action === "daily") {
+      startSession();
+    } else {
+      startTrainer(guide.action, guide.variant || "");
+    }
+  });
+}
+
+function getGuideSuggestion() {
+  const balance = getSubjectBalance(7);
+  const missing = ["math", "russian", "reading"].find((subject) => balance[subject] === 0);
+  if (missing === "math") {
+    return {
+      title: "Математический остров соскучился",
+      text: "Детективы слов прекрасны, но числа тоже любят, когда их навещают.",
+      action: "fast100",
+      button: "Размять быстрый счет"
+    };
+  }
+  if (missing === "russian") {
+    return {
+      title: "Слова ждут расследования",
+      text: "Сегодня можно устроить маленькое дело о словах, буквах и смыслах.",
+      action: "wordDetective",
+      button: "Открыть детектив слов"
+    };
+  }
+  if (missing === "reading") {
+    return {
+      title: "Книжная тропинка зовет",
+      text: "В огоньке дня есть задания на понимание текста, чтобы мысли становились цепкими.",
+      action: "daily",
+      button: "Зажечь огонек дня"
+    };
+  }
+
+  if (balance.math < balance.russian - 2) {
+    return {
+      title: "Числа попросили минутку внимания",
+      text: "Русский идет бодро. Для равновесия полезно дать математике короткий забег.",
+      action: "fast100",
+      button: "5 минут счета"
+    };
+  }
+
+  if (balance.russian < balance.math - 2) {
+    return {
+      title: "Слова машут из словаря",
+      text: "Математика разогрелась. Теперь можно дать слово словарным словам.",
+      action: "dictionary",
+      button: "Потренировать слова"
+    };
+  }
+
+  const weak = topSkills(getWeekAttempts(), false)[0];
+  if (weak) {
+    return {
+      title: "Есть маленькая тропинка для роста",
+      text: `Филин заметил: ${formatSkillName(weak)} просит доброго повторения.`,
+      action: skillToTrainerAction(weak),
+      variant: skillToTrainerVariant(weak),
+      button: "Повторить мягко"
+    };
+  }
+
+  return {
+    title: "Маршрут выглядит ровно",
+    text: "Можно выбрать любимую комнату: быстрый счет, словарные слова или веселые ребусы.",
+    action: "playroom",
+    button: "На веселую перемену"
+  };
+}
+
+function getSubjectBalance(daysBack) {
+  const since = new Date();
+  since.setDate(since.getDate() - daysBack + 1);
+  since.setHours(0, 0, 0, 0);
+  const balance = { math: 0, russian: 0, reading: 0, world: 0 };
+  state.attempts.forEach((attempt) => {
+    if (new Date(attempt.timestamp) >= since && balance[attempt.subject] !== undefined) {
+      balance[attempt.subject] += 1;
+    }
+  });
+  return balance;
+}
+
+function skillToTrainerAction(skillId) {
+  if (["addSub100", "numbers100", "measures", "orderActions"].includes(skillId)) return "fast100";
+  if (skillId === "multiplication50") return "multiply";
+  if (skillId === "dictionaryWords") return "dictionary";
+  if (["wordLogic", "soundLetters", "spellingPairs", "unstressedVowels", "consonants", "separators", "prepositions"].includes(skillId)) return "wordDetective";
+  return "daily";
+}
+
+function skillToTrainerVariant(skillId) {
+  if (skillId === "multiplication50") return "hard";
+  return "";
 }
 
 function renderTrainerActions(mode) {
