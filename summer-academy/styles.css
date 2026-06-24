@@ -59,7 +59,7 @@ button {
   inset: 0;
   background:
     linear-gradient(90deg, rgba(39, 44, 62, 0.62), rgba(39, 44, 62, 0.12)),
-    url("assets/academy-hero.png") center/cover,
+    url("assets/academy-hero.jpg") center/cover,
     linear-gradient(135deg, #f6b443, #7db9df 55%, #84c8a7);
 }
 
@@ -390,6 +390,10 @@ h3 {
   gap: 12px;
 }
 
+.parent-report {
+  overflow-x: auto;
+}
+
 .mistake-card,
 .report-card,
 .stat-card {
@@ -479,7 +483,7 @@ h3 {
   left: 0;
   z-index: 5;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
   gap: 4px;
   max-width: 980px;
   margin: 0 auto;
@@ -502,6 +506,10 @@ h3 {
 
 .nav-button span {
   font-size: 1.2rem;
+}
+
+.nav-button[hidden] {
+  display: none;
 }
 
 .nav-button.active {

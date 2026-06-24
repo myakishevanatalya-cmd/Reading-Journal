@@ -14,6 +14,12 @@ localStorage key: summer-academy-v1:<child>
 https://myakishevanatalya-cmd.github.io/Reading-Journal/summer-academy/?child=katya-academy&name=Катя
 ```
 
+Родительский режим:
+
+```text
+https://myakishevanatalya-cmd.github.io/Reading-Journal/summer-academy/?child=katya-academy&name=Катя&parent=1
+```
+
 ## Что есть
 
 - ежедневная тренировка на 10 заданий;

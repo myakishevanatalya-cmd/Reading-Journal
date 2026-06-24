@@ -1,7 +1,9 @@
 "use strict";
 
-const childName = new URLSearchParams(window.location.search).get("name") || "Катя";
-const childId = new URLSearchParams(window.location.search).get("child") || "katya";
+const urlParams = new URLSearchParams(window.location.search);
+const childName = urlParams.get("name") || "Катя";
+const childId = urlParams.get("child") || "katya";
+const isParentMode = urlParams.get("parent") === "1";
 const STORAGE_KEY = `summer-academy-v1:${childId}`;
 
 const SUBJECTS = {
@@ -15,11 +17,17 @@ const SKILLS = {
   numbers100: { subject: "math", title: "Числа до 100", description: "Сравнение, десятки и единицы" },
   addSub100: { subject: "math", title: "Сложение и вычитание", description: "Устные и письменные вычисления" },
   multiplication50: { subject: "math", title: "Умножение до 50", description: "Табличные случаи и смысл умножения" },
+  division50: { subject: "math", title: "Деление", description: "Связь деления и умножения" },
   wordProblems: { subject: "math", title: "Задачи", description: "Задачи в 1-2 действия" },
   geometry: { subject: "math", title: "Геометрия", description: "Фигуры, длина, периметр" },
+  measures: { subject: "math", title: "Величины", description: "См, дм, м, минуты и часы" },
+  orderActions: { subject: "math", title: "Порядок действий", description: "Скобки и порядок вычислений" },
   spellingPairs: { subject: "russian", title: "Орфограммы", description: "Жи-ши, ча-ща, чу-щу, чк-чн" },
   unstressedVowels: { subject: "russian", title: "Безударные гласные", description: "Подбор проверочных слов" },
   consonants: { subject: "russian", title: "Парные согласные", description: "Проверка согласной в корне" },
+  dictionaryWords: { subject: "russian", title: "Словарные слова", description: "Непроверяемые написания" },
+  separators: { subject: "russian", title: "Разделительные знаки", description: "Разделительные ь и ъ" },
+  prepositions: { subject: "russian", title: "Предлоги", description: "Раздельное написание предлогов" },
   sentenceText: { subject: "russian", title: "Предложение и текст", description: "Тема, главная мысль, заголовок" },
   readingMeaning: { subject: "reading", title: "Понимание текста", description: "Главная мысль, герои, события" },
   worldFacts: { subject: "world", title: "Экспедиции", description: "Природа, карта, безопасность" }
@@ -67,6 +75,11 @@ const againSessionBtn = document.querySelector("#againSessionBtn");
 const exportBtn = document.querySelector("#exportBtn");
 const importInput = document.querySelector("#importInput");
 const resetBtn = document.querySelector("#resetBtn");
+const parentNavBtn = document.querySelector("#parentNavBtn");
+
+if (isParentMode) {
+  parentNavBtn.hidden = false;
+}
 
 navButtons.forEach((button) => {
   button.addEventListener("click", () => showView(button.dataset.view));
@@ -104,6 +117,7 @@ function saveState() {
 }
 
 function showView(viewName) {
+  if (viewName === "parent" && !isParentMode) return;
   views.forEach((view) => view.classList.toggle("active", view.id === `view-${viewName}`));
   navButtons.forEach((button) => button.classList.toggle("active", button.dataset.view === viewName));
   render();
@@ -140,9 +154,12 @@ function startSession() {
   session = {
     id: cryptoRandomId(),
     startedAt: Date.now(),
+    questionStartedAt: Date.now(),
     index: 0,
     tasks,
     results: [],
+    tryCount: 0,
+    usedHint: false,
     locked: false
   };
 
@@ -158,17 +175,29 @@ function buildDailySession() {
     makeNumbersTask,
     makeAddSubTask,
     makeMultiplicationTask,
+    makeDivisionTask,
     makeWordProblemTask,
     makeGeometryTask,
+    makeMeasuresTask,
+    makeOrderTask,
     makeSpellingTask,
     makeUnstressedVowelTask,
     makeConsonantTask,
+    makeDictionaryTask,
+    makeSeparatorTask,
+    makePrepositionTask,
     makeSentenceTask,
     makeReadingTask,
     makeWorldTask
   ];
-  const freshTasks = shuffle(freshFactories).slice(0, Math.max(8, 10 - reviewTasks.length)).map((factory) => factory());
-  return shuffle([...reviewTasks, ...freshTasks]).slice(0, 10);
+  const freshNeeded = Math.max(0, 10 - reviewTasks.length);
+  const freshTasks = [];
+  while (freshTasks.length < freshNeeded) {
+    shuffle(freshFactories).forEach((factory) => {
+      if (freshTasks.length < freshNeeded) freshTasks.push(factory());
+    });
+  }
+  return shuffle([...reviewTasks, ...freshTasks]);
 }
 
 function taskFromMistake(mistake) {
@@ -186,11 +215,17 @@ function createTaskBySkill(skillId) {
     numbers100: makeNumbersTask,
     addSub100: makeAddSubTask,
     multiplication50: makeMultiplicationTask,
+    division50: makeDivisionTask,
     wordProblems: makeWordProblemTask,
     geometry: makeGeometryTask,
+    measures: makeMeasuresTask,
+    orderActions: makeOrderTask,
     spellingPairs: makeSpellingTask,
     unstressedVowels: makeUnstressedVowelTask,
     consonants: makeConsonantTask,
+    dictionaryWords: makeDictionaryTask,
+    separators: makeSeparatorTask,
+    prepositions: makePrepositionTask,
     sentenceText: makeSentenceTask,
     readingMeaning: makeReadingTask,
     worldFacts: makeWorldTask
@@ -201,6 +236,9 @@ function createTaskBySkill(skillId) {
 function renderQuestion() {
   const task = session.tasks[session.index];
   session.locked = false;
+  session.tryCount = 0;
+  session.usedHint = false;
+  session.questionStartedAt = Date.now();
   questCounter.textContent = `Задание ${session.index + 1} из ${session.tasks.length}`;
   questSkill.textContent = `${SUBJECTS[SKILLS[task.skillId].subject].icon} ${SKILLS[task.skillId].title}`;
   questProgressBar.style.width = `${(session.index / session.tasks.length) * 100}%`;
@@ -239,24 +277,38 @@ function renderQuestion() {
 
 function checkAnswer(rawAnswer, sourceElement) {
   if (session.locked) return;
-  session.locked = true;
 
   const task = session.tasks[session.index];
   const userAnswer = normalizeAnswer(rawAnswer);
   const correctAnswer = normalizeAnswer(task.answer);
+  if (!userAnswer) {
+    feedbackBox.classList.remove("hidden");
+    feedbackBox.textContent = "Сначала напиши ответ, потом проверим.";
+    return;
+  }
+
+  session.tryCount += 1;
   const correct = userAnswer === correctAnswer;
+  const finalAttempt = correct || session.tryCount >= 2;
 
   if (task.type !== "input") {
     answerArea.querySelectorAll(".choice-button").forEach((button) => {
       const isAnswer = normalizeAnswer(button.textContent) === correctAnswer;
-      button.classList.toggle("correct", isAnswer);
+      button.classList.toggle("correct", finalAttempt && isAnswer);
       button.classList.toggle("wrong", button === sourceElement && !correct);
     });
   }
 
   feedbackBox.classList.remove("hidden");
+  if (!finalAttempt) {
+    session.usedHint = true;
+    feedbackBox.textContent = `Подсказка: ${task.hint || task.explanation} Попробуй еще раз.`;
+    return;
+  }
+
+  session.locked = true;
   feedbackBox.textContent = correct
-    ? `Верно! ${task.success || "Так держать."}`
+    ? `Верно! ${session.usedHint ? "Ты воспользовалась подсказкой и дошла до ответа." : task.success || "Так держать."}`
     : `Почти получилось. Правильный ответ: ${task.answer}. ${task.explanation}`;
   nextQuestionBtn.classList.remove("hidden");
 
@@ -272,7 +324,9 @@ function checkAnswer(rawAnswer, sourceElement) {
     userAnswer: rawAnswer,
     correct,
     isReview: Boolean(task.isReview),
-    timeSpentSec: Math.round((Date.now() - session.startedAt) / 1000)
+    usedHint: session.usedHint,
+    tries: session.tryCount,
+    timeSpentSec: Math.round((Date.now() - session.questionStartedAt) / 1000)
   };
 
   session.results.push(attempt);
@@ -327,12 +381,14 @@ function updateSkillStats(attempt) {
     attempts: 0,
     correct: 0,
     streak: 0,
+    hints: 0,
     mistakes: 0,
     lastAttempt: ""
   };
   current.attempts += 1;
   current.correct += attempt.correct ? 1 : 0;
   current.streak = attempt.correct ? current.streak + 1 : 0;
+  current.hints += attempt.usedHint ? 1 : 0;
   current.mistakes += attempt.correct ? 0 : 1;
   current.lastAttempt = attempt.timestamp;
   state.skillStats[attempt.skillId] = current;
@@ -457,7 +513,8 @@ function renderParentReport() {
   const skillRows = Object.entries(groupBySkill(weekAttempts))
     .map(([skillId, items]) => {
       const right = items.filter((item) => item.correct).length;
-      return { skillId, total: items.length, correct: right, accuracy: Math.round((right / items.length) * 100) };
+      const hints = items.filter((item) => item.usedHint).length;
+      return { skillId, total: items.length, correct: right, hints, accuracy: Math.round((right / items.length) * 100) };
     })
     .sort((a, b) => a.accuracy - b.accuracy);
 
@@ -476,7 +533,7 @@ function renderParentReport() {
     </div>
     <table class="parent-table">
       <thead>
-        <tr><th>Навык</th><th>Заданий</th><th>Верно</th><th>Точность</th></tr>
+        <tr><th>Навык</th><th>Заданий</th><th>Верно</th><th>С подсказкой</th><th>Точность</th></tr>
       </thead>
       <tbody>
         ${skillRows.map((row) => `
@@ -484,6 +541,7 @@ function renderParentReport() {
             <td>${formatSkillName(row.skillId)}</td>
             <td>${row.total}</td>
             <td>${row.correct}</td>
+            <td>${row.hints}</td>
             <td>${row.accuracy}%</td>
           </tr>
         `).join("")}
@@ -523,6 +581,13 @@ function makeMultiplicationTask() {
   return inputTask("multiplication50", `${a} × ${b} = ?`, String(answer), "Умножение можно представить как несколько одинаковых групп.");
 }
 
+function makeDivisionTask() {
+  const divisor = rand(2, 9);
+  const quotient = rand(2, 9);
+  const dividend = divisor * quotient;
+  return inputTask("division50", `${dividend} : ${divisor} = ?`, String(quotient), "Деление можно проверить умножением.");
+}
+
 function makeWordProblemTask() {
   const templates = [
     () => {
@@ -548,6 +613,35 @@ function makeGeometryTask() {
   const sideA = rand(3, 9);
   const sideB = rand(2, 8);
   return inputTask("geometry", `Прямоугольник: стороны ${sideA} см и ${sideB} см. Чему равен периметр?`, String((sideA + sideB) * 2), "Периметр - сумма длин всех сторон.");
+}
+
+function makeMeasuresTask() {
+  const items = [
+    () => {
+      const dm = rand(2, 9);
+      return inputTask("measures", `${dm} дм = сколько сантиметров?`, String(dm * 10), "В одном дециметре 10 сантиметров.");
+    },
+    () => {
+      const hours = rand(1, 3);
+      return inputTask("measures", `${hours} ч = сколько минут?`, String(hours * 60), "В одном часе 60 минут.");
+    },
+    () => {
+      const cm = rand(20, 90);
+      return choiceTask("measures", `${cm} см - это больше или меньше 1 метра?`, "меньше", ["больше", "меньше", "равно"], "В одном метре 100 сантиметров.");
+    }
+  ];
+  return sample(items)();
+}
+
+function makeOrderTask() {
+  const a = rand(12, 35);
+  const b = rand(3, 12);
+  const c = rand(2, 9);
+  const withBrackets = Math.random() > 0.5;
+  if (withBrackets) {
+    return inputTask("orderActions", `(${a} - ${b}) + ${c} = ?`, String(a - b + c), "Сначала выполняем действие в скобках.");
+  }
+  return inputTask("orderActions", `${a} - ${b} + ${c} = ?`, String(a - b + c), "Сложение и вычитание выполняем по порядку слева направо.");
 }
 
 function makeSpellingTask() {
@@ -582,6 +676,40 @@ function makeConsonantTask() {
   ];
   const item = sample(items);
   return choiceTask("consonants", item[2], item[3], ["б", "п", "г", "к", "з", "с"], `Проверяем так, чтобы после согласной была гласная: ${item[1]}.`);
+}
+
+function makeDictionaryTask() {
+  const items = [
+    ["корова", ["карова", "корова", "кароваа"], "Это словарное слово, его нужно запомнить."],
+    ["собака", ["сабака", "собака", "собако"], "Это словарное слово, его удобно проговаривать по слогам."],
+    ["молоко", ["малако", "молоко", "молако"], "В словарных словах написание проверяем по словарю."],
+    ["ворона", ["варона", "ворона", "воронна"], "Это словарное слово."],
+    ["ученик", ["ученик", "учиник", "ученек"], "Это словарное слово, запоминаем букву е."]
+  ];
+  const [answer, choices, explanation] = sample(items);
+  return choiceTask("dictionaryWords", "Выбери правильное словарное слово.", answer, choices, explanation);
+}
+
+function makeSeparatorTask() {
+  const items = [
+    ["семья", ["семя", "семья", "семъя"], "В слове семья пишется разделительный мягкий знак."],
+    ["вьюга", ["вюга", "вьюга", "въюга"], "Перед ю после согласной здесь нужен разделительный мягкий знак."],
+    ["подъезд", ["подезд", "подьезд", "подъезд"], "После приставки перед е пишется разделительный твердый знак."],
+    ["объявление", ["обявление", "обьявление", "объявление"], "После приставки перед я пишется разделительный твердый знак."]
+  ];
+  const [answer, choices, explanation] = sample(items);
+  return choiceTask("separators", "Где слово написано правильно?", answer, choices, explanation);
+}
+
+function makePrepositionTask() {
+  const items = [
+    ["Кот сидит на окне.", ["на окне", "наокне"], "Предлог со словом пишется раздельно."],
+    ["Дети пошли в школу.", ["в школу", "вшколу"], "Между предлогом и словом можно вставить другое слово."],
+    ["Мяч лежит под столом.", ["под столом", "подстолом"], "Предлог пишется отдельно от слова."],
+    ["Мы гуляли у реки.", ["у реки", "уреки"], "Короткие предлоги тоже пишутся отдельно."]
+  ];
+  const [sentence, choices, explanation] = sample(items);
+  return choiceTask("prepositions", `Выбери правильное написание из предложения: ${sentence}`, choices[0], choices, explanation);
 }
 
 function makeSentenceTask() {
