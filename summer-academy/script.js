@@ -1304,17 +1304,12 @@ function buildDailySession() {
     makeWordProblemTask,
     makeGeometryTask,
     makeMeasuresTask,
-    makeSpellingTask,
-    makeUnstressedVowelTask,
-    makeConsonantTask,
     makeDictionaryTask,
-    makeSeparatorTask,
-    makePrepositionTask,
     makeWordDetectiveTask,
-    makeSoundLettersTask,
-    makeSentenceTask,
     makeReadingTask,
-    makeWorldTask
+    makeRussianGameTask,
+    makeWordPuzzleTask,
+    makeProverbTask
   ];
   const freshNeeded = Math.max(0, 10 - reviewTasks.length);
   const freshTasks = [];
@@ -1335,7 +1330,7 @@ function buildTrainerTasks(modeId, variant) {
     mathStories: () => Array.from({ length: 8 }, () => makeMathStoryTask()),
     dictionary: () => Array.from({ length: 10 }, () => sample([makeDictionaryTask, makeDictionaryMissingTask])()),
     wordDetective: () => Array.from({ length: 10 }, () => makeWordDetectiveTask()),
-    playroom: () => Array.from({ length: 8 }, () => sample([makeMiniRebusTask, makeBuildWordTask, makeOddWordTask, makeDictionaryMissingTask])()),
+    playroom: () => Array.from({ length: 8 }, () => sample([makeRussianGameTask, makeWordPuzzleTask])()),
     russianGames: () => Array.from({ length: 8 }, () => makeRussianGameTask()),
     wordPuzzles: () => Array.from({ length: 6 }, () => makeWordPuzzleTask()),
     proverbs: () => Array.from({ length: 8 }, () => makeProverbTask()),
@@ -1365,20 +1360,20 @@ function createTaskBySkill(skillId) {
     measures: makeMeasuresTask,
     lifeMath: makeLifeMathTask,
     orderActions: makeOrderTask,
-    spellingPairs: makeSpellingTask,
-    unstressedVowels: makeUnstressedVowelTask,
-    consonants: makeConsonantTask,
+    spellingPairs: makeWordDetectiveTask,
+    unstressedVowels: makeWordDetectiveTask,
+    consonants: makeWordDetectiveTask,
     dictionaryWords: makeDictionaryTask,
-    separators: makeSeparatorTask,
-    prepositions: makePrepositionTask,
+    separators: makeWordDetectiveTask,
+    prepositions: makeWordDetectiveTask,
     wordLogic: makeWordDetectiveTask,
     wordGames: makeRussianGameTask,
     wordPuzzles: makeWordPuzzleTask,
     proverbs: makeProverbTask,
-    soundLetters: makeSoundLettersTask,
-    sentenceText: makeSentenceTask,
+    soundLetters: makeWordDetectiveTask,
+    sentenceText: makeWordDetectiveTask,
     readingMeaning: makeReadingTask,
-    worldFacts: makeWorldTask
+    worldFacts: makeReadingTask
   };
   return (factories[skillId] || makeAddSubTask)();
 }
