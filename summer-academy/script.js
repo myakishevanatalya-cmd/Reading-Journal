@@ -1929,7 +1929,10 @@ function makeRussianGameTask() {
     makeChooseRuleTask,
     makeBuildSentenceGameTask,
     makeOddRuleWordTask,
-    makeBuildWordGameTask
+    makeBuildWordGameTask,
+    makeWordRiddleTask,
+    makeWordSortTask,
+    makeMatchPairsTask
   ])();
 }
 
@@ -2009,8 +2012,72 @@ function makeBuildWordGameTask() {
   return task;
 }
 
+function makeWordRiddleTask() {
+  const items = [
+    ["Им пишут или рисуют. В слове две буквы а.", "карандаш", "Карандаш - словарное слово."],
+    ["Дерево с белым стволом. В слове есть буква ё.", "берёза", "Береза - словарное слово."],
+    ["Место, где можно взять книгу почитать.", "библиотека", "Библиотека - длинное словарное слово."],
+    ["Вежливое слово, которое говорят за помощь.", "спасибо", "Спасибо - вежливое словарное слово."],
+    ["Ее надевают зимой поверх одежды.", "пальто", "Пальто пишется с мягким знаком."]
+  ];
+  const [clue, answer, explanation] = sample(items);
+  return inputTask("wordGames", `Отгадай слово: ${clue}`, answer, explanation);
+}
+
+function makeWordSortTask() {
+  const items = [
+    {
+      prompt: "Какие слова относятся к предметам: кот, бежит, дом, пишет, книга, летит?",
+      answer: "кот, дом, книга",
+      accepted: ["кот дом книга", "кот,дом,книга"],
+      explanation: "Предмет отвечает на вопросы кто? что?"
+    },
+    {
+      prompt: "Какие слова относятся к действиям: кот, бежит, дом, пишет, книга, летит?",
+      answer: "бежит, пишет, летит",
+      accepted: ["бежит пишет летит", "бежит,пишет,летит"],
+      explanation: "Действие отвечает на вопрос что делает?"
+    },
+    {
+      prompt: "Выбери слова с правилом жи-ши: машина, чашка, щука, жираф, задача, чудо.",
+      answer: "машина, жираф",
+      accepted: ["машина жираф", "машина,жираф"],
+      explanation: "В словах машина и жираф есть сочетания ши/жи."
+    },
+    {
+      prompt: "Выбери слова с правилом ча-ща: машина, чашка, щука, жираф, задача, чудо.",
+      answer: "чашка, задача",
+      accepted: ["чашка задача", "чашка,задача"],
+      explanation: "В словах чашка и задача есть сочетание ча."
+    },
+    {
+      prompt: "Выбери слова с правилом чу-щу: машина, чашка, щука, жираф, задача, чудо.",
+      answer: "щука, чудо",
+      accepted: ["щука чудо", "щука,чудо"],
+      explanation: "В словах щука и чудо есть сочетания щу/чу."
+    }
+  ];
+  const item = sample(items);
+  const task = inputTask("wordGames", item.prompt, item.answer, item.explanation);
+  task.acceptedAnswers = item.accepted;
+  return task;
+}
+
+function makeMatchPairsTask() {
+  const items = [
+    ["Соедини слово с проверочным словом: леса", "лес", ["лес", "горы", "травы", "звезды"], "Леса проверяем словом лес."],
+    ["Соедини слово с проверочным словом: гора", "горы", ["лес", "горы", "травы", "звезды"], "Гора проверяется словом горы."],
+    ["Соедини слово с проверочным словом: гриб", "грибы", ["грибы", "зубы", "дубы", "снега"], "Гриб проверяем словом грибы."],
+    ["Соедини слово с частью речи: кот", "существительное", ["существительное", "прилагательное", "глагол"], "Кот отвечает на вопрос кто?"],
+    ["Соедини слово с частью речи: зеленый", "прилагательное", ["существительное", "прилагательное", "глагол"], "Зеленый отвечает на вопрос какой?"],
+    ["Соедини слово с частью речи: бежит", "глагол", ["существительное", "прилагательное", "глагол"], "Бежит обозначает действие."]
+  ];
+  const [prompt, answer, choices, explanation] = sample(items);
+  return choiceTask("wordGames", prompt, answer, choices, explanation);
+}
+
 function makeWordPuzzleTask() {
-  return sample([makeMiniCrosswordTask, makeLetterCircleTask, makeWordSearchTask])();
+  return sample([makeMiniCrosswordTask, makeMiniScanwordTask, makeLetterCircleTask, makeWordsFromLettersTask, makeWordSearchTask, makeWordChainTask])();
 }
 
 function makeMiniCrosswordTask() {
@@ -2032,17 +2099,51 @@ function makeMiniCrosswordTask() {
   return task;
 }
 
+function makeMiniScanwordTask() {
+  const items = [
+    ["еда и быт", "белый напиток", "молоко", 6],
+    ["еда и быт", "сладкий продукт для чая", "сахар", 5],
+    ["еда и быт", "овощ для супа, оранжевый", "морковь", 7],
+    ["еда и быт", "посуда для воды", "стакан", 6],
+    ["еда и быт", "верхняя одежда", "пальто", 6],
+    ["город", "место, куда приходят поезда", "вокзал", 6],
+    ["город", "подземный транспорт", "метро", 5],
+    ["город", "место, где живет много людей", "город", 5],
+    ["город", "дорожка в парке с деревьями", "аллея", 5],
+    ["город", "столица России", "Москва", 6]
+  ];
+  const [topic, clue, answer, length] = sample(items);
+  const task = inputTask("wordPuzzles", `Мини-сканворд (${topic}). Подсказка: ${clue}. Слово из ${length} букв.`, answer, "Вспомни слово по короткой подсказке.");
+  task.visual = { type: "pattern", items: Array.from({ length }, () => "□"), missing: "" };
+  return task;
+}
+
 function makeLetterCircleTask() {
   const items = [
     [["с", "о", "б", "а", "к", "а"], ["сок", "бак", "бок", "коса", "бока", "собака"], "собака"],
     [["м", "о", "л", "о", "к", "о"], ["лом", "кол", "мол", "молоко"], "молоко"],
     [["п", "е", "н", "а", "л"], ["пена", "пенал"], "пенал"],
-    [["к", "о", "т", "р", "а"], ["кот", "рот", "ток", "крот", "кора"], "крот"]
+    [["к", "о", "т", "р", "а"], ["кот", "рот", "ток", "крот", "кора"], "крот"],
+    [["в", "е", "т", "е", "р"], ["рев", "ветер"], "ветер"]
   ];
   const [letters, answers, mainAnswer] = sample(items);
   const task = inputTask("wordPuzzles", `Буквенный круг. Составь любое подходящее слово из букв: ${letters.join(", ")}`, mainAnswer, `Можно составить: ${answers.join(", ")}.`);
   task.acceptedAnswers = answers;
   task.visual = { type: "letterCircle", letters };
+  return task;
+}
+
+function makeWordsFromLettersTask() {
+  const items = [
+    ["карандаш", ["дар", "шар", "рак", "рана", "карандаш"]],
+    ["сорока", ["сок", "рок", "коса", "сорока"]],
+    ["собака", ["сок", "бак", "бок", "коса", "собака"]],
+    ["морковь", ["мор", "ров", "морковь"]],
+    ["картина", ["кит", "ран", "тина", "картина"]]
+  ];
+  const [source, answers] = sample(items);
+  const task = inputTask("wordPuzzles", `Составь короткое слово из букв слова "${source}".`, answers[0], `Можно составить: ${answers.join(", ")}.`);
+  task.acceptedAnswers = answers;
   return task;
 }
 
@@ -2065,6 +2166,16 @@ function makeWordSearchTask() {
   task.acceptedAnswers = puzzle.words;
   task.visual = { type: "wordGrid", grid: puzzle.grid };
   return task;
+}
+
+function makeWordChainTask() {
+  const items = [
+    ["кот - тетрадь - ...", "дорога", ["дом", "дорога", "апельсин"], "Слово тетрадь заканчивается на д, следующее слово начинается на д."],
+    ["собака - аллея - ...", "ягода", ["ягода", "метро", "пенал"], "Слово аллея заканчивается на я, следующее слово начинается на я."],
+    ["пенал - лопата - ...", "апельсин", ["апельсин", "собака", "тетрадь"], "Слово лопата заканчивается на а, следующее слово начинается на а."]
+  ];
+  const [chain, answer, choices, explanation] = sample(items);
+  return choiceTask("wordPuzzles", `Продолжи цепочку слов: ${chain}`, answer, choices, explanation);
 }
 
 function makeProverbTask() {
