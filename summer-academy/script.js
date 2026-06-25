@@ -531,7 +531,22 @@ const VERIFIED_LIFE_MATH_TASKS = [
   { skillId: "lifeMath", kind: "choice", prompt: "Найди лишнюю фигуру: квадрат, прямоугольник, треугольник, круг.", answer: "круг", choices: ["квадрат", "прямоугольник", "треугольник", "круг"], explanation: "У круга нет углов, а у остальных фигур есть углы.", visual: { type: "shapeSet", shapes: ["square", "rectangle", "triangle", "circle"] } },
   { skillId: "lifeMath", kind: "choice", prompt: "Продолжи ряд: круг, квадрат, круг, квадрат, ...", answer: "круг", choices: ["круг", "квадрат", "треугольник"], explanation: "Фигуры чередуются.", visual: { type: "pattern", items: ["круг", "квадрат", "круг", "квадрат"], missing: "?" } },
   { skillId: "lifeMath", kind: "input", prompt: "В таблице числа идут так: 3, 6, 9, 12. Какое число будет следующим?", answer: "15", explanation: "Каждый раз прибавляют 3.", visual: { type: "pattern", items: ["3", "6", "9", "12"], missing: "?" } },
-  { skillId: "lifeMath", kind: "input", prompt: "У Маши 2 карандаша, у Лены 4 карандаша, у Оли 6 карандашей. Если правило сохранится, сколько карандашей у следующей девочки?", answer: "8", explanation: "Каждый раз карандашей становится на 2 больше.", visual: { type: "pattern", items: ["2", "4", "6"], missing: "?" } }
+  { skillId: "lifeMath", kind: "input", prompt: "У Маши 2 карандаша, у Лены 4 карандаша, у Оли 6 карандашей. Если правило сохранится, сколько карандашей у следующей девочки?", answer: "8", explanation: "Каждый раз карандашей становится на 2 больше.", visual: { type: "pattern", items: ["2", "4", "6"], missing: "?" } },
+  { skillId: "lifeMath", kind: "input", prompt: "Посмотри на часы. Минутная стрелка на 12, часовая на 7. Который час?", answer: "7:00", acceptedAnswers: ["7 часов", "7"], explanation: "Если минутная стрелка на 12, значит ровный час.", visual: { type: "clock", hour: 7, minute: 0 } },
+  { skillId: "lifeMath", kind: "input", prompt: "Посмотри на часы. Минутная стрелка на 6, часовая между 3 и 4. Который час?", answer: "3:30", acceptedAnswers: ["3 часа 30 минут", "3.30"], explanation: "Если минутная стрелка на 6, прошло 30 минут.", visual: { type: "clock", hour: 3, minute: 30 } },
+  { skillId: "lifeMath", kind: "input", prompt: "На часах 10:15. Через 30 минут начнется прогулка. Во сколько начнется прогулка?", answer: "10:45", explanation: "Прибавь 30 минут к 10:15.", visual: { type: "clock", time: "10:15" } },
+  { skillId: "lifeMath", kind: "input", prompt: "Урок начался в 9:20 и закончился в 9:50. Сколько минут длился урок?", answer: "30", acceptedAnswers: ["30 минут"], explanation: "От 20 минут до 50 минут прошло 30 минут.", visual: { type: "clock", time: "9:20" } },
+  { skillId: "measures", kind: "input", prompt: "На линейке отрезок начинается на 0 см и заканчивается на 8 см. Какова длина отрезка?", answer: "8", acceptedAnswers: ["8 см"], explanation: "Длина отрезка от 0 до 8 равна 8 см.", visual: { type: "ruler", startCm: 0, endCm: 8 } },
+  { skillId: "measures", kind: "input", prompt: "На линейке отрезок начинается на 2 см и заканчивается на 9 см. Какова длина отрезка?", answer: "7", acceptedAnswers: ["7 см"], explanation: "Нужно вычесть начало из конца: 9 - 2.", visual: { type: "ruler", startCm: 2, endCm: 9 } },
+  { skillId: "measures", kind: "input", prompt: "Один отрезок длиной 6 см, другой 4 см. На сколько сантиметров первый отрезок длиннее?", answer: "2", acceptedAnswers: ["2 см"], explanation: "Вычти 4 из 6.", visual: { type: "ruler", segmentA: 6, segmentB: 4 } },
+  { skillId: "lifeMath", kind: "input", prompt: "На экране 2 монеты по 10 рублей и 1 монета 5 рублей. Сколько рублей всего?", answer: "25", explanation: "10 + 10 + 5 = 25.", visual: { type: "coins", coins: [10, 10, 5] } },
+  { skillId: "lifeMath", kind: "input", prompt: "На экране купюра 50 рублей. Покупка стоит 32 рубля. Сколько сдачи?", answer: "18", explanation: "Вычти 32 из 50.", visual: { type: "coins", money: 50, prices: [32] } },
+  { skillId: "lifeMath", kind: "choice", prompt: "У ребенка 40 рублей. Тетрадь стоит 18 рублей, карандаш 15 рублей. Хватит ли денег?", answer: "да", choices: ["да", "нет"], explanation: "18 + 15 = 33, а 40 больше 33.", visual: { type: "coins", money: 40, prices: [18, 15] } },
+  { skillId: "geometry", kind: "choice", prompt: "На экране фигура с 4 равными сторонами. Как она называется?", answer: "квадрат", choices: ["квадрат", "прямоугольник", "треугольник"], explanation: "У квадрата все стороны равны.", visual: { type: "shape", shape: "square" } },
+  { skillId: "geometry", kind: "input", prompt: "На экране прямоугольник со сторонами 5 см и 3 см. Найди периметр.", answer: "16", acceptedAnswers: ["16 см"], explanation: "5 + 3 + 5 + 3 = 16.", visual: { type: "shape", shape: "rectangle", sideA: 5, sideB: 3 } },
+  { skillId: "geometry", kind: "input", prompt: "Путь идет 3 клетки вправо, 2 клетки вверх, 4 клетки вправо. Сколько клеток всего?", answer: "9", explanation: "3 + 2 + 4 = 9.", visual: { type: "grid", moves: ["right 3", "up 2", "right 4"] } },
+  { skillId: "geometry", kind: "input", prompt: "Ломаная на клетках состоит из звеньев 2 клетки, 3 клетки и 5 клеток. Найди длину ломаной.", answer: "10", acceptedAnswers: ["10 клеток"], explanation: "Сложи длины всех звеньев.", visual: { type: "grid", segments: [2, 3, 5] } },
+  { skillId: "lifeMath", kind: "choice", prompt: "Продолжи ряд: треугольник, треугольник, квадрат, треугольник, треугольник, квадрат, ...", answer: "треугольник", choices: ["треугольник", "квадрат", "круг"], explanation: "Повторяется группа: треугольник, треугольник, квадрат.", visual: { type: "pattern", items: ["треугольник", "треугольник", "квадрат", "треугольник", "треугольник", "квадрат"], missing: "?" } }
 ];
 
 const RUSSIAN_DETECTIVE_TASKS = [
@@ -734,6 +749,134 @@ const RUSSIAN_DETECTIVE_TASKS = [
     answer: "арбуз, дом, кот",
     choices: ["арбуз, дом, кот", "дом, арбуз, кот", "кот, дом, арбуз"],
     explanation: "Смотри на первые буквы слов: а, д, к."
+  },
+  {
+    skillId: "spellingPairs",
+    type: "choice",
+    prompt: "Найди ошибку: У Машы новая книга.",
+    answer: "Маши",
+    choices: ["Маши", "Машы", "Маше"],
+    explanation: "Ши пишется с буквой и."
+  },
+  {
+    skillId: "spellingPairs",
+    type: "choice",
+    prompt: "Выбери правильное слово.",
+    answer: "жизнь",
+    choices: ["жизнь", "жызнь", "жезнь"],
+    explanation: "Жи пишется с буквой и."
+  },
+  {
+    skillId: "spellingPairs",
+    type: "choice",
+    prompt: "Найди правильное написание.",
+    answer: "задача",
+    choices: ["задача", "задачя", "задеча"],
+    explanation: "Ча пишется с буквой а."
+  },
+  {
+    skillId: "spellingPairs",
+    type: "choice",
+    prompt: "Найди ошибку: Я чювствую запах цветов.",
+    answer: "чувствую",
+    choices: ["чувствую", "чювствую", "чевствую"],
+    explanation: "Чу пишется с буквой у."
+  },
+  {
+    skillId: "unstressedVowels",
+    type: "choice",
+    prompt: "Найди ошибку: На паляне росли цветы.",
+    answer: "поляне",
+    choices: ["поляне", "паляне", "пилине"],
+    explanation: "Проверочное слово: поле."
+  },
+  {
+    skillId: "consonants",
+    type: "choice",
+    prompt: "Найди ошибку: На столе лежит хлеп.",
+    answer: "хлеб",
+    choices: ["хлеб", "хлеп", "хлет"],
+    explanation: "Проверочное слово: хлеба."
+  },
+  {
+    skillId: "separators",
+    type: "choice",
+    prompt: "Найди слово с разделительным мягким знаком: конь, семья, день.",
+    answer: "семья",
+    choices: ["конь", "семья", "день"],
+    explanation: "Разделительный мягкий знак стоит перед я, е, ё, ю, и и разделяет звуки."
+  },
+  {
+    skillId: "separators",
+    type: "choice",
+    prompt: "Выбери правильное написание.",
+    answer: "письмо",
+    choices: ["письмо", "писмо", "писььмо"],
+    explanation: "Мягкий знак показывает мягкость согласного с."
+  },
+  {
+    skillId: "wordLogic",
+    type: "choice",
+    prompt: "Выбери правильное написание названия города.",
+    answer: "Москва",
+    choices: ["Москва", "москва"],
+    explanation: "Название города пишется с большой буквы."
+  },
+  {
+    skillId: "wordLogic",
+    type: "choice",
+    prompt: "Исправь предложение: У пети есть собака Шарик.",
+    answer: "У Пети есть собака Шарик.",
+    choices: ["У Пети есть собака Шарик.", "У пети есть собака Шарик.", "У Пети есть собака шарик."],
+    explanation: "Имя человека и кличка животного пишутся с большой буквы."
+  },
+  {
+    skillId: "prepositions",
+    type: "choice",
+    prompt: "Исправь ошибку: Мяч лежит подстулом.",
+    answer: "Мяч лежит под стулом.",
+    choices: ["Мяч лежит под стулом.", "Мяч лежит подстулом.", "Мяч лежит под-стулом."],
+    explanation: "Предлог под пишется отдельно."
+  },
+  {
+    skillId: "sentenceText",
+    type: "choice",
+    prompt: "Выбери действие в предложении: Собака бежит по двору.",
+    answer: "бежит",
+    choices: ["собака", "бежит", "двор"],
+    explanation: "Спроси: что делает собака?"
+  },
+  {
+    skillId: "sentenceText",
+    type: "choice",
+    prompt: "Выбери главные слова в предложении: Девочка читает сказку.",
+    answer: "девочка читает",
+    choices: ["девочка читает", "читает сказку", "девочка сказку"],
+    explanation: "Кто? девочка. Что делает? читает."
+  },
+  {
+    skillId: "wordLogic",
+    type: "choice",
+    prompt: "Выбери правильный перенос слова корова.",
+    answer: "ко-рова",
+    choices: ["ко-рова", "кор-ова", "к-орова"],
+    explanation: "Одну букву нельзя оставлять на строке."
+  },
+  {
+    skillId: "wordLogic",
+    type: "choice",
+    prompt: "Поставь слова по алфавиту: кот, кит, кран.",
+    answer: "кит, кот, кран",
+    choices: ["кит, кот, кран", "кот, кит, кран", "кран, кот, кит"],
+    explanation: "Первые буквы одинаковые, смотри на вторую букву."
+  },
+  {
+    skillId: "wordLogic",
+    type: "choice",
+    prompt: "Поставь слова по алфавиту: река, рыба, робот.",
+    answer: "река, робот, рыба",
+    choices: ["река, робот, рыба", "робот, река, рыба", "рыба, робот, река"],
+    explanation: "Смотри на вторую букву: е, о, ы."
   }
 ];
 
