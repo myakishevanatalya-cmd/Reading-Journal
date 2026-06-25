@@ -963,6 +963,25 @@ h3 {
   text-transform: uppercase;
 }
 
+.reading-card {
+  width: 100%;
+  text-align: left;
+}
+
+.reading-card strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--ink);
+  font-size: 1.05rem;
+}
+
+.reading-card p {
+  margin-bottom: 0;
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
 .bottom-nav {
   position: fixed;
   right: 0;
