@@ -63,6 +63,14 @@
             <p class="quest-prompt" id="questPrompt"></p>
             <div class="answer-area" id="answerArea"></div>
             <div class="feedback hidden" id="feedbackBox"></div>
+            <div class="fun-break fun-break--session hidden" id="sessionBreak">
+              <p class="eyebrow">Веселая перемена</p>
+              <h3 id="sessionBreakTitle">Шутка из Академии</h3>
+              <p id="sessionBreakText"></p>
+              <p class="break-answer hidden" id="sessionBreakAnswer"></p>
+              <button class="secondary-action hidden" id="revealSessionBreakAnswerBtn">Показать отгадку</button>
+              <button class="secondary-action" id="nextBreakBtn">Еще улыбку</button>
+            </div>
             <button class="primary-action hidden" id="nextQuestionBtn">Дальше</button>
           </div>
 
@@ -91,8 +99,10 @@
           <div class="trainer-grid" id="trainerGrid"></div>
           <div class="fun-break" id="funBreak">
             <p class="eyebrow">Веселая перемена</p>
-            <h3>Шутка из Академии</h3>
+            <h3 id="funBreakTitle">Шутка из Академии</h3>
             <p id="jokeLine">Учебник математики сказал тетради: «Не переживай, мы все решим».</p>
+            <p class="break-answer hidden" id="funBreakAnswer"></p>
+            <button class="secondary-action hidden" id="revealBreakAnswerBtn">Показать отгадку</button>
             <button class="secondary-action" id="newJokeBtn">Еще улыбку</button>
           </div>
         </section>

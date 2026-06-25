@@ -63,6 +63,109 @@ const ACADEMY_JOKES = [
   "Число 100 гордилось собой, пока не встретило задачу в два действия."
 ];
 
+const FUN_BREAK_ITEMS = [
+  { id: 1, type: "anekdot", title: "Анекдот на перемене", text: "Учитель спрашивает: \"Почему ты опоздал?\" Ученик отвечает: \"Я шел медленно, чтобы не устать до урока\".", answer: "", tag: "школа", tone: "funny", showAfter: "any", weight: 4, isActive: true },
+  { id: 2, type: "anekdot", title: "Анекдот на перемене", text: "Мама спрашивает: \"Ты сделал уроки?\" Сын отвечает: \"Почти. Я уже открыл тетрадь\".", answer: "", tag: "школа", tone: "funny", showAfter: "any", weight: 4, isActive: true },
+  { id: 3, type: "anekdot", title: "Анекдот на перемене", text: "Учитель сказал: \"Откройте учебники\". Петя открыл и прошептал: \"Ну что, учебник, выручай\".", answer: "", tag: "школа", tone: "funny", showAfter: "any", weight: 5, isActive: true },
+  { id: 4, type: "anekdot", title: "Анекдот на перемене", text: "Папа спросил: \"Почему ты так долго решаешь задачу?\" Сын ответил: \"Она сама не решается, приходится уговаривать\".", answer: "", tag: "математика", tone: "funny", showAfter: "any", weight: 5, isActive: true },
+  { id: 5, type: "anekdot", title: "Анекдот на перемене", text: "Учитель спрашивает: \"Что такое перемена?\" Ученик отвечает: \"Это когда стул отдыхает от ученика\".", answer: "", tag: "школа", tone: "funny", showAfter: "any", weight: 4, isActive: true },
+  { id: 6, type: "anekdot", title: "Анекдот на перемене", text: "Бабушка спрашивает: \"Ты прочитал книгу?\" Внук отвечает: \"Да, я уже познакомился с обложкой\".", answer: "", tag: "чтение", tone: "funny", showAfter: "any", weight: 3, isActive: true },
+  { id: 7, type: "anekdot", title: "Анекдот на перемене", text: "Мама спрашивает: \"Почему тетрадь такая мятая?\" Сын отвечает: \"Она волновалась перед проверкой\".", answer: "", tag: "школа", tone: "funny", showAfter: "any", weight: 4, isActive: true },
+  { id: 8, type: "anekdot", title: "Анекдот на перемене", text: "Учитель спрашивает: \"Кто готов отвечать?\" В классе стало так тихо, что было слышно, как думает карандаш.", answer: "", tag: "школа", tone: "funny", showAfter: "any", weight: 4, isActive: true },
+  { id: 9, type: "anekdot", title: "Анекдот на перемене", text: "Мама сказала: \"Пора повторять таблицу умножения\". Сын ответил: \"Она и так повторяется каждый день\".", answer: "", tag: "математика", tone: "funny", showAfter: "any", weight: 4, isActive: true },
+  { id: 10, type: "anekdot", title: "Анекдот на перемене", text: "Петя сказал: \"Я сегодня быстро сделал задание\". Мама спросила: \"И как?\" Петя ответил: \"Быстро\".", answer: "", tag: "школа", tone: "funny", showAfter: "any", weight: 3, isActive: true },
+  { id: 11, type: "joke", title: "Шутка из Академии", text: "Учебник математики сказал тетради: \"Не переживай, мы все решим\".", answer: "", tag: "математика", tone: "funny", showAfter: "any", weight: 5, isActive: true },
+  { id: 12, type: "joke", title: "Шутка из Академии", text: "Ластик сказал карандашу: \"Ошибайся смело, я рядом\".", answer: "", tag: "школа", tone: "kind", showAfter: "after_error", weight: 5, isActive: true },
+  { id: 13, type: "joke", title: "Шутка из Академии", text: "Книга сказала закладке: \"Не уходи, без тебя я потеряю место\".", answer: "", tag: "чтение", tone: "funny", showAfter: "any", weight: 5, isActive: true },
+  { id: 14, type: "joke", title: "Шутка из Академии", text: "Ноль посмотрел на восьмерку и сказал: \"Красивый ремень!\"", answer: "", tag: "математика", tone: "funny", showAfter: "any", weight: 5, isActive: true },
+  { id: 15, type: "joke", title: "Шутка из Академии", text: "Дневник сказал пятерке: \"Заходи почаще!\"", answer: "", tag: "школа", tone: "funny", showAfter: "after_success", weight: 5, isActive: true },
+  { id: 16, type: "joke", title: "Шутка из Академии", text: "Линейка всегда говорит прямо.", answer: "", tag: "математика", tone: "funny", showAfter: "any", weight: 4, isActive: true },
+  { id: 17, type: "joke", title: "Шутка из Академии", text: "Будильник думает, что командует утром.", answer: "", tag: "время", tone: "funny", showAfter: "any", weight: 4, isActive: true },
+  { id: 18, type: "joke", title: "Шутка из Академии", text: "Рюкзак мечтал стать легче, но знания оказались важнее.", answer: "", tag: "школа", tone: "funny", showAfter: "any", weight: 3, isActive: true },
+  { id: 19, type: "joke", title: "Шутка из Академии", text: "Часы не бегают, но все равно всегда идут.", answer: "", tag: "время", tone: "funny", showAfter: "any", weight: 4, isActive: true },
+  { id: 20, type: "joke", title: "Шутка из Академии", text: "Кот лег на книгу и решил, что теперь он ученый.", answer: "", tag: "животные", tone: "funny", showAfter: "any", weight: 5, isActive: true },
+  { id: 21, type: "joke", title: "Шутка из Академии", text: "Собака выучила команду \"сидеть\" и решила, что урок окончен.", answer: "", tag: "животные", tone: "funny", showAfter: "any", weight: 5, isActive: true },
+  { id: 22, type: "joke", title: "Шутка из Академии", text: "Черепаха не опаздывает. Она просто идет в своем темпе.", answer: "", tag: "животные", tone: "kind", showAfter: "any", weight: 4, isActive: true },
+  { id: 23, type: "joke", title: "Шутка из Академии", text: "Заяц так быстро делал зарядку, что сам себя обогнал.", answer: "", tag: "животные", tone: "funny", showAfter: "any", weight: 4, isActive: true },
+  { id: 24, type: "joke", title: "Шутка из Академии", text: "Мороженое хотело погулять, но слишком быстро растаяло от счастья.", answer: "", tag: "лето", tone: "funny", showAfter: "any", weight: 4, isActive: true },
+  { id: 25, type: "joke", title: "Шутка из Академии", text: "Дождик стучал по окну, потому что хотел зайти на чай.", answer: "", tag: "природа", tone: "funny", showAfter: "any", weight: 3, isActive: true },
+  { id: 26, type: "dialogue", title: "Веселый диалог", text: "\"Почему ручка устала?\" - \"Сегодня у нее был письменный марафон\".", answer: "", tag: "школа", tone: "funny", showAfter: "any", weight: 4, isActive: true },
+  { id: 27, type: "dialogue", title: "Веселый диалог", text: "\"Почему книга не скучает?\" - \"Внутри нее всегда кто-то приключается\".", answer: "", tag: "чтение", tone: "funny", showAfter: "any", weight: 4, isActive: true },
+  { id: 28, type: "dialogue", title: "Веселый диалог", text: "\"Что делает задача после решения?\" - \"Отдыхает в правильном ответе\".", answer: "", tag: "математика", tone: "funny", showAfter: "after_success", weight: 4, isActive: true },
+  { id: 29, type: "dialogue", title: "Веселый диалог", text: "\"Почему кот сел на тетрадь?\" - \"Хотел получить мягкую оценку\".", answer: "", tag: "животные", tone: "funny", showAfter: "any", weight: 4, isActive: true },
+  { id: 30, type: "dialogue", title: "Веселый диалог", text: "\"Почему облако не пришло на урок?\" - \"Его унесло ветром\".", answer: "", tag: "природа", tone: "funny", showAfter: "any", weight: 3, isActive: true },
+  { id: 31, type: "dialogue", title: "Веселый диалог", text: "\"Почему карандаш такой острый?\" - \"Он готов к новым идеям\".", answer: "", tag: "школа", tone: "funny", showAfter: "any", weight: 3, isActive: true },
+  { id: 32, type: "dialogue", title: "Веселый диалог", text: "\"Почему пенал всегда спокойный?\" - \"У него все разложено по местам\".", answer: "", tag: "школа", tone: "funny", showAfter: "any", weight: 4, isActive: true },
+  { id: 33, type: "dialogue", title: "Веселый диалог", text: "\"Почему тетрадь любит порядок?\" - \"В клеточку жить удобнее\".", answer: "", tag: "школа", tone: "funny", showAfter: "any", weight: 3, isActive: true },
+  { id: 34, type: "dialogue", title: "Веселый диалог", text: "\"Почему воробей не взял портфель?\" - \"У него уроки на ветке\".", answer: "", tag: "животные", tone: "funny", showAfter: "any", weight: 4, isActive: true },
+  { id: 35, type: "dialogue", title: "Веселый диалог", text: "\"Почему сова хорошо учится ночью?\" - \"У нее вечерняя Академия\".", answer: "", tag: "животные", tone: "funny", showAfter: "any", weight: 4, isActive: true },
+  { id: 36, type: "riddle", title: "Загадка на перемене", text: "Не куст, а с листочками. Не человек, а рассказывает.", answer: "книга", tag: "загадка", tone: "curious", showAfter: "any", weight: 4, isActive: true },
+  { id: 37, type: "riddle", title: "Загадка на перемене", text: "В клетку и в линейку, а живет в портфеле.", answer: "тетрадь", tag: "загадка", tone: "curious", showAfter: "any", weight: 4, isActive: true },
+  { id: 38, type: "riddle", title: "Загадка на перемене", text: "Идет, но с места не сходит.", answer: "часы", tag: "загадка", tone: "curious", showAfter: "any", weight: 4, isActive: true },
+  { id: 39, type: "riddle", title: "Загадка на перемене", text: "Домик для ручек, карандашей и ластика.", answer: "пенал", tag: "загадка", tone: "curious", showAfter: "any", weight: 4, isActive: true },
+  { id: 40, type: "riddle", title: "Загадка на перемене", text: "Белое поле, черные следы.", answer: "тетрадь", tag: "загадка", tone: "curious", showAfter: "any", weight: 3, isActive: true },
+  { id: 41, type: "riddle", title: "Загадка на перемене", text: "С хвостом, но не мышка. Пишет, но не человек.", answer: "ручка", tag: "загадка", tone: "curious", showAfter: "any", weight: 4, isActive: true },
+  { id: 42, type: "riddle", title: "Загадка на перемене", text: "Зимой и летом одним цветом.", answer: "ель", tag: "загадка", tone: "curious", showAfter: "any", weight: 3, isActive: true },
+  { id: 43, type: "riddle", title: "Загадка на перемене", text: "Дует, свистит, но его не видно.", answer: "ветер", tag: "загадка", tone: "curious", showAfter: "any", weight: 4, isActive: true },
+  { id: 44, type: "riddle", title: "Загадка на перемене", text: "Круглое, румяное, с дерева упало.", answer: "яблоко", tag: "загадка", tone: "curious", showAfter: "any", weight: 4, isActive: true },
+  { id: 45, type: "riddle", title: "Загадка на перемене", text: "У него есть шляпка, но нет головы.", answer: "гриб", tag: "загадка", tone: "curious", showAfter: "any", weight: 4, isActive: true },
+  { id: 46, type: "riddle", title: "Загадка на перемене", text: "Без рук, без ног, а ворота открывает.", answer: "ветер", tag: "загадка", tone: "curious", showAfter: "any", weight: 3, isActive: true },
+  { id: 47, type: "riddle", title: "Загадка на перемене", text: "Кто на себе дом носит?", answer: "улитка", tag: "загадка", tone: "curious", showAfter: "any", weight: 4, isActive: true },
+  { id: 48, type: "riddle", title: "Загадка на перемене", text: "Сидит дед, во сто шуб одет. Кто его раздевает, тот слезы проливает.", answer: "лук", tag: "загадка", tone: "curious", showAfter: "any", weight: 3, isActive: true },
+  { id: 49, type: "riddle", title: "Загадка на перемене", text: "Что становится больше, если его перевернуть?", answer: "число 6", tag: "загадка", tone: "curious", showAfter: "any", weight: 4, isActive: true },
+  { id: 50, type: "riddle", title: "Загадка на перемене", text: "Что можно увидеть с закрытыми глазами?", answer: "сон", tag: "загадка", tone: "curious", showAfter: "any", weight: 4, isActive: true },
+  { id: 51, type: "tongue_twister", title: "Скороговорка дня", text: "Шла Саша по шоссе и сосала сушку.", answer: "", tag: "речь", tone: "movement", showAfter: "any", weight: 3, isActive: true },
+  { id: 52, type: "tongue_twister", title: "Скороговорка дня", text: "У ежа ежата, у ужа ужата.", answer: "", tag: "речь", tone: "movement", showAfter: "any", weight: 3, isActive: true },
+  { id: 53, type: "tongue_twister", title: "Скороговорка дня", text: "На дворе трава, на траве дрова.", answer: "", tag: "речь", tone: "movement", showAfter: "any", weight: 3, isActive: true },
+  { id: 54, type: "tongue_twister", title: "Скороговорка дня", text: "От топота копыт пыль по полю летит.", answer: "", tag: "речь", tone: "movement", showAfter: "any", weight: 2, isActive: true },
+  { id: 55, type: "tongue_twister", title: "Скороговорка дня", text: "Купила бабуся бусы Марусе.", answer: "", tag: "речь", tone: "movement", showAfter: "any", weight: 3, isActive: true },
+  { id: 56, type: "tongue_twister", title: "Скороговорка дня", text: "Три сороки тараторки тараторили на горке.", answer: "", tag: "речь", tone: "movement", showAfter: "any", weight: 3, isActive: true },
+  { id: 57, type: "tongue_twister", title: "Скороговорка дня", text: "У четырех черепашек четыре черепашонка.", answer: "", tag: "речь", tone: "movement", showAfter: "any", weight: 2, isActive: true },
+  { id: 58, type: "tongue_twister", title: "Скороговорка дня", text: "Ехал Грека через реку, видит Грека в реке рак.", answer: "", tag: "речь", tone: "movement", showAfter: "any", weight: 2, isActive: true },
+  { id: 59, type: "tongue_twister", title: "Скороговорка дня", text: "Вез корабль карамель, наскочил корабль на мель.", answer: "", tag: "речь", tone: "movement", showAfter: "any", weight: 2, isActive: true },
+  { id: 60, type: "tongue_twister", title: "Скороговорка дня", text: "Рыбу ловит рыболов, весь в реку уплыл улов.", answer: "", tag: "речь", tone: "movement", showAfter: "any", weight: 2, isActive: true },
+  { id: 61, type: "fact", title: "Веселый факт", text: "Пингвины - птицы, но летать они не умеют. Зато отлично плавают.", answer: "", tag: "животные", tone: "curious", showAfter: "any", weight: 3, isActive: true },
+  { id: 62, type: "fact", title: "Веселый факт", text: "Улитка носит свой домик с собой.", answer: "", tag: "животные", tone: "curious", showAfter: "any", weight: 3, isActive: true },
+  { id: 63, type: "fact", title: "Веселый факт", text: "Снежинки бывают разной формы, и найти две совсем одинаковые очень трудно.", answer: "", tag: "природа", tone: "curious", showAfter: "any", weight: 3, isActive: true },
+  { id: 64, type: "fact", title: "Веселый факт", text: "На Луне следы могут сохраняться очень долго, потому что там нет ветра и дождя.", answer: "", tag: "космос", tone: "curious", showAfter: "any", weight: 3, isActive: true },
+  { id: 65, type: "fact", title: "Веселый факт", text: "Радуга появляется, когда солнечный свет проходит через капли воды.", answer: "", tag: "природа", tone: "curious", showAfter: "any", weight: 3, isActive: true },
+  { id: 66, type: "fact", title: "Веселый факт", text: "Деревья дают тень, очищают воздух и делают город красивее.", answer: "", tag: "природа", tone: "curious", showAfter: "any", weight: 2, isActive: true },
+  { id: 67, type: "fact", title: "Веселый факт", text: "Сердце работает днем и ночью, даже когда человек спит.", answer: "", tag: "человек", tone: "curious", showAfter: "any", weight: 2, isActive: true },
+  { id: 68, type: "fact", title: "Веселый факт", text: "Жираф высокий, но шейных позвонков у него столько же, сколько у человека.", answer: "", tag: "животные", tone: "curious", showAfter: "any", weight: 3, isActive: true },
+  { id: 69, type: "fact", title: "Веселый факт", text: "Осьминог умеет менять цвет, чтобы прятаться.", answer: "", tag: "животные", tone: "curious", showAfter: "any", weight: 3, isActive: true },
+  { id: 70, type: "fact", title: "Веселый факт", text: "У бабочек вкус помогают чувствовать лапки.", answer: "", tag: "животные", tone: "curious", showAfter: "any", weight: 3, isActive: true },
+  { id: 71, type: "support", title: "Минутка поддержки", text: "Ошибка - это не провал, а подсказка, что повторить.", answer: "", tag: "поддержка", tone: "kind", showAfter: "after_error", weight: 5, isActive: true },
+  { id: 72, type: "support", title: "Минутка поддержки", text: "Даже маленький шаг вперед - это уже победа.", answer: "", tag: "поддержка", tone: "kind", showAfter: "after_success", weight: 5, isActive: true },
+  { id: 73, type: "support", title: "Минутка поддержки", text: "Не обязательно знать сразу. Важно пробовать.", answer: "", tag: "поддержка", tone: "kind", showAfter: "after_error", weight: 5, isActive: true },
+  { id: 74, type: "support", title: "Минутка поддержки", text: "Сложное становится легче, когда тренируешься.", answer: "", tag: "поддержка", tone: "kind", showAfter: "after_error", weight: 5, isActive: true },
+  { id: 75, type: "support", title: "Минутка поддержки", text: "Ты не обязан спешить. Главное - понимать.", answer: "", tag: "поддержка", tone: "calm", showAfter: "after_error", weight: 5, isActive: true },
+  { id: 76, type: "support", title: "Минутка поддержки", text: "У тебя получается лучше каждый раз, когда ты пробуешь.", answer: "", tag: "поддержка", tone: "kind", showAfter: "after_success", weight: 5, isActive: true },
+  { id: 77, type: "support", title: "Минутка поддержки", text: "Хорошая работа начинается с одной внимательной попытки.", answer: "", tag: "поддержка", tone: "kind", showAfter: "any", weight: 4, isActive: true },
+  { id: 78, type: "support", title: "Минутка поддержки", text: "Отдохни немного, и мозг снова будет готов к приключениям.", answer: "", tag: "поддержка", tone: "calm", showAfter: "any", weight: 4, isActive: true },
+  { id: 79, type: "support", title: "Минутка поддержки", text: "Ты уже сделал часть пути. Продолжаем спокойно.", answer: "", tag: "поддержка", tone: "calm", showAfter: "any", weight: 4, isActive: true },
+  { id: 80, type: "support", title: "Минутка поддержки", text: "Сегодня твоя внимательность стала сильнее.", answer: "", tag: "поддержка", tone: "kind", showAfter: "after_session", weight: 4, isActive: true },
+  { id: 81, type: "support", title: "Минутка поддержки", text: "Ошибки не мешают учиться. Они помогают увидеть, где потренироваться.", answer: "", tag: "поддержка", tone: "kind", showAfter: "after_error", weight: 5, isActive: true },
+  { id: 82, type: "support", title: "Минутка поддержки", text: "Не сдавайся после трудного задания. Мозг любит тренировки.", answer: "", tag: "поддержка", tone: "kind", showAfter: "after_error", weight: 4, isActive: true },
+  { id: 83, type: "support", title: "Минутка поддержки", text: "Ты молодец, что дошел до этой перемены.", answer: "", tag: "поддержка", tone: "kind", showAfter: "any", weight: 4, isActive: true },
+  { id: 84, type: "support", title: "Минутка поддержки", text: "Знания растут не сразу, а по маленьким шагам.", answer: "", tag: "поддержка", tone: "calm", showAfter: "any", weight: 4, isActive: true },
+  { id: 85, type: "support", title: "Минутка поддержки", text: "Если было сложно, значит мозг хорошо потренировался.", answer: "", tag: "поддержка", tone: "kind", showAfter: "after_error", weight: 5, isActive: true },
+  { id: 86, type: "micro_break", title: "Мини-перемена", text: "Потянись вверх, будто ты высокая береза.", answer: "", tag: "движение", tone: "movement", showAfter: "any", weight: 2, isActive: true },
+  { id: 87, type: "micro_break", title: "Мини-перемена", text: "Моргни как сова и улыбнись как кот.", answer: "", tag: "движение", tone: "movement", showAfter: "any", weight: 2, isActive: true },
+  { id: 88, type: "micro_break", title: "Мини-перемена", text: "Найди вокруг себя что-то круглое.", answer: "", tag: "внимание", tone: "movement", showAfter: "any", weight: 2, isActive: true },
+  { id: 89, type: "micro_break", title: "Мини-перемена", text: "Найди вокруг себя предмет, в названии которого есть буква о.", answer: "", tag: "внимание", tone: "movement", showAfter: "any", weight: 2, isActive: true },
+  { id: 90, type: "micro_break", title: "Мини-перемена", text: "Посчитай до пяти очень медленно, как черепаха.", answer: "", tag: "внимание", tone: "calm", showAfter: "any", weight: 2, isActive: true },
+  { id: 91, type: "micro_break", title: "Мини-перемена", text: "Сделай три тихих хлопка и один большой вдох.", answer: "", tag: "движение", tone: "movement", showAfter: "any", weight: 2, isActive: true },
+  { id: 92, type: "micro_break", title: "Мини-перемена", text: "Посмотри налево, направо и найди предмет синего цвета.", answer: "", tag: "внимание", tone: "movement", showAfter: "any", weight: 2, isActive: true },
+  { id: 93, type: "micro_break", title: "Мини-перемена", text: "Сделай глубокий вдох и скажи: \"Продолжаем!\"", answer: "", tag: "движение", tone: "calm", showAfter: "any", weight: 2, isActive: true },
+  { id: 94, type: "micro_break", title: "Мини-перемена", text: "Сожми и разожми пальцы 5 раз, будто просыпаются ладошки.", answer: "", tag: "движение", tone: "movement", showAfter: "any", weight: 2, isActive: true },
+  { id: 95, type: "micro_break", title: "Мини-перемена", text: "Найди глазами самый светлый предмет рядом.", answer: "", tag: "внимание", tone: "calm", showAfter: "any", weight: 2, isActive: true },
+  { id: 96, type: "joke", title: "Шутка из Академии", text: "Пятерка пришла в дневник и сказала: \"Я тут надолго\".", answer: "", tag: "школа", tone: "funny", showAfter: "after_success", weight: 5, isActive: true },
+  { id: 97, type: "joke", title: "Шутка из Академии", text: "Задача спряталась в учебнике, но внимательный ученик все равно ее нашел.", answer: "", tag: "математика", tone: "funny", showAfter: "any", weight: 3, isActive: true },
+  { id: 98, type: "joke", title: "Шутка из Академии", text: "Буква Ё пришла на праздник с двумя точками-конфетти.", answer: "", tag: "русский язык", tone: "funny", showAfter: "any", weight: 3, isActive: true },
+  { id: 99, type: "joke", title: "Шутка из Академии", text: "Запятая сказала: \"Давайте сделаем маленькую паузу\". И все согласились.", answer: "", tag: "русский язык", tone: "funny", showAfter: "any", weight: 3, isActive: true },
+  { id: 100, type: "dialogue", title: "Веселый диалог", text: "\"Почему перемена такая короткая?\" - \"Потому что знания уже соскучились\".", answer: "", tag: "школа", tone: "funny", showAfter: "any", weight: 4, isActive: true }
+];
+
 const READING_TEXTS = [
   {
     title: "Трудная задача",
@@ -1059,8 +1162,17 @@ const finishMistakes = document.querySelector("#finishMistakes");
 const finishMinutes = document.querySelector("#finishMinutes");
 const academyMap = document.querySelector("#academyMap");
 const trainerGrid = document.querySelector("#trainerGrid");
+const funBreakTitle = document.querySelector("#funBreakTitle");
 const jokeLine = document.querySelector("#jokeLine");
 const newJokeBtn = document.querySelector("#newJokeBtn");
+const funBreakAnswer = document.querySelector("#funBreakAnswer");
+const revealBreakAnswerBtn = document.querySelector("#revealBreakAnswerBtn");
+const sessionBreak = document.querySelector("#sessionBreak");
+const sessionBreakTitle = document.querySelector("#sessionBreakTitle");
+const sessionBreakText = document.querySelector("#sessionBreakText");
+const sessionBreakAnswer = document.querySelector("#sessionBreakAnswer");
+const revealSessionBreakAnswerBtn = document.querySelector("#revealSessionBreakAnswerBtn");
+const nextBreakBtn = document.querySelector("#nextBreakBtn");
 const mistakeList = document.querySelector("#mistakeList");
 const kidReport = document.querySelector("#kidReport");
 const parentReport = document.querySelector("#parentReport");
@@ -1084,12 +1196,16 @@ againSessionBtn.addEventListener("click", () => startSession());
 nextQuestionBtn.addEventListener("click", nextQuestion);
 exitSessionBtn.addEventListener("click", exitSession);
 reviewMistakesBtn.addEventListener("click", () => showView("errors"));
-newJokeBtn.addEventListener("click", renderJoke);
+newJokeBtn.addEventListener("click", () => renderFunBreak("any", "main"));
+revealBreakAnswerBtn.addEventListener("click", () => revealFunBreakAnswer("main"));
+revealSessionBreakAnswerBtn.addEventListener("click", () => revealFunBreakAnswer("session"));
+nextBreakBtn.addEventListener("click", () => renderSessionBreak(session?.lastBreakContext || "any", true));
 exportBtn.addEventListener("click", exportProgress);
 importInput.addEventListener("change", importProgress);
 resetBtn.addEventListener("click", resetProgress);
 
 render();
+renderFunBreak("any", "main");
 
 function loadState() {
   const fallback = {
@@ -1447,7 +1563,87 @@ function renderTrainerActions(mode) {
 }
 
 function renderJoke() {
-  jokeLine.textContent = sample(ACADEMY_JOKES);
+  renderFunBreak("any", "main");
+}
+
+function renderFunBreak(showAfter = "any", target = "main", forceNew = false) {
+  const item = pickFunBreakItem(showAfter, target, forceNew);
+  const elements = getFunBreakElements(target);
+  if (!item || !elements) return;
+
+  elements.title.textContent = item.title;
+  elements.text.textContent = item.text;
+  elements.answer.textContent = item.answer ? `Отгадка: ${item.answer}` : "";
+  elements.answer.classList.add("hidden");
+  elements.revealButton.classList.toggle("hidden", item.type !== "riddle" || !item.answer);
+  elements.revealButton.dataset.answer = item.answer || "";
+
+  if (target === "session") {
+    sessionBreak.classList.remove("hidden");
+    session.lastFunBreakId = item.id;
+    session.shownFunBreakIds = session.shownFunBreakIds || [];
+    if (!session.shownFunBreakIds.includes(item.id)) session.shownFunBreakIds.push(item.id);
+    if (item.type === "micro_break") session.microBreakShown = true;
+  }
+}
+
+function renderSessionBreak(showAfter = "any", forceNew = false) {
+  if (!session) return;
+  session.lastBreakContext = showAfter;
+  renderFunBreak(showAfter, "session", forceNew);
+}
+
+function revealFunBreakAnswer(target = "main") {
+  const elements = getFunBreakElements(target);
+  if (!elements?.revealButton.dataset.answer) return;
+  elements.answer.classList.remove("hidden");
+  elements.revealButton.classList.add("hidden");
+}
+
+function getFunBreakElements(target) {
+  if (target === "session") {
+    return {
+      title: sessionBreakTitle,
+      text: sessionBreakText,
+      answer: sessionBreakAnswer,
+      revealButton: revealSessionBreakAnswerBtn
+    };
+  }
+  return {
+    title: funBreakTitle,
+    text: jokeLine,
+    answer: funBreakAnswer,
+    revealButton: revealBreakAnswerBtn
+  };
+}
+
+function pickFunBreakItem(showAfter = "any", target = "main", forceNew = false) {
+  const usedIds = target === "session" && session ? session.shownFunBreakIds || [] : [];
+  const candidates = FUN_BREAK_ITEMS.filter((item) => {
+    if (!item.isActive) return false;
+    if (target === "session" && usedIds.includes(item.id)) return false;
+    if (target === "session" && session?.microBreakShown && item.type === "micro_break") return false;
+    if (showAfter === "after_error") return ["after_error", "any"].includes(item.showAfter) && (item.type === "support" || item.tone === "calm");
+    if (showAfter === "after_success") return ["after_success", "any"].includes(item.showAfter);
+    if (showAfter === "after_session") return ["after_session", "any"].includes(item.showAfter) && ["support", "fact", "joke", "dialogue", "anekdot"].includes(item.type);
+    return item.showAfter === "any";
+  });
+  const pool = candidates.length ? candidates : FUN_BREAK_ITEMS.filter((item) => item.isActive && item.showAfter === "any");
+  return weightedSample(pool);
+}
+
+function weightedSample(items) {
+  const total = items.reduce((sum, item) => sum + (item.weight || 1), 0);
+  let cursor = Math.random() * total;
+  for (const item of items) {
+    cursor -= item.weight || 1;
+    if (cursor <= 0) return item;
+  }
+  return items[items.length - 1];
+}
+
+function getFunBreakLine(showAfter = "any") {
+  return pickFunBreakItem(showAfter, "main")?.text || sample(ACADEMY_JOKES);
 }
 
 function startTrainer(modeId, variant) {
@@ -1472,6 +1668,9 @@ function startSession(options = {}) {
     tasks,
     plannedLength: tasks.length,
     results: [],
+    shownFunBreakIds: [],
+    microBreakShown: false,
+    lastBreakContext: "any",
     tryCount: 0,
     usedHint: false,
     locked: false
@@ -1704,6 +1903,7 @@ function renderQuestion() {
   questPrompt.textContent = task.prompt;
   feedbackBox.classList.add("hidden");
   nextQuestionBtn.classList.add("hidden");
+  sessionBreak.classList.add("hidden");
   answerArea.innerHTML = "";
 
   if (task.visual) {
@@ -1774,6 +1974,7 @@ function checkAnswer(rawAnswer, sourceElement) {
   feedbackBox.textContent = correct
     ? `Верно! ${session.usedHint ? "Ты воспользовалась подсказкой и дошла до ответа." : task.success || "Так держать."}`
     : `Почти получилось. Правильный ответ: ${task.answer}. ${task.explanation}`;
+  renderSessionBreak(correct ? "after_success" : "after_error");
   nextQuestionBtn.classList.remove("hidden");
   const timeSpentSec = Math.round((Date.now() - session.questionStartedAt) / 1000);
   const speedStatus = getSpeedStatus(task, timeSpentSec, correct);
@@ -1859,12 +2060,13 @@ function finishSession() {
       ? " Несколько верных ответов уже получились, теперь будем делать их легче."
       : "";
   finishText.textContent = mistakes
-    ? `${POSITIVE_LINES[correct % POSITIVE_LINES.length]} Лучше всего сегодня: ${bestSkill}. ${mistakes} задания вернутся для доброго повторения.${speedLine} ${sample(ACADEMY_JOKES)}`
-    : `Все задания получились! ${childName}, сегодня твоя Академия сияет особенно ярко.${speedLine} ${sample(ACADEMY_JOKES)}`;
+    ? `${POSITIVE_LINES[correct % POSITIVE_LINES.length]} Лучше всего сегодня: ${bestSkill}. ${mistakes} задания вернутся для доброго повторения.${speedLine} ${getFunBreakLine("after_session")}`
+    : `Все задания получились! ${childName}, сегодня твоя Академия сияет особенно ярко.${speedLine} ${getFunBreakLine("after_session")}`;
   finishCorrect.textContent = String(correct);
   finishMistakes.textContent = String(mistakes);
   finishMinutes.textContent = String(minutes);
   session = null;
+  renderFunBreak("after_session", "main");
   render();
 }
 
