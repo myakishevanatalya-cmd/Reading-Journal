@@ -1096,13 +1096,20 @@ function loadState() {
     childName,
     attempts: [],
     skillStats: {},
+    taskProgress: {},
     dailySessions: [],
     mistakes: [],
     createdAt: new Date().toISOString()
   };
 
   try {
-    return { ...fallback, ...JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") };
+    const loaded = { ...fallback, ...JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") };
+    loaded.attempts = Array.isArray(loaded.attempts) ? loaded.attempts : [];
+    loaded.dailySessions = Array.isArray(loaded.dailySessions) ? loaded.dailySessions : [];
+    loaded.mistakes = Array.isArray(loaded.mistakes) ? loaded.mistakes : [];
+    loaded.skillStats = loaded.skillStats && typeof loaded.skillStats === "object" ? loaded.skillStats : {};
+    loaded.taskProgress = loaded.taskProgress && typeof loaded.taskProgress === "object" ? loaded.taskProgress : {};
+    return loaded;
   } catch {
     return fallback;
   }
@@ -1412,9 +1419,14 @@ function skillToTrainerAction(skillId) {
   if (["addSub100", "numbers100", "orderActions"].includes(skillId)) return "fast100";
   if (["measures", "geometry", "lifeMath"].includes(skillId)) return "lifeMath";
   if (skillId === "multiplication50") return "multiply";
+  if (skillId === "division50") return "multiply";
+  if (skillId === "wordProblems") return "mathStories";
   if (skillId === "dictionaryWords") return "dictionary";
   if (skillId === "readingMeaning") return "readingQuest";
-  if (["wordLogic", "soundLetters", "spellingPairs", "unstressedVowels", "consonants", "separators", "prepositions"].includes(skillId)) return "wordDetective";
+  if (["wordLogic", "soundLetters", "spellingPairs", "unstressedVowels", "consonants", "separators", "prepositions", "sentenceText"].includes(skillId)) return "wordDetective";
+  if (skillId === "wordGames") return "russianGames";
+  if (skillId === "wordPuzzles") return "wordPuzzles";
+  if (skillId === "proverbs") return "proverbs";
   return "daily";
 }
 
@@ -1458,6 +1470,7 @@ function startSession(options = {}) {
     questionStartedAt: Date.now(),
     index: 0,
     tasks,
+    plannedLength: tasks.length,
     results: [],
     tryCount: 0,
     usedHint: false,
@@ -1474,7 +1487,6 @@ function startSession(options = {}) {
 }
 
 function buildDailySession() {
-  const reviewTasks = state.mistakes.slice(0, 3).map((mistake) => taskFromMistake(mistake));
   const freshFactories = [
     makeNumbersTask,
     makeAddSubTask,
@@ -1490,41 +1502,162 @@ function buildDailySession() {
     makeWordPuzzleTask,
     makeProverbTask
   ];
-  const freshNeeded = Math.max(0, 10 - reviewTasks.length);
-  const freshTasks = [];
-  while (freshTasks.length < freshNeeded) {
-    shuffle(freshFactories).forEach((factory) => {
-      if (freshTasks.length < freshNeeded) freshTasks.push(factory());
-    });
-  }
-  return shuffle([...reviewTasks, ...freshTasks]);
+  return buildAdaptiveTasks(10, freshFactories, "daily", { maxReviews: 3 });
 }
 
 function buildTrainerTasks(modeId, variant) {
   const builders = {
-    fast10: () => Array.from({ length: 10 }, () => makeFastArithmeticTask("within10")),
-    fast100: () => Array.from({ length: 12 }, () => makeFastArithmeticTask(sample(["within20", "within100", "roundTens", "compare", "unknown"]))),
-    multiply: () => Array.from({ length: 12 }, () => makeMultiplicationTask(variant)),
-    lifeMath: () => Array.from({ length: 8 }, () => makeLifeMathTask()),
-    mathStories: () => Array.from({ length: 8 }, () => makeMathStoryTask()),
-    dictionary: () => Array.from({ length: 10 }, () => sample([makeDictionaryTask, makeDictionaryMissingTask])()),
-    wordDetective: () => Array.from({ length: 10 }, () => makeWordDetectiveTask()),
-    playroom: () => Array.from({ length: 8 }, () => sample([makeRussianGameTask, makeWordPuzzleTask])()),
-    russianGames: () => Array.from({ length: 8 }, () => makeRussianGameTask()),
-    wordPuzzles: () => Array.from({ length: 6 }, () => makeWordPuzzleTask()),
-    proverbs: () => Array.from({ length: 8 }, () => makeProverbTask()),
-    readingQuest: () => Array.from({ length: 8 }, () => makeReadingTask())
+    fast10: () => buildAdaptiveTasks(10, [() => makeFastArithmeticTask("within10")], "fast10", { maxReviews: 2 }),
+    fast100: () => buildAdaptiveTasks(12, [
+      () => makeFastArithmeticTask("within20"),
+      () => makeFastArithmeticTask("within100"),
+      () => makeFastArithmeticTask("roundTens"),
+      () => makeFastArithmeticTask("compare"),
+      () => makeFastArithmeticTask("unknown")
+    ], "fast100", { maxReviews: 3 }),
+    multiply: () => buildAdaptiveTasks(12, [() => makeMultiplicationTask(variant)], "multiply", { maxReviews: 3 }),
+    lifeMath: () => buildAdaptiveTasks(8, [makeLifeMathTask], "lifeMath", { maxReviews: 2 }),
+    mathStories: () => buildAdaptiveTasks(8, [makeMathStoryTask], "mathStories", { maxReviews: 2 }),
+    dictionary: () => buildAdaptiveTasks(10, [makeDictionaryTask, makeDictionaryMissingTask], "dictionary", { maxReviews: 3 }),
+    wordDetective: () => buildAdaptiveTasks(10, [makeWordDetectiveTask], "wordDetective", { maxReviews: 3 }),
+    playroom: () => buildAdaptiveTasks(8, [makeRussianGameTask, makeWordPuzzleTask], "playroom", { maxReviews: 2 }),
+    russianGames: () => buildAdaptiveTasks(8, [makeRussianGameTask], "russianGames", { maxReviews: 2 }),
+    wordPuzzles: () => buildAdaptiveTasks(6, [makeWordPuzzleTask], "wordPuzzles", { maxReviews: 1 }),
+    proverbs: () => buildAdaptiveTasks(8, [makeProverbTask], "proverbs", { maxReviews: 2 }),
+    readingQuest: () => buildAdaptiveTasks(8, [makeReadingTask], "readingQuest", { maxReviews: 2 })
   };
   return (builders[modeId] || builders.fast100)();
+}
+
+function buildAdaptiveTasks(count, factories, modeId, options = {}) {
+  const maxReviews = options.maxReviews ?? 2;
+  const tasks = getDueReviewTasks(modeId, maxReviews);
+  const usedPrompts = new Set(tasks.map((task) => task.prompt));
+  const maxAttempts = count * 16;
+
+  for (let attempt = 0; tasks.length < count && attempt < maxAttempts; attempt += 1) {
+    const candidates = Array.from({ length: Math.min(6, Math.max(3, factories.length * 2)) }, () => {
+      const factory = sample(factories);
+      const task = ensureTaskMeta(factory());
+      return { task, score: scoreTaskForAdaptiveSession(task, tasks, usedPrompts) };
+    }).sort((a, b) => b.score - a.score);
+
+    const picked = candidates.find((candidate) => !usedPrompts.has(candidate.task.prompt)) || candidates[0];
+    if (!picked) break;
+    tasks.push(picked.task);
+    usedPrompts.add(picked.task.prompt);
+  }
+
+  while (tasks.length < count) {
+    const task = ensureTaskMeta(sample(factories)());
+    tasks.push(task);
+  }
+
+  return spaceReviewTasks(tasks).slice(0, count);
+}
+
+function getDueReviewTasks(modeId, limit) {
+  const now = Date.now();
+  const mistakeTasks = state.mistakes
+    .filter((mistake) => isMistakeRelevantForMode(mistake, modeId))
+    .filter((mistake) => !mistake.nextReviewAt || new Date(mistake.nextReviewAt).getTime() <= now)
+    .slice(0, limit)
+    .map((mistake) => taskFromMistake(mistake));
+  const usedPrompts = new Set(mistakeTasks.map((task) => task.prompt));
+  const progressTasks = Object.values(state.taskProgress || {})
+    .filter((progress) => ["review", "mastered"].includes(progress.status))
+    .filter((progress) => isProgressRelevantForMode(progress, modeId))
+    .filter((progress) => isTaskDueForReview(progress))
+    .filter((progress) => !usedPrompts.has(progress.prompt))
+    .slice(0, Math.max(0, limit - mistakeTasks.length))
+    .map(progressToReviewTask);
+  return [...mistakeTasks, ...progressTasks];
+}
+
+function isMistakeRelevantForMode(mistake, modeId) {
+  if (modeId === "daily") return true;
+  return skillToTrainerAction(mistake.skillId) === modeId || (
+    modeId === "playroom" && ["russianGames", "wordPuzzles"].includes(skillToTrainerAction(mistake.skillId))
+  );
+}
+
+function isProgressRelevantForMode(progress, modeId) {
+  if (modeId === "daily") return true;
+  return skillToTrainerAction(progress.skillId) === modeId || (
+    modeId === "playroom" && ["russianGames", "wordPuzzles"].includes(skillToTrainerAction(progress.skillId))
+  );
+}
+
+function progressToReviewTask(progress) {
+  const task = {
+    type: progress.type || "input",
+    skillId: progress.skillId,
+    prompt: progress.prompt,
+    answer: progress.answer,
+    choices: progress.choices || [],
+    acceptedAnswers: progress.acceptedAnswers || [],
+    explanation: `Это дальнее повторение, чтобы знание не потерялось. ${progress.explanation || ""}`,
+    isReview: true,
+    taskKey: progress.taskKey
+  };
+  if (task.type !== "input" && !task.choices.length) task.type = "input";
+  return task;
+}
+
+function scoreTaskForAdaptiveSession(task, currentTasks, usedPrompts) {
+  const progress = getTaskProgress(task);
+  const skillStats = state.skillStats[task.skillId] || { attempts: 0, correct: 0, mistakes: 0, streak: 0 };
+  const skillAccuracy = skillStats.attempts ? skillStats.correct / skillStats.attempts : 1;
+  const previousTask = currentTasks[currentTasks.length - 1];
+  let score = Math.random();
+
+  if (!progress.shownCount) score += 1.5;
+  if (progress.status === "review") score += 3;
+  if (progress.status === "learning") score += 2;
+  if (progress.status === "problem") score += 4;
+  if (progress.status === "mastered") score -= 2;
+  if (isTaskDueForReview(progress)) score += 2.5;
+  if (skillStats.attempts >= 2 && skillAccuracy < 0.85) score += 2.5;
+  if (skillStats.mistakes >= 2 && skillStats.mistakes >= skillStats.correct) score += 1.5;
+  if (previousTask?.skillId === task.skillId) score -= 3;
+  if (usedPrompts.has(task.prompt)) score -= 8;
+
+  return score;
+}
+
+function spaceReviewTasks(tasks) {
+  const spaced = [];
+  const deferred = [];
+  tasks.forEach((task) => {
+    const previous = spaced[spaced.length - 1];
+    if (task.isReview && previous?.isReview) {
+      deferred.push(task);
+    } else {
+      spaced.push(task);
+    }
+  });
+
+  deferred.forEach((task) => {
+    const index = Math.min(spaced.length, 3);
+    spaced.splice(index, 0, task);
+  });
+
+  return spaced;
 }
 
 function taskFromMistake(mistake) {
   const task = createTaskBySkill(mistake.skillId);
   task.prompt = mistake.prompt;
   task.answer = mistake.answer;
-  task.choices = mistake.choices && mistake.choices.length ? mistake.choices : task.choices;
+  if (mistake.choices && mistake.choices.length) {
+    task.choices = mistake.choices;
+  } else {
+    task.type = "input";
+    task.choices = [];
+  }
   task.explanation = `Это задание вернулось для мягкого повторения. ${task.explanation}`;
   task.isReview = true;
+  task.taskKey = mistake.taskKey || makeTaskKey(task);
   return task;
 }
 
@@ -1558,11 +1691,13 @@ function createTaskBySkill(skillId) {
 }
 
 function renderQuestion() {
-  const task = session.tasks[session.index];
+  const task = ensureTaskMeta(session.tasks[session.index]);
+  session.tasks[session.index] = task;
   session.locked = false;
   session.tryCount = 0;
   session.usedHint = false;
   session.questionStartedAt = Date.now();
+  markTaskShown(task);
   questCounter.textContent = `Задание ${session.index + 1} из ${session.tasks.length}`;
   questSkill.textContent = `${SUBJECTS[SKILLS[task.skillId].subject].icon} ${SKILLS[task.skillId].title}`;
   questProgressBar.style.width = `${(session.index / session.tasks.length) * 100}%`;
@@ -1650,6 +1785,7 @@ function checkAnswer(rawAnswer, sourceElement) {
     timestamp: new Date().toISOString(),
     subject: SKILLS[task.skillId].subject,
     skillId: task.skillId,
+    taskKey: task.taskKey,
     prompt: task.prompt,
     answer: task.answer,
     userAnswer: rawAnswer,
@@ -1664,7 +1800,9 @@ function checkAnswer(rawAnswer, sourceElement) {
   session.results.push(attempt);
   state.attempts.push(attempt);
   updateSkillStats(attempt);
+  updateTaskProgress(task, attempt);
   updateMistakeBank(task, attempt);
+  scheduleInSessionReview(task, attempt);
   saveState();
 }
 
@@ -1730,6 +1868,113 @@ function finishSession() {
   render();
 }
 
+function ensureTaskMeta(task) {
+  if (!task.taskKey) task.taskKey = makeTaskKey(task);
+  return task;
+}
+
+function makeTaskKey(task) {
+  return `${task.skillId}|${normalizeAnswer(task.prompt)}|${normalizeAnswer(task.answer)}`;
+}
+
+function getTaskProgress(task) {
+  const taskKey = task.taskKey || makeTaskKey(task);
+  return state.taskProgress[taskKey] || {
+    taskKey,
+    skillId: task.skillId,
+    type: task.type,
+    prompt: task.prompt,
+    answer: task.answer,
+    choices: task.choices || [],
+    acceptedAnswers: task.acceptedAnswers || [],
+    explanation: task.explanation || "",
+    shownCount: 0,
+    correctCount: 0,
+    wrongCount: 0,
+    streak: 0,
+    status: "new",
+    lastShownAt: "",
+    lastAnsweredAt: "",
+    lastWrongAt: "",
+    nextReviewAt: ""
+  };
+}
+
+function markTaskShown(task) {
+  if (task.markedShown) return;
+  const progress = getTaskProgress(task);
+  progress.type = task.type;
+  progress.choices = task.choices || [];
+  progress.acceptedAnswers = task.acceptedAnswers || [];
+  progress.explanation = task.explanation || "";
+  progress.shownCount += 1;
+  progress.lastShownAt = new Date().toISOString();
+  if (progress.status === "new" && progress.shownCount > 0) progress.status = "active";
+  state.taskProgress[progress.taskKey] = progress;
+  task.markedShown = true;
+}
+
+function updateTaskProgress(task, attempt) {
+  const progress = getTaskProgress(task);
+  progress.skillId = task.skillId;
+  progress.prompt = task.prompt;
+  progress.answer = task.answer;
+  progress.type = task.type;
+  progress.choices = task.choices || [];
+  progress.acceptedAnswers = task.acceptedAnswers || [];
+  progress.explanation = task.explanation || "";
+  progress.lastAnsweredAt = attempt.timestamp;
+
+  if (attempt.correct) {
+    progress.correctCount += 1;
+    progress.streak += 1;
+    if (progress.streak >= 3 && !attempt.usedHint) {
+      progress.status = "mastered";
+      progress.nextReviewAt = addDaysIso(14);
+    } else if (progress.streak >= 2) {
+      progress.status = "review";
+      progress.nextReviewAt = addDaysIso(7);
+    } else {
+      progress.status = "learning";
+      progress.nextReviewAt = addDaysIso(2);
+    }
+  } else {
+    progress.wrongCount += 1;
+    progress.streak = 0;
+    progress.lastWrongAt = attempt.timestamp;
+    progress.status = progress.wrongCount >= 2 ? "problem" : "learning";
+    progress.nextReviewAt = addDaysIso(2);
+  }
+
+  state.taskProgress[progress.taskKey] = progress;
+}
+
+function isTaskDueForReview(progress) {
+  if (!progress.nextReviewAt) return false;
+  return new Date(progress.nextReviewAt).getTime() <= Date.now();
+}
+
+function addDaysIso(days) {
+  const date = new Date();
+  date.setDate(date.getDate() + days);
+  return date.toISOString();
+}
+
+function scheduleInSessionReview(task, attempt) {
+  if (attempt.correct || task.isReview || !session) return;
+  if (session.tasks.length >= session.plannedLength + 3) return;
+  if (session.tasks.some((item, index) => index > session.index && item.prompt === task.prompt)) return;
+
+  const reviewTask = {
+    ...task,
+    isReview: true,
+    markedShown: false,
+    explanation: `Это задание вернулось через несколько шагов. ${task.explanation}`
+  };
+  const insertAt = Math.min(session.tasks.length, session.index + 3);
+  session.tasks.splice(insertAt, 0, reviewTask);
+}
+
 function updateSkillStats(attempt) {
   const current = state.skillStats[attempt.skillId] || {
     attempts: 0,
@@ -1755,16 +2000,20 @@ function updateSkillStats(attempt) {
 }
 
 function updateMistakeBank(task, attempt) {
+  const existingMistake = state.mistakes.find((item) => item.prompt === task.prompt);
   state.mistakes = state.mistakes.filter((item) => item.prompt !== task.prompt);
   if (!attempt.correct) {
+    const previousRepeats = existingMistake?.repeats || 0;
     state.mistakes.unshift({
       id: cryptoRandomId(),
       skillId: task.skillId,
+      taskKey: task.taskKey,
       prompt: task.prompt,
       answer: task.answer,
       choices: task.choices || [],
       lastWrongAt: attempt.timestamp,
-      repeats: 0
+      nextReviewAt: addDaysIso(2),
+      repeats: task.isReview ? previousRepeats + 1 : previousRepeats
     });
   }
 }
@@ -1806,6 +2055,7 @@ function renderMistakes() {
   state.mistakes.slice(0, 12).forEach((mistake) => {
     const skill = SKILLS[mistake.skillId];
     const subject = SUBJECTS[skill.subject];
+    const dueLabel = getReviewDueLabel(mistake.nextReviewAt);
     const card = document.createElement("article");
     card.className = "mistake-card";
     card.innerHTML = `
@@ -1813,7 +2063,7 @@ function renderMistakes() {
       <p>${mistake.prompt}</p>
       <div class="pill-row">
         <span class="pill">Ответ: ${mistake.answer}</span>
-        <span class="pill">Вернется в тренировке</span>
+        <span class="pill">${dueLabel}</span>
       </div>
     `;
     mistakeList.append(card);
@@ -2455,11 +2705,11 @@ function buildReadingChoices(answer, item) {
 }
 
 function choiceTask(skillId, prompt, answer, choices, explanation) {
-  return { type: "choice", skillId, prompt, answer, choices: shuffle([...new Set(choices)]), explanation };
+  return ensureTaskMeta({ type: "choice", skillId, prompt, answer, choices: shuffle([...new Set(choices)]), explanation });
 }
 
 function inputTask(skillId, prompt, answer, explanation) {
-  return { type: "input", skillId, prompt, answer, explanation };
+  return ensureTaskMeta({ type: "input", skillId, prompt, answer, explanation });
 }
 
 function renderTaskVisual(visual) {
@@ -2748,6 +2998,14 @@ function getSkillStatus(stats) {
   if (stats.streak >= 3) return "уверенно";
   if (stats.mistakes > stats.correct) return "нужно повторить";
   return "тренируем";
+}
+
+function getReviewDueLabel(nextReviewAt) {
+  if (!nextReviewAt) return "Вернется в тренировке";
+  const diffMs = new Date(nextReviewAt).getTime() - Date.now();
+  if (diffMs <= 0) return "Готово к повтору";
+  const days = Math.max(1, Math.ceil(diffMs / 86400000));
+  return `Повтор через ${days} ${dayWord(days)}`;
 }
 
 function buildParentRecommendation(rows) {
