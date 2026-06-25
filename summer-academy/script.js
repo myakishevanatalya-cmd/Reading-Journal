@@ -27,6 +27,7 @@ const SKILLS = {
   wordProblems: { subject: "math", title: "Задачи", description: "Задачи в 1-2 действия" },
   geometry: { subject: "math", title: "Геометрия", description: "Фигуры, длина, периметр" },
   measures: { subject: "math", title: "Величины", description: "См, дм, м, минуты и часы" },
+  lifeMath: { subject: "math", title: "Математика в жизни", description: "Часы, деньги, линейка, фигуры и закономерности" },
   orderActions: { subject: "math", title: "Порядок действий", description: "Скобки и порядок вычислений" },
   spellingPairs: { subject: "russian", title: "Орфограммы", description: "Жи-ши, ча-ща, чу-щу, чк-чн" },
   unstressedVowels: { subject: "russian", title: "Безударные гласные", description: "Подбор проверочных слов" },
@@ -83,6 +84,14 @@ const TRAINER_MODES = [
     title: "Таблица умножения",
     description: "Можно тренировать все примеры или сложные случаи.",
     chips: ["на 2-9", "сложные", "быстрота"]
+  },
+  {
+    id: "lifeMath",
+    subject: "math",
+    icon: "🧭",
+    title: "Математика в жизни",
+    description: "Часы, деньги, линейка, фигуры, маршруты и закономерности.",
+    chips: ["визуально", "8 заданий", "для жизни"]
   },
   {
     id: "dictionary",
@@ -534,7 +543,8 @@ function getSubjectGuideButton(subject) {
 }
 
 function skillToTrainerAction(skillId) {
-  if (["addSub100", "numbers100", "measures", "orderActions"].includes(skillId)) return "fast100";
+  if (["addSub100", "numbers100", "orderActions"].includes(skillId)) return "fast100";
+  if (["measures", "geometry", "lifeMath"].includes(skillId)) return "lifeMath";
   if (skillId === "multiplication50") return "multiply";
   if (skillId === "dictionaryWords") return "dictionary";
   if (skillId === "readingMeaning") return "readingQuest";
@@ -635,6 +645,7 @@ function buildTrainerTasks(modeId, variant) {
     fast10: () => Array.from({ length: 10 }, () => makeFastArithmeticTask("within10")),
     fast100: () => Array.from({ length: 12 }, () => makeFastArithmeticTask(sample(["within20", "within100", "roundTens"]))),
     multiply: () => Array.from({ length: 12 }, () => makeMultiplicationTask(variant)),
+    lifeMath: () => Array.from({ length: 8 }, () => makeLifeMathTask()),
     dictionary: () => Array.from({ length: 10 }, () => sample([makeDictionaryTask, makeDictionaryMissingTask])()),
     wordDetective: () => Array.from({ length: 10 }, () => sample([makeOddWordTask, makeLetterSwapTask, makeSoundLettersTask, makeStressTask])()),
     playroom: () => Array.from({ length: 8 }, () => sample([makeMiniRebusTask, makeBuildWordTask, makeOddWordTask, makeDictionaryMissingTask])()),
@@ -662,6 +673,7 @@ function createTaskBySkill(skillId) {
     wordProblems: makeWordProblemTask,
     geometry: makeGeometryTask,
     measures: makeMeasuresTask,
+    lifeMath: makeLifeMathTask,
     orderActions: makeOrderTask,
     spellingPairs: makeSpellingTask,
     unstressedVowels: makeUnstressedVowelTask,
@@ -691,6 +703,10 @@ function renderQuestion() {
   feedbackBox.classList.add("hidden");
   nextQuestionBtn.classList.add("hidden");
   answerArea.innerHTML = "";
+
+  if (task.visual) {
+    answerArea.append(renderTaskVisual(task.visual));
+  }
 
   if (task.type === "input") {
     const input = document.createElement("input");
@@ -726,6 +742,7 @@ function checkAnswer(rawAnswer, sourceElement) {
   const task = session.tasks[session.index];
   const userAnswer = normalizeAnswer(rawAnswer);
   const correctAnswer = normalizeAnswer(task.answer);
+  const acceptedAnswers = [task.answer, ...(task.acceptedAnswers || [])].map(normalizeAnswer);
   if (!userAnswer) {
     feedbackBox.classList.remove("hidden");
     feedbackBox.textContent = "Сначала напиши ответ, потом проверим.";
@@ -733,7 +750,7 @@ function checkAnswer(rawAnswer, sourceElement) {
   }
 
   session.tryCount += 1;
-  const correct = userAnswer === correctAnswer;
+  const correct = acceptedAnswers.includes(userAnswer);
   const finalAttempt = correct || session.tryCount >= 2;
 
   if (task.type !== "input") {
@@ -1155,6 +1172,125 @@ function makeMeasuresTask() {
   return sample(items)();
 }
 
+function makeLifeMathTask() {
+  const templates = [
+    () => {
+      const cut = sample([20, 30, 40]);
+      const answer = 100 - cut;
+      const task = inputTask(
+        "lifeMath",
+        `Лента длиной 1 метр. От нее отрезали ${cut} сантиметров. Сколько сантиметров ленты осталось?`,
+        String(answer),
+        "1 метр - это 100 сантиметров. Вычти отрезанную часть из 100."
+      );
+      task.visual = { type: "ruler", startCm: 0, endCm: 100, markerCm: answer, label: "1 м = 100 см" };
+      return task;
+    },
+    () => {
+      const hour = rand(6, 10);
+      const add = rand(1, 3);
+      const task = inputTask(
+        "lifeMath",
+        `На часах ${hour}:00. Через ${add} ${hourWord(add)} начнется кружок. Во сколько начнется кружок?`,
+        `${hour + add}:00`,
+        `Прибавь ${add} ${hourWord(add)} к ${hour}:00.`
+      );
+      task.visual = { type: "clock", hour, minute: 0 };
+      task.acceptedAnswers = [`${hour + add} часов`, `${hour + add}`];
+      return task;
+    },
+    () => {
+      const start = sample(["10:20", "11:30", "15:15", "16:20"]);
+      const minutes = sample([10, 15, 25, 30]);
+      const answer = addMinutes(start, minutes);
+      const task = inputTask(
+        "lifeMath",
+        `Занятие началось в ${start} и длилось ${minutes} минут. Во сколько оно закончилось?`,
+        answer,
+        `Прибавь ${minutes} минут к времени начала.`
+      );
+      task.visual = { type: "clock", time: start };
+      task.acceptedAnswers = [answer.replace(":00", " часов")];
+      return task;
+    },
+    () => {
+      const money = sample([40, 50, 70, 100]);
+      const priceA = sample([12, 18, 25, 32]);
+      const priceB = sample([9, 15, 20, 35]);
+      const total = priceA + priceB;
+      if (total <= money) {
+        const task = inputTask(
+          "lifeMath",
+          `У Кати ${money} рублей. Покупка стоит ${priceA} рублей и ${priceB} рублей. Сколько рублей останется?`,
+          String(money - total),
+          `Сначала сложи покупки: ${priceA} + ${priceB}, потом вычти из ${money}.`
+        );
+        task.visual = { type: "coins", money, prices: [priceA, priceB] };
+        return task;
+      }
+      const task = choiceTask(
+        "lifeMath",
+        `У Кати ${money} рублей. Тетрадь стоит ${priceA} рублей, карандаш ${priceB} рублей. Хватит ли денег на обе покупки?`,
+        "нет",
+        ["да", "нет"],
+        `Покупки вместе стоят ${total} рублей, а это больше ${money}.`
+      );
+      task.visual = { type: "coins", money, prices: [priceA, priceB] };
+      return task;
+    },
+    () => {
+      const sideA = rand(4, 8);
+      const sideB = rand(3, 6);
+      const task = inputTask(
+        "lifeMath",
+        `У прямоугольника стороны ${sideA} см и ${sideB} см. Найди периметр.`,
+        String((sideA + sideB) * 2),
+        `Периметр - это сумма всех сторон: ${sideA} + ${sideB} + ${sideA} + ${sideB}.`
+      );
+      task.visual = { type: "shape", shape: "rectangle", sideA, sideB };
+      return task;
+    },
+    () => {
+      const segments = [rand(2, 5), rand(2, 5), rand(2, 5)];
+      const task = inputTask(
+        "lifeMath",
+        `Ломаная состоит из звеньев ${segments.join(", ")} см. Найди длину ломаной.`,
+        String(segments.reduce((sum, item) => sum + item, 0)),
+        "Сложи длины всех звеньев ломаной."
+      );
+      task.visual = { type: "grid", segments };
+      return task;
+    },
+    () => {
+      const step = sample([2, 3, 5, 10]);
+      const start = sample([1, 2, 5, 10, 12]);
+      const row = [start, start + step, start + step * 2, start + step * 3];
+      const task = inputTask(
+        "lifeMath",
+        `Продолжи ряд: ${row.join(", ")}, ...`,
+        String(start + step * 4),
+        `Каждое следующее число больше на ${step}.`
+      );
+      task.visual = { type: "pattern", items: row.map(String), missing: "?" };
+      return task;
+    },
+    () => {
+      const task = choiceTask(
+        "lifeMath",
+        "Какая фигура лишняя: круг, квадрат, треугольник, прямоугольник?",
+        "круг",
+        ["круг", "квадрат", "треугольник", "прямоугольник"],
+        "У круга нет углов, а у остальных фигур есть углы."
+      );
+      task.visual = { type: "shapeSet", shapes: ["circle", "square", "triangle", "rectangle"] };
+      return task;
+    }
+  ];
+  const task = sample(templates)();
+  task.speedTargetSec = 14;
+  return task;
+}
+
 function makeOrderTask() {
   const a = rand(12, 35);
   const b = rand(3, 12);
@@ -1389,6 +1525,133 @@ function inputTask(skillId, prompt, answer, explanation) {
   return { type: "input", skillId, prompt, answer, explanation };
 }
 
+function renderTaskVisual(visual) {
+  const container = document.createElement("div");
+  container.className = `task-visual task-visual--${visual.type}`;
+
+  if (visual.type === "clock") {
+    const time = visual.time || `${visual.hour}:00`;
+    const [hourRaw, minuteRaw = "0"] = String(time).split(":");
+    const hour = Number(visual.hour ?? hourRaw);
+    const minute = Number(visual.minute ?? minuteRaw);
+    const hourAngle = ((hour % 12) + minute / 60) * 30;
+    const minuteAngle = minute * 6;
+    container.innerHTML = `
+      <div class="clock-face" aria-label="Часы показывают ${formatTime(hour, minute)}">
+        ${Array.from({ length: 12 }, (_, index) => `<span style="--i:${index + 1}">${index + 1}</span>`).join("")}
+        <i class="clock-hand clock-hand--hour" style="transform:rotate(${hourAngle}deg)"></i>
+        <i class="clock-hand clock-hand--minute" style="transform:rotate(${minuteAngle}deg)"></i>
+        <b></b>
+      </div>
+      <strong>${formatTime(hour, minute)}</strong>
+    `;
+    return container;
+  }
+
+  if (visual.type === "ruler") {
+    const max = visual.endCm > 20 ? 10 : Math.max(10, visual.endCm || 10);
+    container.innerHTML = `
+      <div class="ruler-visual" aria-label="Линейка">
+        ${Array.from({ length: max + 1 }, (_, index) => `<span class="${index % 5 === 0 ? "major" : ""}"><b>${index}</b></span>`).join("")}
+      </div>
+      <strong>${visual.label || "Сантиметры на линейке"}</strong>
+    `;
+    return container;
+  }
+
+  if (visual.type === "coins") {
+    const coins = visual.coins || makeCoinSet(visual.money || 0);
+    const priceLine = visual.prices ? `Покупки: ${visual.prices.join(" + ")} руб.` : visual.price ? `Цена: ${visual.price} руб.` : "";
+    container.innerHTML = `
+      <div class="coin-row">
+        ${coins.map((coin) => `<span class="coin">${coin}₽</span>`).join("")}
+      </div>
+      <strong>${visual.money ? `Всего: ${visual.money} руб.` : ""} ${priceLine}</strong>
+    `;
+    return container;
+  }
+
+  if (visual.type === "shape") {
+    container.innerHTML = renderShapeSvg(visual.shape || "rectangle", visual);
+    return container;
+  }
+
+  if (visual.type === "shapeSet") {
+    container.innerHTML = `<div class="shape-set">${visual.shapes.map((shape) => renderShapeSvg(shape, { compact: true })).join("")}</div>`;
+    return container;
+  }
+
+  if (visual.type === "grid") {
+    const labels = visual.segments || [];
+    container.innerHTML = `
+      <div class="grid-visual" aria-label="Клетчатое поле">
+        ${Array.from({ length: 25 }, (_, index) => `<span>${labels[index] || ""}</span>`).join("")}
+      </div>
+      <strong>${labels.length ? `Звенья: ${labels.join(" + ")}` : "Маршрут по клеткам"}</strong>
+    `;
+    return container;
+  }
+
+  if (visual.type === "pattern") {
+    container.innerHTML = `
+      <div class="pattern-row">
+        ${visual.items.map((item) => `<span>${item}</span>`).join("")}
+        <span>${visual.missing || "?"}</span>
+      </div>
+    `;
+    return container;
+  }
+
+  return container;
+}
+
+function renderShapeSvg(shape, data = {}) {
+  const caption = data.sideA && data.sideB ? `${data.sideA} см × ${data.sideB} см` : "";
+  const sizeClass = data.compact ? "shape-svg shape-svg--compact" : "shape-svg";
+  const shapes = {
+    rectangle: `<rect x="22" y="34" width="116" height="70" rx="4"></rect>`,
+    square: `<rect x="40" y="26" width="88" height="88" rx="4"></rect>`,
+    triangle: `<polygon points="80,22 136,116 24,116"></polygon>`,
+    circle: `<circle cx="80" cy="72" r="48"></circle>`
+  };
+  return `
+    <div>
+      <svg class="${sizeClass}" viewBox="0 0 160 140" role="img" aria-label="${shape}">
+        ${shapes[shape] || shapes.rectangle}
+      </svg>
+      ${caption ? `<strong>${caption}</strong>` : ""}
+    </div>
+  `;
+}
+
+function makeCoinSet(amount) {
+  const coins = [];
+  let rest = amount;
+  [50, 10, 5, 1].forEach((coin) => {
+    while (rest >= coin && coins.length < 8) {
+      coins.push(coin);
+      rest -= coin;
+    }
+  });
+  return coins;
+}
+
+function formatTime(hour, minute) {
+  return `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+}
+
+function addMinutes(time, minutes) {
+  const [hours, mins] = time.split(":").map(Number);
+  const total = hours * 60 + mins + minutes;
+  return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;
+}
+
+function hourWord(value) {
+  if (value === 1) return "час";
+  if (value >= 2 && value <= 4) return "часа";
+  return "часов";
+}
+
 function getHeroLine(streak) {
   if (streak >= 7) return `${childName}, твой огонек знаний горит уже неделю. Очень сильный ритм.`;
   if (streak >= 3) return `${childName}, огонек разгорается. Сегодня хватит маленького шага.`;
@@ -1549,6 +1812,7 @@ function getDefaultSpeedTarget(skillId) {
     division50: 6,
     numbers100: 5,
     measures: 8,
+    lifeMath: 14,
     orderActions: 8
   };
   return targets[skillId] || 0;
