@@ -672,6 +672,8 @@ const SUBJECT_LAUNCHERS = [
     actions: [
       { label: "Детектив слов", action: "wordDetective" },
       { label: "Игры", action: "russianGames" },
+      { label: "Головоломки", action: "wordPuzzles" },
+      { label: "Пословицы", action: "proverbs" },
       { label: "Словарные", action: "dictionary" }
     ]
   },
