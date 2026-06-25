@@ -1359,7 +1359,7 @@ function createTaskBySkill(skillId) {
     geometry: makeGeometryTask,
     measures: makeMeasuresTask,
     lifeMath: makeLifeMathTask,
-    orderActions: makeOrderTask,
+    orderActions: makeAddSubTask,
     spellingPairs: makeWordDetectiveTask,
     unstressedVowels: makeWordDetectiveTask,
     consonants: makeWordDetectiveTask,
@@ -1859,10 +1859,6 @@ function makeVerifiedLifeMathTask(skillId) {
   if (item.acceptedAnswers) task.acceptedAnswers = item.acceptedAnswers;
   if (item.visual) task.visual = item.visual;
   return task;
-}
-
-function makeOrderTask() {
-  return makeAddSubTask();
 }
 
 function makeWordDetectiveTask() {
