@@ -1874,40 +1874,6 @@ function makeWordDetectiveTask() {
   return task;
 }
 
-function makeSpellingTask() {
-  const items = [
-    ["лыжи", ["лыжы", "лыжи", "лыжыь"], "Жи-ши пишем с буквой и."],
-    ["чашка", ["чяшка", "чашка", "чашька"], "Ча-ща пишем с буквой а."],
-    ["чудо", ["чюдо", "чудо", "чьудо"], "Чу-щу пишем с буквой у."],
-    ["точка", ["точка", "точька", "точкаь"], "Чк пишем без мягкого знака."],
-    ["солнечный", ["солнечный", "солнечьный", "солнешный"], "Чн пишем без мягкого знака."]
-  ];
-  const [answer, choices, explanation] = sample(items);
-  return choiceTask("spellingPairs", "Выбери правильное написание слова.", answer, shuffle(choices), explanation);
-}
-
-function makeUnstressedVowelTask() {
-  const items = [
-    ["леса", "лес", "Какую букву пишем в слове л_са? Проверочное слово: лес.", "е"],
-    ["гора", "горы", "Какую букву пишем в слове г_ра? Проверочное слово: горы.", "о"],
-    ["трава", "травы", "Какую букву пишем в слове тр_ва? Проверочное слово: травы.", "а"],
-    ["зима", "зимы", "Какую букву пишем в слове з_ма? Проверочное слово: зимы.", "и"]
-  ];
-  const item = sample(items);
-  return choiceTask("unstressedVowels", item[2], item[3], ["а", "о", "е", "и"], `Проверочное слово помогает услышать гласную: ${item[1]}.`);
-}
-
-function makeConsonantTask() {
-  const items = [
-    ["гриб", "грибы", "Какую букву пишем на конце слова гри_?", "б"],
-    ["дуб", "дубы", "Какую букву пишем на конце слова ду_?", "б"],
-    ["снег", "снега", "Какую букву пишем на конце слова сне_?", "г"],
-    ["мороз", "морозы", "Какую букву пишем на конце слова моро_?", "з"]
-  ];
-  const item = sample(items);
-  return choiceTask("consonants", item[2], item[3], ["б", "п", "г", "к", "з", "с"], `Проверяем так, чтобы после согласной была гласная: ${item[1]}.`);
-}
-
 function makeDictionaryTask() {
   const items = [
     ["корова", ["карова", "корова", "кароваа"], "Это словарное слово, его нужно запомнить."],
@@ -1958,70 +1924,6 @@ function makeDictionaryMissingTask() {
   ];
   const [word, answer, choices, explanation] = sample(items);
   return choiceTask("dictionaryWords", `Вставь букву: ${word}`, answer, choices, explanation);
-}
-
-function makeOddWordTask() {
-  const items = [
-    ["Кто лишний по смыслу?", "кузнечик", ["сорока", "воробей", "дятел", "кузнечик"], "Кузнечик - насекомое, остальные птицы."],
-    ["Кто лишний по смыслу?", "покупатель", ["писатель", "строитель", "водитель", "покупатель"], "Покупатель не профессия в этом ряду."],
-    ["Какое слово лишнее?", "молоко", ["карандаш", "тетрадь", "молоко", "пенал"], "Молоко не школьная принадлежность."],
-    ["Какое слово лишнее?", "зима", ["утро", "день", "вечер", "зима"], "Зима - время года, остальные части суток."]
-  ];
-  const [prompt, answer, choices, explanation] = sample(items);
-  return choiceTask("wordLogic", prompt, answer, choices, explanation);
-}
-
-function makeLetterSwapTask() {
-  const items = [
-    ["Если в слове мак заменить м на р, какое слово получится?", "рак", ["лак", "рак", "бак"], "Меняем только первую букву."],
-    ["Если в слове дом заменить д на с, какое слово получится?", "сом", ["сом", "сон", "сок"], "Получается новое слово: сом."],
-    ["Если в слове кот заменить к на р, какое слово получится?", "рот", ["рот", "род", "лот"], "Меняем только первую букву."],
-    ["Если в слове лук заменить л на ж, какое слово получится?", "жук", ["жук", "сук", "звук"], "Получается жук."]
-  ];
-  const [prompt, answer, choices, explanation] = sample(items);
-  return choiceTask("wordLogic", prompt, answer, choices, explanation);
-}
-
-function makeSoundLettersTask() {
-  const items = [
-    ["В каком слове звуков больше, чем букв?", "яма", ["кот", "сад", "яма"], "В начале слова я обозначает два звука."],
-    ["В каком слове букв больше, чем звуков?", "ель", ["ель", "юла", "моя"], "Мягкий знак звука не обозначает."],
-    ["Из чего состоят слова в устной речи?", "из звуков", ["из букв", "из звуков"], "Устную речь мы слышим и произносим."],
-    ["Из чего состоят слова в письменной речи?", "из букв", ["из букв", "из звуков"], "Письменную речь мы видим и пишем."]
-  ];
-  const [prompt, answer, choices, explanation] = sample(items);
-  return choiceTask("soundLetters", prompt, answer, choices, explanation);
-}
-
-function makeStressTask() {
-  const items = [
-    ["В каком слове ударение падает на второй слог?", "магазин", ["документ", "алфавит", "дремота", "магазин"], "Ма-га-зин: ударный второй слог."],
-    ["Где ударение на последнем слоге?", "алфавит", ["алфавит", "дремота", "яблоко"], "Алфавит - ударение на последний слог."],
-    ["Где ударение на первом слоге?", "яблоко", ["магазин", "яблоко", "документ"], "Яблоко - ударение на первый слог."]
-  ];
-  const [prompt, answer, choices, explanation] = sample(items);
-  return choiceTask("soundLetters", prompt, answer, choices, explanation);
-}
-
-function makeMiniRebusTask() {
-  const items = [
-    ["Мини-ребус: теле + фон. Какое слово спряталось?", "телефон", ["телефон", "телеграф", "фонарь"], "Соедини части слова: теле + фон."],
-    ["Мини-ребус: само + лет. Какое слово получилось?", "самолет", ["самолет", "самокат", "летчик"], "Две части вместе дают слово самолет."],
-    ["Мини-ребус: пар + ход. Какое слово получилось?", "пароход", ["пароход", "паровоз", "поход"], "Пар + ход превращаются в пароход."]
-  ];
-  const [prompt, answer, choices, explanation] = sample(items);
-  return choiceTask("wordLogic", prompt, answer, choices, explanation);
-}
-
-function makeBuildWordTask() {
-  const items = [
-    ["Собери слово из букв: О, С, Н", "сон", ["нос", "сон", "сено"], "Из этих букв можно собрать слово сон."],
-    ["Собери слово из букв: К, О, Т", "кот", ["кит", "кот", "ток"], "Кот - предметное слово из данных букв."],
-    ["Собери слово из букв: Л, Е, С", "лес", ["лес", "сел", "слон"], "Лес - слово из трех данных букв."],
-    ["Собери слово из букв: Р, А, К", "рак", ["рак", "рука", "карта"], "Берем только данные буквы."]
-  ];
-  const [prompt, answer, choices, explanation] = sample(items);
-  return choiceTask("wordLogic", prompt, answer, choices, explanation);
 }
 
 function makeRussianGameTask() {
@@ -2221,38 +2123,6 @@ function makeProverbTask() {
   return choiceTask("proverbs", `Какая пословица подходит к ситуации? ${item.situation}`, item.text, choices, `Подходит: ${item.text}`);
 }
 
-function makeSeparatorTask() {
-  const items = [
-    ["семья", ["семя", "семья", "семъя"], "В слове семья пишется разделительный мягкий знак."],
-    ["вьюга", ["вюга", "вьюга", "въюга"], "Перед ю после согласной здесь нужен разделительный мягкий знак."],
-    ["подъезд", ["подезд", "подьезд", "подъезд"], "После приставки перед е пишется разделительный твердый знак."],
-    ["объявление", ["обявление", "обьявление", "объявление"], "После приставки перед я пишется разделительный твердый знак."]
-  ];
-  const [answer, choices, explanation] = sample(items);
-  return choiceTask("separators", "Где слово написано правильно?", answer, choices, explanation);
-}
-
-function makePrepositionTask() {
-  const items = [
-    ["Кот сидит на окне.", ["на окне", "наокне"], "Предлог со словом пишется раздельно."],
-    ["Дети пошли в школу.", ["в школу", "вшколу"], "Между предлогом и словом можно вставить другое слово."],
-    ["Мяч лежит под столом.", ["под столом", "подстолом"], "Предлог пишется отдельно от слова."],
-    ["Мы гуляли у реки.", ["у реки", "уреки"], "Короткие предлоги тоже пишутся отдельно."]
-  ];
-  const [sentence, choices, explanation] = sample(items);
-  return choiceTask("prepositions", `Выбери правильное написание из предложения: ${sentence}`, choices[0], choices, explanation);
-}
-
-function makeSentenceTask() {
-  const items = [
-    ["Скоро начнется дождь.", "повествовательное"],
-    ["Почему светит солнце?", "вопросительное"],
-    ["Закрой, пожалуйста, дверь.", "побудительное"]
-  ];
-  const [sentence, answer] = sample(items);
-  return choiceTask("sentenceText", `Какое это предложение: "${sentence}"`, answer, ["повествовательное", "вопросительное", "побудительное"], "Посмотри, сообщает ли оно, спрашивает или просит действовать.");
-}
-
 function makeReadingTask() {
   const item = sample(READING_TEXTS);
   const [question, answer] = sample(item.questions);
@@ -2268,17 +2138,6 @@ function buildReadingChoices(answer, item) {
     .flatMap((text) => text.questions.map((question) => question[1]))
     .filter((value) => value !== answer && !localPool.includes(value));
   return shuffle([answer, ...shuffle(localPool).slice(0, 1), ...shuffle(globalPool).slice(0, 2)]).slice(0, 4);
-}
-
-function makeWorldTask() {
-  const items = [
-    ["Что показывает глобус?", "модель Земли", ["модель Земли", "расписание уроков", "только город Москву"], "Глобус помогает представить форму Земли."],
-    ["К какой группе относится береза?", "дерево", ["дерево", "кустарник", "трава"], "У дерева один главный ствол."],
-    ["Что помогает определить стороны горизонта?", "компас", ["компас", "линейка", "термометр"], "Компас показывает направление на север."],
-    ["Что относится к безопасному поведению в интернете?", "не сообщать личные данные", ["не сообщать личные данные", "писать адрес всем", "открывать любые ссылки"], "Личные данные нужно беречь."]
-  ];
-  const [prompt, answer, choices, explanation] = sample(items);
-  return choiceTask("worldFacts", prompt, answer, choices, explanation);
 }
 
 function choiceTask(skillId, prompt, answer, choices, explanation) {
@@ -2655,10 +2514,6 @@ function dateKey(date) {
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
-}
-
-function rand(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function sample(items) {
