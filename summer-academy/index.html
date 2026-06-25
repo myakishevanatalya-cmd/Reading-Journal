@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#f6b443" />
     <title>Летняя Академия Кати</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=20260625-funbreak2" />
   </head>
   <body>
     <div class="app-shell">
@@ -49,6 +49,15 @@
 
           <div class="guide-card" id="todayGuideCard"></div>
 
+          <div class="fun-break fun-break--today" id="todayFunBreak">
+            <p class="eyebrow">ВЕСЕЛАЯ ПЕРЕМЕНА</p>
+            <h3 id="todayFunBreakTitle">Шутка из Академии</h3>
+            <p id="todayFunBreakText">Учебник математики сказал тетради: «Не переживай, мы все решим».</p>
+            <p class="break-answer hidden" id="todayFunBreakAnswer"></p>
+            <button class="secondary-action hidden" id="revealTodayBreakAnswerBtn">Показать отгадку</button>
+            <button class="secondary-action" id="newTodayBreakBtn">Еще улыбку</button>
+          </div>
+
           <div class="quest-panel hidden" id="questPanel">
             <div class="quest-nav">
               <button class="secondary-action" id="exitSessionBtn" type="button">На главную</button>
@@ -64,7 +73,7 @@
             <div class="answer-area" id="answerArea"></div>
             <div class="feedback hidden" id="feedbackBox"></div>
             <div class="fun-break fun-break--session hidden" id="sessionBreak">
-              <p class="eyebrow">Веселая перемена</p>
+              <p class="eyebrow">ВЕСЕЛАЯ ПЕРЕМЕНА</p>
               <h3 id="sessionBreakTitle">Шутка из Академии</h3>
               <p id="sessionBreakText"></p>
               <p class="break-answer hidden" id="sessionBreakAnswer"></p>
@@ -98,7 +107,7 @@
           <div class="guide-card" id="trainerGuideCard"></div>
           <div class="trainer-grid" id="trainerGrid"></div>
           <div class="fun-break" id="funBreak">
-            <p class="eyebrow">Веселая перемена</p>
+            <p class="eyebrow">ВЕСЕЛАЯ ПЕРЕМЕНА</p>
             <h3 id="funBreakTitle">Шутка из Академии</h3>
             <p id="jokeLine">Учебник математики сказал тетради: «Не переживай, мы все решим».</p>
             <p class="break-answer hidden" id="funBreakAnswer"></p>
@@ -166,6 +175,6 @@
       </nav>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=20260625-funbreak2"></script>
   </body>
 </html>

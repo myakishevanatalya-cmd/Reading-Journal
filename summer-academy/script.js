@@ -1162,6 +1162,12 @@ const finishMistakes = document.querySelector("#finishMistakes");
 const finishMinutes = document.querySelector("#finishMinutes");
 const academyMap = document.querySelector("#academyMap");
 const trainerGrid = document.querySelector("#trainerGrid");
+const todayFunBreak = document.querySelector("#todayFunBreak");
+const todayFunBreakTitle = document.querySelector("#todayFunBreakTitle");
+const todayFunBreakText = document.querySelector("#todayFunBreakText");
+const todayFunBreakAnswer = document.querySelector("#todayFunBreakAnswer");
+const revealTodayBreakAnswerBtn = document.querySelector("#revealTodayBreakAnswerBtn");
+const newTodayBreakBtn = document.querySelector("#newTodayBreakBtn");
 const funBreakTitle = document.querySelector("#funBreakTitle");
 const jokeLine = document.querySelector("#jokeLine");
 const newJokeBtn = document.querySelector("#newJokeBtn");
@@ -1196,7 +1202,9 @@ againSessionBtn.addEventListener("click", () => startSession());
 nextQuestionBtn.addEventListener("click", nextQuestion);
 exitSessionBtn.addEventListener("click", exitSession);
 reviewMistakesBtn.addEventListener("click", () => showView("errors"));
-newJokeBtn.addEventListener("click", () => renderFunBreak("any", "main"));
+newTodayBreakBtn.addEventListener("click", () => renderFunBreak("any", "today", true));
+revealTodayBreakAnswerBtn.addEventListener("click", () => revealFunBreakAnswer("today"));
+newJokeBtn.addEventListener("click", () => renderFunBreak("any", "main", true));
 revealBreakAnswerBtn.addEventListener("click", () => revealFunBreakAnswer("main"));
 revealSessionBreakAnswerBtn.addEventListener("click", () => revealFunBreakAnswer("session"));
 nextBreakBtn.addEventListener("click", () => renderSessionBreak(session?.lastBreakContext || "any", true));
@@ -1205,6 +1213,7 @@ importInput.addEventListener("change", importProgress);
 resetBtn.addEventListener("click", resetProgress);
 
 render();
+renderFunBreak("any", "today");
 renderFunBreak("any", "main");
 
 function loadState() {
@@ -1262,6 +1271,7 @@ function renderToday() {
   startSessionBtn.closest(".today-card").classList.toggle("hidden", focusMode);
   subjectLaunch.classList.toggle("hidden", focusMode);
   todayGuideCard.classList.toggle("hidden", focusMode);
+  todayFunBreak.classList.toggle("hidden", trainingActive);
   questPanel.classList.toggle("hidden", !trainingActive);
 
   const today = dateKey(new Date());
@@ -1567,12 +1577,15 @@ function renderJoke() {
 }
 
 function renderFunBreak(showAfter = "any", target = "main", forceNew = false) {
-  const item = pickFunBreakItem(showAfter, target, forceNew);
   const elements = getFunBreakElements(target);
-  if (!item || !elements) return;
+  if (!elements) return;
+  const currentId = forceNew ? Number(elements.text.dataset.itemId || 0) : 0;
+  const item = pickFunBreakItem(showAfter, target, forceNew, currentId);
+  if (!item) return;
 
   elements.title.textContent = item.title;
   elements.text.textContent = item.text;
+  elements.text.dataset.itemId = String(item.id);
   elements.answer.textContent = item.answer ? `Отгадка: ${item.answer}` : "";
   elements.answer.classList.add("hidden");
   elements.revealButton.classList.toggle("hidden", item.type !== "riddle" || !item.answer);
@@ -1609,6 +1622,14 @@ function getFunBreakElements(target) {
       revealButton: revealSessionBreakAnswerBtn
     };
   }
+  if (target === "today") {
+    return {
+      title: todayFunBreakTitle,
+      text: todayFunBreakText,
+      answer: todayFunBreakAnswer,
+      revealButton: revealTodayBreakAnswerBtn
+    };
+  }
   return {
     title: funBreakTitle,
     text: jokeLine,
@@ -1617,10 +1638,11 @@ function getFunBreakElements(target) {
   };
 }
 
-function pickFunBreakItem(showAfter = "any", target = "main", forceNew = false) {
+function pickFunBreakItem(showAfter = "any", target = "main", forceNew = false, currentId = 0) {
   const usedIds = target === "session" && session ? session.shownFunBreakIds || [] : [];
   const candidates = FUN_BREAK_ITEMS.filter((item) => {
     if (!item.isActive) return false;
+    if (forceNew && item.id === currentId) return false;
     if (target === "session" && usedIds.includes(item.id)) return false;
     if (target === "session" && session?.microBreakShown && item.type === "micro_break") return false;
     if (showAfter === "after_error") return ["after_error", "any"].includes(item.showAfter) && (item.type === "support" || item.tone === "calm");
@@ -1680,6 +1702,7 @@ function startSession(options = {}) {
   startSessionBtn.closest(".today-card").classList.add("hidden");
   subjectLaunch.classList.add("hidden");
   todayGuideCard.classList.add("hidden");
+  todayFunBreak.classList.add("hidden");
   finishPanel.classList.add("hidden");
   questPanel.classList.remove("hidden");
   renderQuestion();
@@ -2066,6 +2089,7 @@ function finishSession() {
   finishMistakes.textContent = String(mistakes);
   finishMinutes.textContent = String(minutes);
   session = null;
+  renderFunBreak("after_session", "today");
   renderFunBreak("after_session", "main");
   render();
 }
