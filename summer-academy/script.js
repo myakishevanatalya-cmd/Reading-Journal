@@ -348,6 +348,52 @@ const MATH_STORY_TASKS = [
   ["два действия", "В саду росло 3 ряда яблонь, по 7 яблонь в каждом ряду. Потом посадили еще 9 яблонь. Сколько яблонь стало в саду?", 30, "Сначала узнай, сколько яблонь было в рядах, потом прибавь новые."]
 ];
 
+const VERIFIED_FAST100_EXAMPLES = [
+  "34 + 5", "62 + 7", "80 + 6", "47 + 2", "53 + 4", "71 + 8", "25 + 3", "40 + 9", "16 + 2", "91 + 6",
+  "34 - 2", "62 - 1", "80 - 6", "47 - 3", "59 - 4", "76 - 5", "28 - 6", "90 - 7", "65 - 2", "43 - 1",
+  "20 + 30", "40 + 50", "10 + 70", "60 + 20", "30 + 30", "50 + 40", "80 + 10", "20 + 60", "70 + 20", "10 + 80",
+  "80 - 30", "70 - 20", "90 - 40", "60 - 10", "100 - 50", "50 - 20", "80 - 60", "40 - 10", "100 - 70", "90 - 30",
+  "24 + 10", "35 + 20", "48 + 30", "52 + 40", "17 + 50", "63 + 20", "71 + 10", "26 + 30", "39 + 40", "45 + 20",
+  "54 - 10", "76 - 20", "89 - 30", "65 - 40", "47 - 20", "93 - 50", "68 - 30", "72 - 10", "59 - 40", "84 - 20",
+  "38 + 7", "46 + 8", "27 + 6", "59 + 5", "64 + 9", "75 + 8", "29 + 4", "18 + 7", "53 + 9", "67 + 6",
+  "34 - 8", "52 - 7", "41 - 6", "63 - 9", "75 - 8", "90 - 4", "28 - 9", "46 - 7", "81 - 5", "57 - 8",
+  "23 + 14", "42 + 35", "51 + 26", "34 + 25", "62 + 17", "71 + 18", "45 + 23", "56 + 32", "24 + 13", "31 + 48",
+  "58 - 24", "76 - 35", "94 - 52", "67 - 23", "85 - 41", "49 - 27", "63 - 12", "88 - 34", "57 - 26", "79 - 45",
+  "38 + 27", "46 + 35", "57 + 24", "29 + 48", "64 + 18", "75 + 16", "28 + 37", "39 + 26", "47 + 35", "58 + 24",
+  "54 - 28", "63 - 37", "72 - 45", "81 - 56", "90 - 34", "46 - 19", "75 - 48", "62 - 27", "83 - 59", "51 - 24"
+];
+
+const VERIFIED_COMPARISON_EXAMPLES = [
+  "34 __ 43", "56 __ 65", "72 __ 27", "90 __ 89", "41 __ 41", "18 __ 81", "67 __ 76", "55 __ 55", "29 __ 92", "100 __ 99",
+  "30 + 5 __ 36", "40 + 8 __ 48", "70 - 6 __ 65", "90 - 10 __ 80", "25 + 4 __ 30", "60 - 7 __ 50", "18 + 2 __ 20", "45 - 5 __ 41",
+  "20 + 5 __ 30 - 4", "40 + 8 __ 50 - 2", "70 - 6 __ 60 + 3", "25 + 5 __ 20 + 10", "90 - 8 __ 80 + 1", "34 + 4 __ 40 - 2",
+  "2 × 4 __ 7", "3 × 5 __ 15", "4 × 6 __ 25", "5 × 5 __ 20", "6 × 3 __ 18", "7 × 2 __ 15", "8 × 4 __ 32", "9 × 3 __ 28",
+  "12 : 2 __ 6", "18 : 3 __ 5", "20 : 4 __ 6", "25 : 5 __ 5", "36 : 6 __ 7", "42 : 7 __ 6", "56 : 8 __ 8", "63 : 9 __ 7"
+];
+
+const VERIFIED_UNKNOWN_EXAMPLES = [
+  "□ + 5 = 12", "8 + □ = 15", "□ + 20 = 60", "34 + □ = 40", "□ + 7 = 16", "25 + □ = 30", "□ + 14 = 50", "9 + □ = 18",
+  "□ - 5 = 10", "18 - □ = 9", "□ - 20 = 40", "36 - □ = 30", "□ - 7 = 12", "25 - □ = 20", "□ - 14 = 36", "17 - □ = 8"
+];
+
+const VERIFIED_MULTIPLICATION_EXAMPLES = [
+  "2 × 1", "2 × 2", "2 × 3", "2 × 4", "2 × 5", "2 × 6", "2 × 7", "2 × 8", "2 × 9", "2 × 10", "2 × 0",
+  "3 × 1", "3 × 2", "3 × 3", "3 × 4", "3 × 5", "3 × 6", "3 × 7", "3 × 8", "3 × 9", "3 × 10", "3 × 0",
+  "4 × 1", "4 × 2", "4 × 3", "4 × 4", "4 × 5", "4 × 6", "4 × 7", "4 × 8", "4 × 9", "4 × 10", "4 × 0",
+  "5 × 1", "5 × 2", "5 × 3", "5 × 4", "5 × 5", "5 × 6", "5 × 7", "5 × 8", "5 × 9", "5 × 10", "5 × 0",
+  "6 × 1", "6 × 2", "6 × 3", "6 × 4", "6 × 5", "6 × 6", "6 × 7", "6 × 8", "6 × 9", "6 × 10", "6 × 0",
+  "7 × 1", "7 × 2", "7 × 3", "7 × 4", "7 × 5", "7 × 6", "7 × 7", "7 × 8", "7 × 9", "7 × 10", "7 × 0",
+  "8 × 1", "8 × 2", "8 × 3", "8 × 4", "8 × 5", "8 × 6", "8 × 7", "8 × 8", "8 × 9", "8 × 10", "8 × 0",
+  "9 × 1", "9 × 2", "9 × 3", "9 × 4", "9 × 5", "9 × 6", "9 × 7", "9 × 8", "9 × 9", "9 × 10", "9 × 0",
+  "3 × 4", "5 × 6", "7 × 8", "9 × 4", "6 × 7", "8 × 5", "4 × 7", "6 × 8", "5 × 9"
+];
+
+const VERIFIED_DIVISION_EXAMPLES = [
+  "12 : 2", "18 : 3", "20 : 4", "25 : 5", "36 : 6", "42 : 7", "56 : 8", "63 : 9", "16 : 2", "27 : 3",
+  "32 : 4", "45 : 5", "54 : 6", "49 : 7", "64 : 8", "72 : 9", "30 : 3", "40 : 5", "48 : 6", "81 : 9",
+  "12 : 3", "30 : 5", "56 : 7", "36 : 9", "42 : 6", "40 : 8", "28 : 4", "48 : 6", "45 : 5"
+];
+
 const RUSSIAN_DETECTIVE_TASKS = [
   {
     skillId: "spellingPairs",
@@ -1601,19 +1647,22 @@ function renderParentReport() {
 }
 
 function makeNumbersTask() {
-  const a = rand(20, 99);
-  const b = rand(20, 99);
-  const answer = a > b ? ">" : a < b ? "<" : "=";
-  return choiceTask("numbers100", `Какой знак поставить: ${a} ... ${b}?`, answer, [">", "<", "="], "Сравни десятки, потом единицы.");
+  return makeVerifiedComparisonTask();
 }
 
 function makeAddSubTask() {
-  const plus = Math.random() > 0.45;
-  const a = rand(18, 78);
-  const b = rand(6, plus ? 19 : Math.min(19, a - 1));
-  const answer = plus ? a + b : a - b;
-  const task = inputTask("addSub100", `${a} ${plus ? "+" : "-"} ${b} = ?`, String(answer), plus ? "Складывай десятки и единицы." : "Вычитание можно проверить сложением.");
+  const expression = sample(VERIFIED_FAST100_EXAMPLES);
+  const task = inputTask("addSub100", `${expression} = ?`, String(solveSimpleExpression(expression)), "Это пример из проверенного блока счета в пределах 100.");
   task.speedTargetSec = 7;
+  return task;
+}
+
+function makeVerifiedComparisonTask() {
+  const expression = sample(VERIFIED_COMPARISON_EXAMPLES);
+  const [leftRaw, rightRaw] = expression.split("__").map((part) => part.trim());
+  const answer = compareSign(solveSimpleExpression(leftRaw), solveSimpleExpression(rightRaw));
+  const task = choiceTask("numbers100", `Поставь знак: ${expression.replace("__", "...")}`, answer, [">", "<", "="], "Это пример из проверенного блока сравнения.");
+  task.speedTargetSec = 8;
   return task;
 }
 
@@ -1627,97 +1676,48 @@ function makeFastArithmeticTask(level) {
     return task;
   }
 
+  if (level === "verified") {
+    return makeAddSubTask();
+  }
+
   if (level === "within20") {
-    const plus = Math.random() > 0.5;
-    const a = rand(4, 19);
-    const b = plus ? rand(1, Math.max(1, 20 - a)) : rand(1, a);
-    const task = inputTask("addSub100", `${a} ${plus ? "+" : "-"} ${b} = ?`, String(plus ? a + b : a - b), "Держи в голове десяток и единицы.");
-    task.speedTargetSec = 4;
-    return task;
+    return makeAddSubTask();
   }
 
   if (level === "roundTens") {
-    const a = sample([20, 30, 40, 50, 60, 70, 80, 90]);
-    const b = rand(1, 9);
-    const task = inputTask("addSub100", `${a} - ${b} = ?`, String(a - b), "Разбей десяток: например, 60 - 2 = 58.");
-    task.speedTargetSec = 6;
-    return task;
+    return makeAddSubTask();
   }
 
   if (level === "compare") {
-    const variants = [
-      () => {
-        const left = rand(20, 99);
-        const right = rand(20, 99);
-        return { prompt: `${left} ... ${right}`, left, right, hint: "Сравни десятки, потом единицы." };
-      },
-      () => {
-        const a = rand(20, 80);
-        const b = rand(2, 9);
-        const right = rand(20, 95);
-        return { prompt: `${a} + ${b} ... ${right}`, left: a + b, right, hint: "Сначала вычисли выражение слева, потом сравни." };
-      },
-      () => {
-        const a = rand(30, 99);
-        const b = rand(2, 9);
-        const c = rand(20, 80);
-        const d = rand(2, 9);
-        return { prompt: `${a} - ${b} ... ${c} + ${d}`, left: a - b, right: c + d, hint: "Вычисли обе стороны и поставь знак." };
-      }
-    ];
-    const item = sample(variants)();
-    const answer = compareSign(item.left, item.right);
-    const task = choiceTask("numbers100", `Поставь знак: ${item.prompt}`, answer, [">", "<", "="], item.hint);
-    task.speedTargetSec = 8;
-    return task;
+    return makeVerifiedComparisonTask();
   }
 
   if (level === "unknown") {
-    const plus = Math.random() > 0.45;
-    if (plus) {
-      const first = rand(8, 55);
-      const missing = rand(4, 20);
-      const task = inputTask("addSub100", `${first} + □ = ${first + missing}. Найди □.`, String(missing), "Неизвестное слагаемое можно найти вычитанием.");
-      task.speedTargetSec = 10;
-      return task;
-    }
-    const start = rand(25, 90);
-    const missing = rand(4, Math.min(30, start - 1));
-    const task = inputTask("addSub100", `${start} - □ = ${start - missing}. Найди □.`, String(missing), "Неизвестное вычитаемое можно найти вычитанием результата из начала.");
+    const expression = sample(VERIFIED_UNKNOWN_EXAMPLES);
+    const task = inputTask("addSub100", `${expression}. Найди □.`, String(solveUnknownExpression(expression)), "Это задание из проверенного блока на неизвестное число.");
     task.speedTargetSec = 10;
     return task;
   }
 
-  const plus = Math.random() > 0.5;
-  const a = rand(20, 89);
-  const b = plus ? rand(2, Math.min(10, 99 - a)) : rand(2, Math.min(10, a));
-  const task = inputTask("addSub100", `${a} ${plus ? "+" : "-"} ${b} = ?`, String(plus ? a + b : a - b), "Считай спокойно: десятки отдельно, единицы отдельно.");
-  task.speedTargetSec = 6;
-  return task;
+  return makeAddSubTask();
 }
 
 function makeMultiplicationTask(variant = "all") {
-  const pairs = [];
-  for (let a = 2; a <= 9; a += 1) {
-    for (let b = 2; b <= 9; b += 1) {
-      const fitsProgram = a * b <= 50;
-      const fitsVariant = variant === "all" || variant === "hard" || String(a) === String(variant) || String(b) === String(variant);
-      const hard = [6, 7, 8, 9].includes(a) || [6, 7, 8, 9].includes(b);
-      if (fitsProgram && fitsVariant && (variant !== "hard" || hard)) pairs.push([a, b]);
-    }
-  }
-  const [a, b] = sample(pairs);
-  const answer = a * b;
-  const task = inputTask("multiplication50", `${a} × ${b} = ?`, String(answer), "Умножение можно представить как несколько одинаковых групп.");
+  const examples = VERIFIED_MULTIPLICATION_EXAMPLES.filter((expression) => {
+    const [left, , right] = expression.split(" ");
+    const hasVariant = variant === "all" || String(left) === String(variant) || String(right) === String(variant);
+    const hard = [6, 7, 8, 9].includes(Number(left)) || [6, 7, 8, 9].includes(Number(right));
+    return variant === "hard" ? hard : hasVariant;
+  });
+  const expression = sample(examples.length ? examples : VERIFIED_MULTIPLICATION_EXAMPLES);
+  const task = inputTask("multiplication50", `${expression} = ?`, String(solveSimpleExpression(expression)), "Это пример из проверенного блока таблицы умножения.");
   task.speedTargetSec = 5;
   return task;
 }
 
 function makeDivisionTask() {
-  const divisor = rand(2, 9);
-  const quotient = rand(2, 9);
-  const dividend = divisor * quotient;
-  return inputTask("division50", `${dividend} : ${divisor} = ?`, String(quotient), "Деление можно проверить умножением.");
+  const expression = sample(VERIFIED_DIVISION_EXAMPLES);
+  return inputTask("division50", `${expression} = ?`, String(solveSimpleExpression(expression)), "Это пример из проверенного блока деления по таблице умножения.");
 }
 
 function makeWordProblemTask() {
@@ -2696,6 +2696,31 @@ function compareSign(left, right) {
   if (left > right) return ">";
   if (left < right) return "<";
   return "=";
+}
+
+function solveSimpleExpression(expression) {
+  const parts = String(expression).trim().split(/\s+/);
+  if (parts.length === 1) return Number(parts[0]);
+  const left = Number(parts[0]);
+  const operation = parts[1];
+  const right = Number(parts[2]);
+  if (operation === "+") return left + right;
+  if (operation === "-") return left - right;
+  if (operation === "×") return left * right;
+  if (operation === ":") return left / right;
+  return 0;
+}
+
+function solveUnknownExpression(expression) {
+  const [leftRaw, resultRaw] = expression.split("=").map((part) => part.trim());
+  const result = Number(resultRaw);
+  const [firstRaw, operation, secondRaw] = leftRaw.split(/\s+/);
+  const firstUnknown = firstRaw === "□";
+  const first = firstUnknown ? null : Number(firstRaw);
+  const second = secondRaw === "□" ? null : Number(secondRaw);
+  if (operation === "+") return firstUnknown ? result - second : result - first;
+  if (operation === "-") return firstUnknown ? result + second : first - result;
+  return 0;
 }
 
 function dayWord(count) {
