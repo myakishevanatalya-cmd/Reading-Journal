@@ -394,6 +394,63 @@ const VERIFIED_DIVISION_EXAMPLES = [
   "12 : 3", "30 : 5", "56 : 7", "36 : 9", "42 : 6", "40 : 8", "28 : 4", "48 : 6", "45 : 5"
 ];
 
+const VERIFIED_LIFE_MATH_TASKS = [
+  { skillId: "measures", kind: "input", prompt: "Лента длиной 1 метр. От нее отрезали 30 сантиметров. Сколько сантиметров ленты осталось?", answer: "70", explanation: "1 метр - это 100 сантиметров. Вычти 30 из 100.", visual: { type: "ruler", startCm: 0, endCm: 100, markerCm: 70, label: "1 м = 100 см" } },
+  { skillId: "measures", kind: "input", prompt: "Карандаш длиной 14 см, а ручка длиной 12 см. На сколько сантиметров карандаш длиннее ручки?", answer: "2", explanation: "Чтобы узнать, на сколько больше, нужно вычесть.", visual: { type: "ruler", segmentA: 14, segmentB: 12 } },
+  { skillId: "measures", kind: "input", prompt: "У Маши есть полоска длиной 3 дм. Сколько это сантиметров?", answer: "30", explanation: "1 дм - это 10 см.", visual: { type: "ruler", startCm: 0, endCm: 30, label: "3 дм" } },
+  { skillId: "measures", kind: "input", prompt: "Дорожка состоит из двух частей: 25 м и 30 м. Какова длина всей дорожки?", answer: "55", explanation: "Нужно сложить длины двух частей." },
+  { skillId: "measures", kind: "input", prompt: "В пакете 2 кг яблок, а в корзине 5 кг яблок. Сколько килограммов яблок всего?", answer: "7", explanation: "Нужно сложить массу яблок." },
+  { skillId: "measures", kind: "input", prompt: "Мешок картофеля весил 10 кг. Из него взяли 3 кг. Сколько килограммов картофеля осталось?", answer: "7", explanation: "Картофеля стало меньше, значит нужно вычесть." },
+  { skillId: "measures", kind: "input", prompt: "В кувшине было 2 л воды. Мама долила еще 3 л. Сколько литров воды стало?", answer: "5", explanation: "Нужно сложить литры." },
+  { skillId: "measures", kind: "input", prompt: "В ведре было 9 л воды. Для полива взяли 4 л. Сколько литров воды осталось?", answer: "5", explanation: "Нужно вычесть использованную воду." },
+  { skillId: "measures", kind: "choice", prompt: "Что больше: 1 м или 90 см?", answer: "1 м", choices: ["1 м", "90 см", "равно"], explanation: "1 м - это 100 см, а 100 см больше 90 см.", visual: { type: "ruler", startCm: 0, endCm: 100, markerCm: 90, label: "1 м и 90 см" } },
+  { skillId: "measures", kind: "choice", prompt: "Что меньше: 4 дм или 50 см?", answer: "4 дм", choices: ["4 дм", "50 см", "равно"], explanation: "4 дм - это 40 см. 40 см меньше 50 см.", visual: { type: "ruler", startCm: 0, endCm: 50, markerCm: 40, label: "4 дм = 40 см" } },
+
+  { skillId: "lifeMath", kind: "input", prompt: "На часах 8 часов утра. Через 2 часа начнется кружок. Во сколько начнется кружок?", answer: "10 часов", acceptedAnswers: ["10", "10:00"], explanation: "Прибавь 2 часа к 8 часам.", visual: { type: "clock", hour: 8, minute: 0 } },
+  { skillId: "lifeMath", kind: "input", prompt: "Урок начался в 9 часов и длился 1 час. Во сколько закончился урок?", answer: "10 часов", acceptedAnswers: ["10", "10:00"], explanation: "Прибавь 1 час к 9 часам.", visual: { type: "clock", hour: 9, minute: 0 } },
+  { skillId: "lifeMath", kind: "input", prompt: "Перемена началась в 10:20 и закончилась в 10:30. Сколько минут длилась перемена?", answer: "10", acceptedAnswers: ["10 минут"], explanation: "Посчитай минуты от 20 до 30.", visual: { type: "clock", time: "10:20" } },
+  { skillId: "lifeMath", kind: "input", prompt: "Маша читала с 15:00 до 15:25. Сколько минут она читала?", answer: "25", acceptedAnswers: ["25 минут"], explanation: "От 15:00 до 15:25 прошло 25 минут.", visual: { type: "clock", time: "15:00" } },
+  { skillId: "lifeMath", kind: "choice", prompt: "Петя пришел в школу в 8:10, а Ваня в 8:20. Кто пришел раньше?", answer: "Петя", choices: ["Петя", "Ваня", "пришли одновременно"], explanation: "8:10 раньше, чем 8:20." },
+  { skillId: "lifeMath", kind: "choice", prompt: "Мультфильм начался в 18:30, а фильм в 19:00. Что началось позже?", answer: "фильм", choices: ["мультфильм", "фильм", "оба вместе"], explanation: "19:00 позже, чем 18:30." },
+  { skillId: "lifeMath", kind: "choice", prompt: "Завтрак в 8:00, прогулка в 10:00, обед в 13:00. Что будет раньше: прогулка или обед?", answer: "прогулка", choices: ["прогулка", "обед", "одновременно"], explanation: "10:00 раньше, чем 13:00." },
+  { skillId: "lifeMath", kind: "input", prompt: "Урок музыки начинается в 12:00. Сейчас 11:30. Через сколько минут начнется урок?", answer: "30", acceptedAnswers: ["30 минут"], explanation: "От 11:30 до 12:00 пройдет 30 минут.", visual: { type: "clock", time: "11:30" } },
+  { skillId: "lifeMath", kind: "input", prompt: "Поездка длилась 40 минут. Она началась в 14:00. Во сколько закончилась поездка?", answer: "14:40", explanation: "Прибавь 40 минут к 14:00.", visual: { type: "clock", time: "14:00" } },
+  { skillId: "lifeMath", kind: "input", prompt: "Тренировка началась в 16:15 и закончилась в 16:45. Сколько минут длилась тренировка?", answer: "30", acceptedAnswers: ["30 минут"], explanation: "От 15 минут до 45 минут прошло 30 минут.", visual: { type: "clock", time: "16:15" } },
+
+  { skillId: "lifeMath", kind: "input", prompt: "У Кати было 50 рублей. Она купила тетрадь за 18 рублей и карандаш за 12 рублей. Сколько рублей осталось?", answer: "20", explanation: "Сначала узнай, сколько Катя потратила, потом вычти из 50.", visual: { type: "coins", money: 50, prices: [18, 12] } },
+  { skillId: "lifeMath", kind: "input", prompt: "У Миши было 40 рублей. Он купил сок за 25 рублей. Сколько рублей осталось?", answer: "15", explanation: "Деньги потратили, значит нужно вычесть.", visual: { type: "coins", money: 40, prices: [25] } },
+  { skillId: "lifeMath", kind: "input", prompt: "Булочка стоит 18 рублей, а сок 22 рубля. Сколько стоят булочка и сок вместе?", answer: "40", explanation: "Нужно сложить две стоимости.", visual: { type: "coins", prices: [18, 22] } },
+  { skillId: "lifeMath", kind: "choice", prompt: "У Лены 30 рублей. Хватит ли ей на мороженое за 28 рублей?", answer: "да", choices: ["да", "нет"], explanation: "30 рублей больше, чем 28 рублей.", visual: { type: "coins", money: 30, prices: [28] } },
+  { skillId: "lifeMath", kind: "choice", prompt: "У Вани 20 рублей. Карандаш стоит 12 рублей, а ластик 9 рублей. Хватит ли денег на обе покупки?", answer: "нет", choices: ["да", "нет"], explanation: "12 + 9 = 21, а 21 больше 20.", visual: { type: "coins", money: 20, prices: [12, 9] } },
+  { skillId: "lifeMath", kind: "input", prompt: "У Сони было 100 рублей. Она купила книгу за 65 рублей. Сколько рублей сдачи она получила?", answer: "35", explanation: "Вычти стоимость книги из 100.", visual: { type: "coins", money: 100, prices: [65] } },
+  { skillId: "lifeMath", kind: "input", prompt: "Яблоко стоит 15 рублей, груша стоит 20 рублей. На сколько рублей груша дороже яблока?", answer: "5", explanation: "Чтобы узнать, на сколько дороже, нужно вычесть.", visual: { type: "coins", prices: [15, 20] } },
+  { skillId: "lifeMath", kind: "input", prompt: "У Димы 70 рублей. Он хочет купить ручку за 25 рублей и блокнот за 35 рублей. Сколько рублей останется?", answer: "10", explanation: "Сначала сложи стоимость покупок, потом вычти из 70.", visual: { type: "coins", money: 70, prices: [25, 35] } },
+  { skillId: "lifeMath", kind: "input", prompt: "У Оли 45 рублей. Она купила наклейки за 30 рублей. Сколько рублей ей нужно добавить, чтобы купить еще открытку за 20 рублей?", answer: "5", explanation: "После покупки осталось 15 рублей, до 20 не хватает 5.", visual: { type: "coins", money: 45, prices: [30, 20] } },
+  { skillId: "lifeMath", kind: "input", prompt: "У Пети 3 монеты по 10 рублей и 2 монеты по 5 рублей. Сколько рублей у Пети?", answer: "40", explanation: "Сначала посчитай 3 десятки, потом 2 пятерки.", visual: { type: "coins", coins: [10, 10, 10, 5, 5] } },
+
+  { skillId: "geometry", kind: "input", prompt: "У отрезка длина 8 см. Его увеличили на 4 см. Какой длины стал отрезок?", answer: "12", acceptedAnswers: ["12 см"], explanation: "Нужно прибавить 4 см.", visual: { type: "ruler", startCm: 0, endCm: 12 } },
+  { skillId: "geometry", kind: "input", prompt: "Одна сторона треугольника 5 см, вторая 6 см, третья 7 см. Найди периметр треугольника.", answer: "18", acceptedAnswers: ["18 см"], explanation: "Периметр - это сумма длин всех сторон.", visual: { type: "shape", shape: "triangle" } },
+  { skillId: "geometry", kind: "input", prompt: "У квадрата сторона 4 см. Найди периметр квадрата.", answer: "16", acceptedAnswers: ["16 см"], explanation: "У квадрата 4 равные стороны: 4 + 4 + 4 + 4.", visual: { type: "shape", shape: "square", sideA: 4, sideB: 4 } },
+  { skillId: "geometry", kind: "input", prompt: "У прямоугольника стороны 6 см и 4 см. Найди периметр.", answer: "20", acceptedAnswers: ["20 см"], explanation: "Сложи все стороны: 6 + 4 + 6 + 4.", visual: { type: "shape", shape: "rectangle", sideA: 6, sideB: 4 } },
+  { skillId: "geometry", kind: "input", prompt: "Ломаная состоит из трех звеньев: 3 см, 5 см и 4 см. Найди длину ломаной.", answer: "12", acceptedAnswers: ["12 см"], explanation: "Сложи длины всех звеньев.", visual: { type: "grid", segments: [3, 5, 4] } },
+  { skillId: "geometry", kind: "choice", prompt: "У какой фигуры 3 стороны и 3 угла?", answer: "треугольник", choices: ["треугольник", "квадрат", "круг"], explanation: "Треугольник имеет три стороны.", visual: { type: "shape", shape: "triangle" } },
+  { skillId: "geometry", kind: "choice", prompt: "У какой фигуры все стороны равны и 4 угла?", answer: "квадрат", choices: ["квадрат", "прямоугольник", "треугольник"], explanation: "У квадрата 4 равные стороны.", visual: { type: "shape", shape: "square" } },
+  { skillId: "geometry", kind: "input", prompt: "Начертили отрезок 9 см. Потом стерли 3 см. Какая длина осталась?", answer: "6", acceptedAnswers: ["6 см"], explanation: "Нужно вычесть 3 см.", visual: { type: "ruler", startCm: 0, endCm: 9, markerCm: 6 } },
+  { skillId: "geometry", kind: "input", prompt: "Путь по клеткам идет так: 4 клетки вправо, 3 клетки вверх, 2 клетки вправо. Сколько всего клеток прошел путь?", answer: "9", explanation: "Сложи все части пути: 4 + 3 + 2.", visual: { type: "grid", moves: ["right 4", "up 3", "right 2"] } },
+  { skillId: "geometry", kind: "input", prompt: "Прямоугольник имеет стороны 8 см и 3 см. Найди периметр.", answer: "22", acceptedAnswers: ["22 см"], explanation: "Сложи 8 + 3 + 8 + 3.", visual: { type: "shape", shape: "rectangle", sideA: 8, sideB: 3 } },
+
+  { skillId: "lifeMath", kind: "input", prompt: "Продолжи ряд: 2, 4, 6, 8, ...", answer: "10", explanation: "Каждое следующее число больше на 2.", visual: { type: "pattern", items: ["2", "4", "6", "8"], missing: "?" } },
+  { skillId: "lifeMath", kind: "input", prompt: "Продолжи ряд: 5, 10, 15, 20, ...", answer: "25", explanation: "Каждое следующее число больше на 5.", visual: { type: "pattern", items: ["5", "10", "15", "20"], missing: "?" } },
+  { skillId: "lifeMath", kind: "input", prompt: "Продолжи ряд: 30, 27, 24, 21, ...", answer: "18", explanation: "Каждое следующее число меньше на 3.", visual: { type: "pattern", items: ["30", "27", "24", "21"], missing: "?" } },
+  { skillId: "lifeMath", kind: "input", prompt: "Продолжи ряд: 1, 2, 4, 8, ...", answer: "16", explanation: "Каждое следующее число увеличивается в 2 раза.", visual: { type: "pattern", items: ["1", "2", "4", "8"], missing: "?" } },
+  { skillId: "lifeMath", kind: "input", prompt: "Какой шаг в ряду: 12, 22, 32, 42?", answer: "+10", acceptedAnswers: ["10"], explanation: "Сравни соседние числа.", visual: { type: "pattern", items: ["12", "22", "32", "42"] } },
+  { skillId: "lifeMath", kind: "choice", prompt: "Найди лишнее число: 10, 20, 30, 35, 40.", answer: "35", choices: ["10", "20", "35", "40"], explanation: "Остальные числа круглые десятки.", visual: { type: "pattern", items: ["10", "20", "30", "35", "40"] } },
+  { skillId: "lifeMath", kind: "choice", prompt: "Найди лишнюю фигуру: квадрат, прямоугольник, треугольник, круг.", answer: "круг", choices: ["квадрат", "прямоугольник", "треугольник", "круг"], explanation: "У круга нет углов, а у остальных фигур есть углы.", visual: { type: "shapeSet", shapes: ["square", "rectangle", "triangle", "circle"] } },
+  { skillId: "lifeMath", kind: "choice", prompt: "Продолжи ряд: круг, квадрат, круг, квадрат, ...", answer: "круг", choices: ["круг", "квадрат", "треугольник"], explanation: "Фигуры чередуются.", visual: { type: "pattern", items: ["круг", "квадрат", "круг", "квадрат"], missing: "?" } },
+  { skillId: "lifeMath", kind: "input", prompt: "В таблице числа идут так: 3, 6, 9, 12. Какое число будет следующим?", answer: "15", explanation: "Каждый раз прибавляют 3.", visual: { type: "pattern", items: ["3", "6", "9", "12"], missing: "?" } },
+  { skillId: "lifeMath", kind: "input", prompt: "У Маши 2 карандаша, у Лены 4 карандаша, у Оли 6 карандашей. Если правило сохранится, сколько карандашей у следующей девочки?", answer: "8", explanation: "Каждый раз карандашей становится на 2 больше.", visual: { type: "pattern", items: ["2", "4", "6"], missing: "?" } }
+];
+
 const RUSSIAN_DETECTIVE_TASKS = [
   {
     skillId: "spellingPairs",
@@ -1192,7 +1249,6 @@ function buildDailySession() {
     makeWordProblemTask,
     makeGeometryTask,
     makeMeasuresTask,
-    makeOrderTask,
     makeSpellingTask,
     makeUnstressedVowelTask,
     makeConsonantTask,
@@ -1668,10 +1724,7 @@ function makeVerifiedComparisonTask() {
 
 function makeFastArithmeticTask(level) {
   if (level === "within10") {
-    const plus = Math.random() > 0.45;
-    const a = rand(0, 9);
-    const b = plus ? rand(0, 10 - a) : rand(0, a);
-    const task = inputTask("addSub100", `${a} ${plus ? "+" : "-"} ${b} = ?`, String(plus ? a + b : a - b), "Сначала точно, потом быстрее.");
+    const task = makeAddSubTask();
     task.speedTargetSec = 3;
     return task;
   }
@@ -1732,157 +1785,34 @@ function makeMathStoryTask() {
 }
 
 function makeGeometryTask() {
-  const sideA = rand(3, 9);
-  const sideB = rand(2, 8);
-  return inputTask("geometry", `Прямоугольник: стороны ${sideA} см и ${sideB} см. Чему равен периметр?`, String((sideA + sideB) * 2), "Периметр - сумма длин всех сторон.");
+  return makeVerifiedLifeMathTask("geometry");
 }
 
 function makeMeasuresTask() {
-  const items = [
-    () => {
-      const dm = rand(2, 9);
-      return inputTask("measures", `${dm} дм = сколько сантиметров?`, String(dm * 10), "В одном дециметре 10 сантиметров.");
-    },
-    () => {
-      const hours = rand(1, 3);
-      return inputTask("measures", `${hours} ч = сколько минут?`, String(hours * 60), "В одном часе 60 минут.");
-    },
-    () => {
-      const cm = rand(20, 90);
-      return choiceTask("measures", `${cm} см - это больше или меньше 1 метра?`, "меньше", ["больше", "меньше", "равно"], "В одном метре 100 сантиметров.");
-    }
-  ];
-  return sample(items)();
+  return makeVerifiedLifeMathTask("measures");
 }
 
 function makeLifeMathTask() {
-  const templates = [
-    () => {
-      const cut = sample([20, 30, 40]);
-      const answer = 100 - cut;
-      const task = inputTask(
-        "lifeMath",
-        `Лента длиной 1 метр. От нее отрезали ${cut} сантиметров. Сколько сантиметров ленты осталось?`,
-        String(answer),
-        "1 метр - это 100 сантиметров. Вычти отрезанную часть из 100."
-      );
-      task.visual = { type: "ruler", startCm: 0, endCm: 100, markerCm: answer, label: "1 м = 100 см" };
-      return task;
-    },
-    () => {
-      const hour = rand(6, 10);
-      const add = rand(1, 3);
-      const task = inputTask(
-        "lifeMath",
-        `На часах ${hour}:00. Через ${add} ${hourWord(add)} начнется кружок. Во сколько начнется кружок?`,
-        `${hour + add}:00`,
-        `Прибавь ${add} ${hourWord(add)} к ${hour}:00.`
-      );
-      task.visual = { type: "clock", hour, minute: 0 };
-      task.acceptedAnswers = [`${hour + add} часов`, `${hour + add}`];
-      return task;
-    },
-    () => {
-      const start = sample(["10:20", "11:30", "15:15", "16:20"]);
-      const minutes = sample([10, 15, 25, 30]);
-      const answer = addMinutes(start, minutes);
-      const task = inputTask(
-        "lifeMath",
-        `Занятие началось в ${start} и длилось ${minutes} минут. Во сколько оно закончилось?`,
-        answer,
-        `Прибавь ${minutes} минут к времени начала.`
-      );
-      task.visual = { type: "clock", time: start };
-      task.acceptedAnswers = [answer.replace(":00", " часов")];
-      return task;
-    },
-    () => {
-      const money = sample([40, 50, 70, 100]);
-      const priceA = sample([12, 18, 25, 32]);
-      const priceB = sample([9, 15, 20, 35]);
-      const total = priceA + priceB;
-      if (total <= money) {
-        const task = inputTask(
-          "lifeMath",
-          `У Кати ${money} рублей. Покупка стоит ${priceA} рублей и ${priceB} рублей. Сколько рублей останется?`,
-          String(money - total),
-          `Сначала сложи покупки: ${priceA} + ${priceB}, потом вычти из ${money}.`
-        );
-        task.visual = { type: "coins", money, prices: [priceA, priceB] };
-        return task;
-      }
-      const task = choiceTask(
-        "lifeMath",
-        `У Кати ${money} рублей. Тетрадь стоит ${priceA} рублей, карандаш ${priceB} рублей. Хватит ли денег на обе покупки?`,
-        "нет",
-        ["да", "нет"],
-        `Покупки вместе стоят ${total} рублей, а это больше ${money}.`
-      );
-      task.visual = { type: "coins", money, prices: [priceA, priceB] };
-      return task;
-    },
-    () => {
-      const sideA = rand(4, 8);
-      const sideB = rand(3, 6);
-      const task = inputTask(
-        "lifeMath",
-        `У прямоугольника стороны ${sideA} см и ${sideB} см. Найди периметр.`,
-        String((sideA + sideB) * 2),
-        `Периметр - это сумма всех сторон: ${sideA} + ${sideB} + ${sideA} + ${sideB}.`
-      );
-      task.visual = { type: "shape", shape: "rectangle", sideA, sideB };
-      return task;
-    },
-    () => {
-      const segments = [rand(2, 5), rand(2, 5), rand(2, 5)];
-      const task = inputTask(
-        "lifeMath",
-        `Ломаная состоит из звеньев ${segments.join(", ")} см. Найди длину ломаной.`,
-        String(segments.reduce((sum, item) => sum + item, 0)),
-        "Сложи длины всех звеньев ломаной."
-      );
-      task.visual = { type: "grid", segments };
-      return task;
-    },
-    () => {
-      const step = sample([2, 3, 5, 10]);
-      const start = sample([1, 2, 5, 10, 12]);
-      const row = [start, start + step, start + step * 2, start + step * 3];
-      const task = inputTask(
-        "lifeMath",
-        `Продолжи ряд: ${row.join(", ")}, ...`,
-        String(start + step * 4),
-        `Каждое следующее число больше на ${step}.`
-      );
-      task.visual = { type: "pattern", items: row.map(String), missing: "?" };
-      return task;
-    },
-    () => {
-      const task = choiceTask(
-        "lifeMath",
-        "Какая фигура лишняя: круг, квадрат, треугольник, прямоугольник?",
-        "круг",
-        ["круг", "квадрат", "треугольник", "прямоугольник"],
-        "У круга нет углов, а у остальных фигур есть углы."
-      );
-      task.visual = { type: "shapeSet", shapes: ["circle", "square", "triangle", "rectangle"] };
-      return task;
-    }
-  ];
-  const task = sample(templates)();
+  const task = makeVerifiedLifeMathTask();
   task.speedTargetSec = 14;
   return task;
 }
 
+function makeVerifiedLifeMathTask(skillId) {
+  const pool = skillId
+    ? VERIFIED_LIFE_MATH_TASKS.filter((item) => item.skillId === skillId)
+    : VERIFIED_LIFE_MATH_TASKS;
+  const item = sample(pool.length ? pool : VERIFIED_LIFE_MATH_TASKS);
+  const task = item.kind === "choice"
+    ? choiceTask(item.skillId, item.prompt, item.answer, item.choices, item.explanation)
+    : inputTask(item.skillId, item.prompt, item.answer, item.explanation);
+  if (item.acceptedAnswers) task.acceptedAnswers = item.acceptedAnswers;
+  if (item.visual) task.visual = item.visual;
+  return task;
+}
+
 function makeOrderTask() {
-  const a = rand(12, 35);
-  const b = rand(3, 12);
-  const c = rand(2, 9);
-  const withBrackets = Math.random() > 0.5;
-  if (withBrackets) {
-    return inputTask("orderActions", `(${a} - ${b}) + ${c} = ?`, String(a - b + c), "Сначала выполняем действие в скобках.");
-  }
-  return inputTask("orderActions", `${a} - ${b} + ${c} = ?`, String(a - b + c), "Сложение и вычитание выполняем по порядку слева направо.");
+  return makeAddSubTask();
 }
 
 function makeWordDetectiveTask() {
