@@ -1170,7 +1170,7 @@ function buildDailySession() {
 function buildTrainerTasks(modeId, variant) {
   const builders = {
     fast10: () => Array.from({ length: 10 }, () => makeFastArithmeticTask("within10")),
-    fast100: () => Array.from({ length: 12 }, () => makeFastArithmeticTask(sample(["within20", "within100", "roundTens"]))),
+    fast100: () => Array.from({ length: 12 }, () => makeFastArithmeticTask(sample(["within20", "within100", "roundTens", "compare", "unknown"]))),
     multiply: () => Array.from({ length: 12 }, () => makeMultiplicationTask(variant)),
     lifeMath: () => Array.from({ length: 8 }, () => makeLifeMathTask()),
     mathStories: () => Array.from({ length: 8 }, () => makeMathStoryTask()),
@@ -1639,6 +1639,50 @@ function makeFastArithmeticTask(level) {
     const b = rand(1, 9);
     const task = inputTask("addSub100", `${a} - ${b} = ?`, String(a - b), "Разбей десяток: например, 60 - 2 = 58.");
     task.speedTargetSec = 6;
+    return task;
+  }
+
+  if (level === "compare") {
+    const variants = [
+      () => {
+        const left = rand(20, 99);
+        const right = rand(20, 99);
+        return { prompt: `${left} ... ${right}`, left, right, hint: "Сравни десятки, потом единицы." };
+      },
+      () => {
+        const a = rand(20, 80);
+        const b = rand(2, 9);
+        const right = rand(20, 95);
+        return { prompt: `${a} + ${b} ... ${right}`, left: a + b, right, hint: "Сначала вычисли выражение слева, потом сравни." };
+      },
+      () => {
+        const a = rand(30, 99);
+        const b = rand(2, 9);
+        const c = rand(20, 80);
+        const d = rand(2, 9);
+        return { prompt: `${a} - ${b} ... ${c} + ${d}`, left: a - b, right: c + d, hint: "Вычисли обе стороны и поставь знак." };
+      }
+    ];
+    const item = sample(variants)();
+    const answer = compareSign(item.left, item.right);
+    const task = choiceTask("numbers100", `Поставь знак: ${item.prompt}`, answer, [">", "<", "="], item.hint);
+    task.speedTargetSec = 8;
+    return task;
+  }
+
+  if (level === "unknown") {
+    const plus = Math.random() > 0.45;
+    if (plus) {
+      const first = rand(8, 55);
+      const missing = rand(4, 20);
+      const task = inputTask("addSub100", `${first} + □ = ${first + missing}. Найди □.`, String(missing), "Неизвестное слагаемое можно найти вычитанием.");
+      task.speedTargetSec = 10;
+      return task;
+    }
+    const start = rand(25, 90);
+    const missing = rand(4, Math.min(30, start - 1));
+    const task = inputTask("addSub100", `${start} - □ = ${start - missing}. Найди □.`, String(missing), "Неизвестное вычитаемое можно найти вычитанием результата из начала.");
+    task.speedTargetSec = 10;
     return task;
   }
 
@@ -2618,6 +2662,12 @@ function shuffle(items) {
     .map((item) => ({ item, sort: Math.random() }))
     .sort((a, b) => a.sort - b.sort)
     .map(({ item }) => item);
+}
+
+function compareSign(left, right) {
+  if (left > right) return ">";
+  if (left < right) return "<";
+  return "=";
 }
 
 function dayWord(count) {
