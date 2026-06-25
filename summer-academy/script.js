@@ -187,6 +187,7 @@ const questPrompt = document.querySelector("#questPrompt");
 const answerArea = document.querySelector("#answerArea");
 const feedbackBox = document.querySelector("#feedbackBox");
 const nextQuestionBtn = document.querySelector("#nextQuestionBtn");
+const exitSessionBtn = document.querySelector("#exitSessionBtn");
 const finishTitle = document.querySelector("#finishTitle");
 const finishText = document.querySelector("#finishText");
 const finishCorrect = document.querySelector("#finishCorrect");
@@ -217,6 +218,7 @@ navButtons.forEach((button) => {
 startSessionBtn.addEventListener("click", () => startSession());
 againSessionBtn.addEventListener("click", () => startSession());
 nextQuestionBtn.addEventListener("click", nextQuestion);
+exitSessionBtn.addEventListener("click", exitSession);
 reviewMistakesBtn.addEventListener("click", () => showView("errors"));
 newJokeBtn.addEventListener("click", renderJoke);
 exportBtn.addEventListener("click", exportProgress);
@@ -808,6 +810,19 @@ function nextQuestion() {
   } else {
     renderQuestion();
   }
+}
+
+function exitSession() {
+  if (!session) {
+    showView("today");
+    return;
+  }
+  const ok = confirm("Вернуться на главную? Уже отвеченные задания сохранятся в прогрессе, а эту тренировку можно будет начать заново.");
+  if (!ok) return;
+  session = null;
+  questPanel.classList.add("hidden");
+  finishPanel.classList.add("hidden");
+  showView("today");
 }
 
 function finishSession() {

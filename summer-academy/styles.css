@@ -194,6 +194,12 @@ h3 {
   padding: 18px;
 }
 
+.quest-nav {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
 .today-card p {
   margin-bottom: 6px;
   color: var(--muted);
