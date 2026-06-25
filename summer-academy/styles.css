@@ -915,6 +915,54 @@ h3 {
   font-weight: 900;
 }
 
+.letter-circle {
+  position: relative;
+  width: 176px;
+  aspect-ratio: 1;
+  border: 3px solid #f2c777;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, #fff 0 28%, transparent 29%),
+    linear-gradient(145deg, #fff7dc, #e9f5ff);
+}
+
+.letter-circle span {
+  position: absolute;
+  left: calc(50% - 20px);
+  top: calc(50% - 20px);
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border: 1px solid rgba(37, 48, 68, 0.1);
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 6px 16px rgba(56, 64, 82, 0.12);
+  font-size: 1.25rem;
+  font-weight: 900;
+  transform: rotate(calc(360deg / var(--n) * var(--i))) translateY(-66px) rotate(calc(-360deg / var(--n) * var(--i)));
+}
+
+.word-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 36px);
+  gap: 4px;
+}
+
+.word-grid span {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid #cbd8e6;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 1.05rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
 .bottom-nav {
   position: fixed;
   right: 0;

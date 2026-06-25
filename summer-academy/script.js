@@ -36,6 +36,9 @@ const SKILLS = {
   separators: { subject: "russian", title: "Разделительные знаки", description: "Разделительные ь и ъ" },
   prepositions: { subject: "russian", title: "Предлоги", description: "Раздельное написание предлогов" },
   wordLogic: { subject: "russian", title: "Детектив слов", description: "Лишнее слово, смысл и замена буквы" },
+  wordGames: { subject: "russian", title: "Игровой детектив", description: "Записки, улики, потерянные буквы и предложения" },
+  wordPuzzles: { subject: "russian", title: "Словесные головоломки", description: "Кроссворды, буквенные круги и поиск слов" },
+  proverbs: { subject: "russian", title: "Пословицы", description: "Мудрые фразы, смысл и ситуации" },
   soundLetters: { subject: "russian", title: "Звуки и буквы", description: "Звуки, буквы и хитрые гласные" },
   sentenceText: { subject: "russian", title: "Предложение и текст", description: "Тема, главная мысль, заголовок" },
   readingMeaning: { subject: "reading", title: "Понимание текста", description: "Главная мысль, герои, события" },
@@ -118,6 +121,30 @@ const TRAINER_MODES = [
     chips: ["игра", "ребусы", "кроссвордный дух"]
   },
   {
+    id: "russianGames",
+    subject: "russian",
+    icon: "🕵️",
+    title: "Игровой детектив слов",
+    description: "Потерянные буквы, записки с ошибками, улики и предложения.",
+    chips: ["8 заданий", "правила", "внимание"]
+  },
+  {
+    id: "wordPuzzles",
+    subject: "russian",
+    icon: "🧠",
+    title: "Словесные головоломки",
+    description: "Кроссворд-карточки, буквенный круг и поиск слов в клетках.",
+    chips: ["головоломки", "словарные", "визуально"]
+  },
+  {
+    id: "proverbs",
+    subject: "russian",
+    icon: "📜",
+    title: "Пословицы и поговорки",
+    description: "Закончи фразу, выбери смысл и найди пословицу к ситуации.",
+    chips: ["мудрая минутка", "смысл", "речь"]
+  },
+  {
     id: "readingQuest",
     subject: "reading",
     icon: "📖",
@@ -147,6 +174,7 @@ const SUBJECT_LAUNCHERS = [
     note: "Можно начать с детектива слов.",
     actions: [
       { label: "Детектив слов", action: "wordDetective" },
+      { label: "Игры", action: "russianGames" },
       { label: "Словарные", action: "dictionary" }
     ]
   },
@@ -651,6 +679,9 @@ function buildTrainerTasks(modeId, variant) {
     dictionary: () => Array.from({ length: 10 }, () => sample([makeDictionaryTask, makeDictionaryMissingTask])()),
     wordDetective: () => Array.from({ length: 10 }, () => sample([makeOddWordTask, makeLetterSwapTask, makeSoundLettersTask, makeStressTask])()),
     playroom: () => Array.from({ length: 8 }, () => sample([makeMiniRebusTask, makeBuildWordTask, makeOddWordTask, makeDictionaryMissingTask])()),
+    russianGames: () => Array.from({ length: 8 }, () => makeRussianGameTask()),
+    wordPuzzles: () => Array.from({ length: 6 }, () => makeWordPuzzleTask()),
+    proverbs: () => Array.from({ length: 8 }, () => makeProverbTask()),
     readingQuest: () => Array.from({ length: 8 }, () => makeReadingTask())
   };
   return (builders[modeId] || builders.fast100)();
@@ -684,6 +715,9 @@ function createTaskBySkill(skillId) {
     separators: makeSeparatorTask,
     prepositions: makePrepositionTask,
     wordLogic: makeOddWordTask,
+    wordGames: makeRussianGameTask,
+    wordPuzzles: makeWordPuzzleTask,
+    proverbs: makeProverbTask,
     soundLetters: makeSoundLettersTask,
     sentenceText: makeSentenceTask,
     readingMeaning: makeReadingTask,
@@ -1441,6 +1475,210 @@ function makeBuildWordTask() {
   return choiceTask("wordLogic", prompt, answer, choices, explanation);
 }
 
+function makeRussianGameTask() {
+  return sample([
+    makeLostLetterTask,
+    makeFixNoteTask,
+    makeChooseRuleTask,
+    makeBuildSentenceGameTask,
+    makeOddRuleWordTask,
+    makeBuildWordGameTask
+  ])();
+}
+
+function makeLostLetterTask() {
+  const items = [
+    ["словарные слова", "к_рандаш", "а", ["а", "о", "е"], "карандаш", "В слове карандаш две буквы а."],
+    ["жи-ши", "маш_на", "и", ["и", "ы", "е"], "машина", "Жи-ши пиши с буквой и."],
+    ["парная согласная", "гри_", "б", ["б", "п"], "гриб", "Проверь словом грибы."],
+    ["разделительный мягкий знак", "сем_я", "ь", ["ь", "ъ", "-"], "семья", "Здесь нужен разделительный мягкий знак."],
+    ["ча-ща", "ч_шка", "а", ["а", "я", "е"], "чашка", "Ча-ща пиши с буквой а."],
+    ["чу-щу", "щ_ка", "у", ["у", "ю", "а"], "щука", "Чу-щу пиши с буквой у."]
+  ];
+  const [topic, word, answer, choices, fullWord, hint] = sample(items);
+  return choiceTask("wordGames", `Слово потеряло букву. Верни ее на место: ${word}`, answer, choices, `${hint} Получится слово: ${fullWord}.`);
+}
+
+function makeFixNoteTask() {
+  const items = [
+    ["маша идет в школу.", "Маша идет в школу.", "Имя и начало предложения пишутся с большой буквы."],
+    ["Книга лежит настоле.", "Книга лежит на столе.", "Предлог на пишется отдельно."],
+    ["У Машы новая тетрадь.", "У Маши новая тетрадь.", "Ши пишется с и."],
+    ["Я пью малако.", "Я пью молоко.", "Молоко - словарное слово, запомни две буквы о."],
+    ["утром светит солнце", "Утром светит солнце.", "Предложение начинается с большой буквы и заканчивается точкой."]
+  ];
+  const [note, answer, explanation] = sample(items);
+  const task = choiceTask("wordGames", `Исправь записку: ${note}`, answer, shuffle([answer, note, answer.replace(".", "!")]), explanation);
+  task.acceptedAnswers = [answer.replace(".", "")];
+  return task;
+}
+
+function makeChooseRuleTask() {
+  const items = [
+    ["машина", "жи-ши", ["жи-ши", "ча-ща", "чу-щу"], "В слове есть сочетание ши."],
+    ["чашка", "ча-ща", ["жи-ши", "ча-ща", "разделительный мягкий знак"], "В слове есть сочетание ча."],
+    ["семья", "разделительный мягкий знак", ["разделительный мягкий знак", "парная согласная", "безударная гласная"], "Мягкий знак стоит перед я и разделяет звуки."],
+    ["гриб", "парная согласная", ["парная согласная", "ча-ща", "предлог"], "На конце слышится п, но пишется б. Проверка: грибы."],
+    ["на столе", "предлог", ["предлог", "словарное слово", "жи-ши"], "На - отдельное маленькое слово."]
+  ];
+  const [word, answer, choices, explanation] = sample(items);
+  return choiceTask("wordGames", `Выбери улику. Какое правило спряталось в записи: ${word}?`, answer, choices, explanation);
+}
+
+function makeBuildSentenceGameTask() {
+  const items = [
+    ["Маша, книгу, читает", "Маша читает книгу.", ["Маша читает книгу.", "Книгу Маша читает?", "Читает Маша книгу"], "Сначала кто?, потом что делает?"],
+    ["светит, ярко, солнце", "Солнце светит ярко.", ["Солнце светит ярко.", "Ярко солнце.", "Светит солнце ярко?"], "Найди, о чем говорится в предложении."],
+    ["в, дети, играют, парке", "Дети играют в парке.", ["Дети играют в парке.", "В дети играют парке.", "Парке дети в играют."], "Предлог в пишется отдельно."],
+    ["где, твой, пенал", "Где твой пенал?", ["Где твой пенал?", "Твой где пенал.", "Где твой пенал!"], "Это вопрос, в конце нужен вопросительный знак."]
+  ];
+  const [words, answer, choices, explanation] = sample(items);
+  return choiceTask("wordGames", `Собери предложение из слов: ${words}`, answer, choices, explanation);
+}
+
+function makeOddRuleWordTask() {
+  const items = [
+    ["кот, стол, веселый, дом", "веселый", "Веселый - признак предмета, остальные слова называют предметы."],
+    ["машина, шишка, жираф, чашка", "чашка", "В слове чашка правило ча-ща, а в остальных жи-ши."],
+    ["молоко, сахар, собака, морковь", "собака", "Собака - животное, остальные слова связаны с едой."],
+    ["бежит, пишет, зеленый, читает", "зеленый", "Зеленый отвечает на вопрос какой?, остальные слова обозначают действия."],
+    ["Москва, Маша, Волга, карандаш", "карандаш", "Карандаш не имя собственное, пишется с маленькой буквы."]
+  ];
+  const [words, answer, explanation] = sample(items);
+  return choiceTask("wordGames", `Найди лишнее слово: ${words}`, answer, words.split(", "), explanation);
+}
+
+function makeBuildWordGameTask() {
+  const items = [
+    [["о", "б", "а", "к", "а", "с"], "собака", "Это домашнее животное."],
+    [["о", "л", "о", "м", "к", "о"], "молоко", "Белый напиток, словарное слово."],
+    [["т", "е", "т", "р", "а", "д", "ь"], "тетрадь", "В ней пишут на уроке."],
+    [["б", "е", "р", "ё", "з", "а"], "берёза", "Дерево с белым стволом."],
+    [["с", "п", "а", "с", "и", "б", "о"], "спасибо", "Вежливое слово."]
+  ];
+  const [letters, answer, explanation] = sample(items);
+  const task = inputTask("wordGames", `Собери слово из букв: ${letters.join(", ")}`, answer, explanation);
+  task.visual = { type: "letterCircle", letters };
+  return task;
+}
+
+function makeWordPuzzleTask() {
+  return sample([makeMiniCrosswordTask, makeLetterCircleTask, makeWordSearchTask])();
+}
+
+function makeMiniCrosswordTask() {
+  const items = [
+    ["школа", "в нем лежат ручки и карандаши", "пенал", 5],
+    ["школа", "комната, где проходят уроки", "класс", 5],
+    ["школа", "в ней пишут на уроке", "тетрадь", 7],
+    ["школа", "ребенок, который учится в школе", "ученик", 6],
+    ["школа", "им пишут или рисуют", "карандаш", 8],
+    ["природа", "дерево с белым стволом", "берёза", 6],
+    ["природа", "он дует на улице", "ветер", 5],
+    ["еда и быт", "белый напиток", "молоко", 6],
+    ["еда и быт", "овощ для супа, оранжевый", "морковь", 7],
+    ["город", "место, куда приходят поезда", "вокзал", 6]
+  ];
+  const [topic, clue, answer, length] = sample(items);
+  const task = inputTask("wordPuzzles", `Кроссворд-карточка (${topic}). Подсказка: ${clue}. Слово из ${length} букв.`, answer, "Вспомни слово по смыслу и проверь количество букв.");
+  task.visual = { type: "pattern", items: Array.from({ length }, () => "□"), missing: "" };
+  return task;
+}
+
+function makeLetterCircleTask() {
+  const items = [
+    [["с", "о", "б", "а", "к", "а"], ["сок", "бак", "бок", "коса", "бока", "собака"], "собака"],
+    [["м", "о", "л", "о", "к", "о"], ["лом", "кол", "мол", "молоко"], "молоко"],
+    [["п", "е", "н", "а", "л"], ["пена", "пенал"], "пенал"],
+    [["к", "о", "т", "р", "а"], ["кот", "рот", "ток", "крот", "кора"], "крот"]
+  ];
+  const [letters, answers, mainAnswer] = sample(items);
+  const task = inputTask("wordPuzzles", `Буквенный круг. Составь любое подходящее слово из букв: ${letters.join(", ")}`, mainAnswer, `Можно составить: ${answers.join(", ")}.`);
+  task.acceptedAnswers = answers;
+  task.visual = { type: "letterCircle", letters };
+  return task;
+}
+
+function makeWordSearchTask() {
+  const puzzles = [
+    {
+      topic: "школа",
+      words: ["пенал", "класс", "урок"],
+      grid: ["пенал", "класс", "урока", "машат", "домик"]
+    },
+    {
+      topic: "природа",
+      words: ["заяц", "лес", "роза", "ветер"],
+      grid: ["заяцк", "лесом", "розап", "ветер", "котик"]
+    }
+  ];
+  const puzzle = sample(puzzles);
+  const answer = sample(puzzle.words);
+  const task = inputTask("wordPuzzles", `Найди в клетках слово из темы "${puzzle.topic}" и напиши его.`, answer, `В этом поле спрятаны слова: ${puzzle.words.join(", ")}.`);
+  task.acceptedAnswers = puzzle.words;
+  task.visual = { type: "wordGrid", grid: puzzle.grid };
+  return task;
+}
+
+function makeProverbTask() {
+  const proverbs = [
+    {
+      text: "Без труда не вытащишь и рыбку из пруда.",
+      start: "Без труда не вытащишь...",
+      ending: "и рыбку из пруда",
+      meaning: "чтобы получить результат, нужно постараться",
+      situation: "Петя не хотел тренироваться писать словарные слова и сделал много ошибок."
+    },
+    {
+      text: "Делу время, потехе час.",
+      start: "Делу время...",
+      ending: "потехе час",
+      meaning: "сначала важные дела, потом отдых",
+      situation: "Катя сначала сделала задания, а потом спокойно пошла гулять."
+    },
+    {
+      text: "Повторенье - мать ученья.",
+      start: "Повторенье...",
+      ending: "мать ученья",
+      meaning: "чтобы хорошо запомнить, нужно повторять",
+      situation: "Оля несколько раз повторила правило и решила упражнения без ошибок."
+    },
+    {
+      text: "Друг познаётся в беде.",
+      start: "Друг познаётся...",
+      ending: "в беде",
+      meaning: "настоящий друг помогает, когда трудно",
+      situation: "У Максима сломался карандаш, и друг сразу поделился своим."
+    },
+    {
+      text: "Семь раз отмерь, один раз отрежь.",
+      start: "Семь раз отмерь...",
+      ending: "один раз отрежь",
+      meaning: "перед важным делом нужно хорошо подумать",
+      situation: "Игорь сначала проверил детали для поделки, а потом начал клеить."
+    },
+    {
+      text: "Чужого не бери, своего не теряй.",
+      start: "Чужого не бери...",
+      ending: "своего не теряй",
+      meaning: "нельзя брать чужое, а за своими вещами нужно следить",
+      situation: "Маша нашла чужую заколку и отнесла ее учителю."
+    }
+  ];
+  const item = sample(proverbs);
+  const format = sample(["finish", "meaning", "situation"]);
+  if (format === "finish") {
+    const choices = shuffle([item.ending, "а дома лучше", "один раз отрежь"]);
+    return choiceTask("proverbs", `Закончи пословицу: ${item.start}`, item.ending, choices, `Полностью: ${item.text}`);
+  }
+  if (format === "meaning") {
+    const choices = shuffle([item.meaning, "нужно делать все очень быстро", "красивая вещь всегда важнее поступка"]);
+    return choiceTask("proverbs", `Что значит пословица: "${item.text}"?`, item.meaning, choices, "Пословица говорит не только о словах, а о жизненной ситуации.");
+  }
+  const choices = shuffle([item.text, "В гостях хорошо, а дома лучше.", "Лучше поздно, чем никогда."]);
+  return choiceTask("proverbs", `Какая пословица подходит к ситуации? ${item.situation}`, item.text, choices, `Подходит: ${item.text}`);
+}
+
 function makeSeparatorTask() {
   const items = [
     ["семья", ["семя", "семья", "семъя"], "В слове семья пишется разделительный мягкий знак."],
@@ -1612,6 +1850,25 @@ function renderTaskVisual(visual) {
       <div class="pattern-row">
         ${visual.items.map((item) => `<span>${item}</span>`).join("")}
         <span>${visual.missing || "?"}</span>
+      </div>
+    `;
+    return container;
+  }
+
+  if (visual.type === "letterCircle") {
+    container.innerHTML = `
+      <div class="letter-circle" aria-label="Буквенный круг">
+        ${visual.letters.map((letter, index) => `<span style="--i:${index}; --n:${visual.letters.length}">${letter}</span>`).join("")}
+      </div>
+    `;
+    return container;
+  }
+
+  if (visual.type === "wordGrid") {
+    const cells = visual.grid.join("").split("");
+    container.innerHTML = `
+      <div class="word-grid" aria-label="Поле букв">
+        ${cells.map((letter) => `<span>${letter}</span>`).join("")}
       </div>
     `;
     return container;
