@@ -348,6 +348,209 @@ const MATH_STORY_TASKS = [
   ["два действия", "В саду росло 3 ряда яблонь, по 7 яблонь в каждом ряду. Потом посадили еще 9 яблонь. Сколько яблонь стало в саду?", 30, "Сначала узнай, сколько яблонь было в рядах, потом прибавь новые."]
 ];
 
+const RUSSIAN_DETECTIVE_TASKS = [
+  {
+    skillId: "spellingPairs",
+    type: "choice",
+    prompt: "Слово потеряло букву: маш_на. Какое слово получится?",
+    answer: "машина",
+    choices: ["машина", "машына", "машена"],
+    explanation: "Ши пишется с буквой и."
+  },
+  {
+    skillId: "spellingPairs",
+    type: "choice",
+    prompt: "Выбери правильное написание.",
+    answer: "шишка",
+    choices: ["шишка", "шышка", "шешка"],
+    explanation: "Жи-ши пишем с буквой и."
+  },
+  {
+    skillId: "spellingPairs",
+    type: "choice",
+    prompt: "Найди правильное слово.",
+    answer: "чашка",
+    choices: ["чашка", "чяшка", "чешка"],
+    explanation: "Ча-ща пишем с буквой а."
+  },
+  {
+    skillId: "spellingPairs",
+    type: "choice",
+    prompt: "Слово потеряло букву: щ_ка. Какое слово получится?",
+    answer: "щука",
+    choices: ["щука", "щюка", "щека"],
+    explanation: "Чу-щу пишем с буквой у."
+  },
+  {
+    skillId: "unstressedVowels",
+    type: "choice",
+    prompt: "Какую букву пишем в слове л_са? Проверочное слово: лес.",
+    answer: "е",
+    choices: ["е", "и", "я"],
+    explanation: "Безударную гласную проверяем ударением: лес."
+  },
+  {
+    skillId: "unstressedVowels",
+    type: "choice",
+    prompt: "Выбери проверочное слово для слова тр_ва.",
+    answer: "травы",
+    choices: ["трава", "травы", "травка"],
+    explanation: "В слове травы буква а слышится под ударением."
+  },
+  {
+    skillId: "unstressedVowels",
+    type: "choice",
+    prompt: "Найди правильное написание.",
+    answer: "звезда",
+    choices: ["звезда", "звизда", "звазда"],
+    explanation: "Проверочное слово: звезды."
+  },
+  {
+    skillId: "consonants",
+    type: "choice",
+    prompt: "Какую букву пишем на конце слова гри_?",
+    answer: "б",
+    choices: ["б", "п"],
+    explanation: "Проверочное слово: грибы. После б стоит гласная."
+  },
+  {
+    skillId: "consonants",
+    type: "choice",
+    prompt: "Выбери проверочное слово для слова зу_.",
+    answer: "зубы",
+    choices: ["зуб", "зубы", "зубной"],
+    explanation: "В слове зубы ясно слышится б."
+  },
+  {
+    skillId: "consonants",
+    type: "choice",
+    prompt: "Найди правильное написание.",
+    answer: "снег",
+    choices: ["снег", "снек", "снех"],
+    explanation: "Проверочное слово: снега."
+  },
+  {
+    skillId: "separators",
+    type: "choice",
+    prompt: "Выбери правильное написание.",
+    answer: "семья",
+    choices: ["семя", "семья", "семъя"],
+    explanation: "В слове семья нужен разделительный мягкий знак."
+  },
+  {
+    skillId: "separators",
+    type: "choice",
+    prompt: "Какой мягкий знак в слове семья?",
+    answer: "разделительный мягкий знак",
+    choices: ["разделительный мягкий знак", "мягкий знак для мягкости"],
+    explanation: "Мягкий знак стоит перед я и разделяет звуки."
+  },
+  {
+    skillId: "separators",
+    type: "choice",
+    prompt: "Какой мягкий знак в слове конь?",
+    answer: "мягкий знак для мягкости",
+    choices: ["разделительный мягкий знак", "мягкий знак для мягкости"],
+    explanation: "Мягкий знак стоит в конце слова и смягчает н."
+  },
+  {
+    skillId: "prepositions",
+    type: "choice",
+    prompt: "Выбери правильное написание.",
+    answer: "на столе",
+    choices: ["на столе", "настоле"],
+    explanation: "Предлог на пишется отдельно."
+  },
+  {
+    skillId: "prepositions",
+    type: "choice",
+    prompt: "Найди предлог в предложении: Книга лежит на парте.",
+    answer: "на",
+    choices: ["книга", "лежит", "на", "парте"],
+    explanation: "Предлог - отдельное маленькое слово перед существительным."
+  },
+  {
+    skillId: "wordLogic",
+    type: "choice",
+    prompt: "Определи часть речи: кот.",
+    answer: "существительное",
+    choices: ["существительное", "прилагательное", "глагол"],
+    explanation: "Слово кот отвечает на вопрос кто?"
+  },
+  {
+    skillId: "wordLogic",
+    type: "choice",
+    prompt: "Определи часть речи: зеленый.",
+    answer: "прилагательное",
+    choices: ["существительное", "прилагательное", "глагол"],
+    explanation: "Слово зеленый отвечает на вопрос какой?"
+  },
+  {
+    skillId: "wordLogic",
+    type: "choice",
+    prompt: "Выбери глагол.",
+    answer: "светит",
+    choices: ["солнце", "яркий", "светит"],
+    explanation: "Глагол обозначает действие."
+  },
+  {
+    skillId: "wordLogic",
+    type: "choice",
+    prompt: "Найди лишнее слово: книга, стол, веселый, окно.",
+    answer: "веселый",
+    choices: ["книга", "стол", "веселый", "окно"],
+    explanation: "Веселый - признак предмета, остальные слова называют предметы."
+  },
+  {
+    skillId: "sentenceText",
+    type: "choice",
+    prompt: "Собери предложение из слов: читает, книгу, Маша.",
+    answer: "Маша читает книгу.",
+    choices: ["Маша читает книгу.", "Книгу читает.", "Читает Маша книгу?"],
+    explanation: "Предложение должно звучать понятно: кто? что делает? что?"
+  },
+  {
+    skillId: "sentenceText",
+    type: "choice",
+    prompt: "Какой знак нужен в конце: Как тебя зовут_",
+    answer: "?",
+    choices: [".", "?", "!"],
+    explanation: "Если спрашивают, ставится вопросительный знак."
+  },
+  {
+    skillId: "sentenceText",
+    type: "choice",
+    prompt: "Выбери главные слова в предложении: Птицы поют утром.",
+    answer: "птицы поют",
+    choices: ["птицы поют", "поют утром", "птицы утром"],
+    explanation: "Кто? птицы. Что делают? поют."
+  },
+  {
+    skillId: "sentenceText",
+    type: "choice",
+    prompt: "Исправь предложение.",
+    answer: "Утром дети пошли в школу.",
+    choices: ["Утром дети пошли в школу.", "утром дети пошли в школу", "Утром дети пошли в школу"],
+    explanation: "Предложение начинается с большой буквы и заканчивается точкой."
+  },
+  {
+    skillId: "wordLogic",
+    type: "choice",
+    prompt: "Выбери правильный перенос слова тетрадь.",
+    answer: "те-традь",
+    choices: ["те-традь", "тетрад-ь", "т-етрадь"],
+    explanation: "Мягкий знак не переносится отдельно."
+  },
+  {
+    skillId: "wordLogic",
+    type: "choice",
+    prompt: "Поставь слова по алфавиту: дом, арбуз, кот.",
+    answer: "арбуз, дом, кот",
+    choices: ["арбуз, дом, кот", "дом, арбуз, кот", "кот, дом, арбуз"],
+    explanation: "Смотри на первые буквы слов: а, д, к."
+  }
+];
+
 const TRAINER_MODES = [
   {
     id: "fast10",
@@ -948,7 +1151,7 @@ function buildDailySession() {
     makeDictionaryTask,
     makeSeparatorTask,
     makePrepositionTask,
-    makeOddWordTask,
+    makeWordDetectiveTask,
     makeSoundLettersTask,
     makeSentenceTask,
     makeReadingTask,
@@ -972,7 +1175,7 @@ function buildTrainerTasks(modeId, variant) {
     lifeMath: () => Array.from({ length: 8 }, () => makeLifeMathTask()),
     mathStories: () => Array.from({ length: 8 }, () => makeMathStoryTask()),
     dictionary: () => Array.from({ length: 10 }, () => sample([makeDictionaryTask, makeDictionaryMissingTask])()),
-    wordDetective: () => Array.from({ length: 10 }, () => sample([makeOddWordTask, makeLetterSwapTask, makeSoundLettersTask, makeStressTask])()),
+    wordDetective: () => Array.from({ length: 10 }, () => makeWordDetectiveTask()),
     playroom: () => Array.from({ length: 8 }, () => sample([makeMiniRebusTask, makeBuildWordTask, makeOddWordTask, makeDictionaryMissingTask])()),
     russianGames: () => Array.from({ length: 8 }, () => makeRussianGameTask()),
     wordPuzzles: () => Array.from({ length: 6 }, () => makeWordPuzzleTask()),
@@ -1009,7 +1212,7 @@ function createTaskBySkill(skillId) {
     dictionaryWords: makeDictionaryTask,
     separators: makeSeparatorTask,
     prepositions: makePrepositionTask,
-    wordLogic: makeOddWordTask,
+    wordLogic: makeWordDetectiveTask,
     wordGames: makeRussianGameTask,
     wordPuzzles: makeWordPuzzleTask,
     proverbs: makeProverbTask,
@@ -1634,6 +1837,15 @@ function makeOrderTask() {
     return inputTask("orderActions", `(${a} - ${b}) + ${c} = ?`, String(a - b + c), "Сначала выполняем действие в скобках.");
   }
   return inputTask("orderActions", `${a} - ${b} + ${c} = ?`, String(a - b + c), "Сложение и вычитание выполняем по порядку слева направо.");
+}
+
+function makeWordDetectiveTask() {
+  const item = sample(RUSSIAN_DETECTIVE_TASKS);
+  const task = item.type === "input"
+    ? inputTask(item.skillId, item.prompt, item.answer, item.explanation)
+    : choiceTask(item.skillId, item.prompt, item.answer, item.choices, item.explanation);
+  if (item.acceptedAnswers) task.acceptedAnswers = item.acceptedAnswers;
+  return task;
 }
 
 function makeSpellingTask() {
