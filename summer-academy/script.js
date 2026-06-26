@@ -794,6 +794,51 @@ const VERIFIED_DIVISION_EXAMPLES = [
   "20 : 4", "25 : 5", "36 : 6", "42 : 7", "56 : 8", "63 : 9", "16 : 2", "27 : 3", "32 : 4", "45 : 5", "54 : 6", "49 : 7", "64 : 8", "72 : 9"
 ];
 
+const FAST100_TOPIC_META = [
+  { topic: "сложение в пределах 100 без перехода через десяток", operation: "addition", difficulty: 1, requiresTransition: false, level: 1 },
+  { topic: "вычитание в пределах 100 без перехода через десяток", operation: "subtraction", difficulty: 1, requiresTransition: false, level: 1 },
+  { topic: "сложение круглых десятков", operation: "addition", difficulty: 1, requiresTransition: false, level: 2 },
+  { topic: "вычитание круглых десятков", operation: "subtraction", difficulty: 1, requiresTransition: false, level: 2 },
+  { topic: "сложение двузначного числа и круглого десятка", operation: "addition", difficulty: 1, requiresTransition: false, level: 2 },
+  { topic: "вычитание круглого десятка из двузначного числа", operation: "subtraction", difficulty: 1, requiresTransition: false, level: 2 },
+  { topic: "сложение в пределах 100 с переходом через десяток", operation: "addition", difficulty: 2, requiresTransition: true, level: 3 },
+  { topic: "вычитание в пределах 100 с переходом через десяток", operation: "subtraction", difficulty: 2, requiresTransition: true, level: 3 },
+  { topic: "сложение двух двузначных чисел без перехода через десяток", operation: "addition", difficulty: 2, requiresTransition: false, level: 4 },
+  { topic: "вычитание двух двузначных чисел без перехода через десяток", operation: "subtraction", difficulty: 2, requiresTransition: false, level: 4 },
+  { topic: "сложение двух двузначных чисел с переходом через десяток", operation: "addition", difficulty: 3, requiresTransition: true, level: 4 },
+  { topic: "вычитание двух двузначных чисел с переходом через десяток", operation: "subtraction", difficulty: 3, requiresTransition: true, level: 4 }
+];
+
+const COMPARISON_TOPIC_META = [
+  { topic: "сравнение чисел в пределах 100", operation: "comparison", difficulty: 1, level: 5, examples: [...VERIFIED_COMPARISON_EXAMPLES.slice(0, 10), ...VERIFIED_COMPARISON_EXAMPLES.slice(40, 50)] },
+  { topic: "сравнение числа и выражения", operation: "comparison", difficulty: 2, level: 5, examples: [...VERIFIED_COMPARISON_EXAMPLES.slice(10, 18), ...VERIFIED_COMPARISON_EXAMPLES.slice(50, 60), ...VERIFIED_COMPARISON_EXAMPLES.slice(90, 92)] },
+  { topic: "сравнение двух выражений", operation: "comparison", difficulty: 2, level: 5, examples: [...VERIFIED_COMPARISON_EXAMPLES.slice(18, 24), ...VERIFIED_COMPARISON_EXAMPLES.slice(60, 70), ...VERIFIED_COMPARISON_EXAMPLES.slice(92, 96)] },
+  { topic: "сравнение с умножением", operation: "comparison", difficulty: 3, level: 8, examples: [...VERIFIED_COMPARISON_EXAMPLES.slice(24, 32), ...VERIFIED_COMPARISON_EXAMPLES.slice(70, 80), ...VERIFIED_COMPARISON_EXAMPLES.slice(96, 98)] },
+  { topic: "сравнение с делением", operation: "comparison", difficulty: 3, level: 9, examples: [...VERIFIED_COMPARISON_EXAMPLES.slice(32, 40), ...VERIFIED_COMPARISON_EXAMPLES.slice(80, 90), ...VERIFIED_COMPARISON_EXAMPLES.slice(98, 100)] },
+  { topic: "смешанное сравнение", operation: "comparison", difficulty: 3, level: 10, examples: VERIFIED_COMPARISON_EXAMPLES.slice(100, 120) }
+];
+
+const MIXED_MULTIPLICATION_DIVISION_EXAMPLES = [
+  "3 × 4", "12 : 3", "5 × 6", "30 : 5", "7 × 8", "56 : 7", "9 × 4", "36 : 9", "6 × 7", "42 : 6",
+  "8 × 5", "40 : 8", "9 × 9", "81 : 9", "4 × 7", "28 : 4", "6 × 8", "48 : 6", "5 × 9", "45 : 5"
+];
+
+const MIXED_100_EXAMPLES = [
+  "34 + 8", "56 - 9", "7 × 6", "42 : 7", "48 + 27", "73 - 38", "5 × 9", "45 : 5", "62 + 18", "90 - 46",
+  "8 × 4", "32 : 8", "29 + 35", "81 - 27", "6 × 6", "36 : 6", "47 + 26", "64 - 19", "9 × 7", "63 : 9"
+];
+
+const MATH_EXAMPLE_TOPICS = buildMathExampleTopics();
+const NORMALIZED_MATH_EXAMPLES = MATH_EXAMPLE_TOPICS.flatMap((group, groupIndex) =>
+  group.examples.map((example, exampleIndex) => normalizeMathExample(group, example, groupIndex, exampleIndex))
+);
+const MATH_FAST100_TASKS = NORMALIZED_MATH_EXAMPLES.filter((item) => item.block === "fast100");
+const MATH_COMPARISON_TASKS = NORMALIZED_MATH_EXAMPLES.filter((item) => item.hasComparison);
+const MATH_UNKNOWN_TASKS = NORMALIZED_MATH_EXAMPLES.filter((item) => item.block === "unknown");
+const MATH_MULTIPLICATION_TASKS = NORMALIZED_MATH_EXAMPLES.filter((item) => item.block === "multiplication");
+const MATH_DIVISION_TASKS = NORMALIZED_MATH_EXAMPLES.filter((item) => item.block === "division");
+const MATH_MIXED_TASKS = NORMALIZED_MATH_EXAMPLES.filter((item) => item.block === "mixed");
+
 const VERIFIED_LIFE_MATH_TASKS = [
   { skillId: "measures", kind: "input", prompt: "Лента длиной 1 метр. От нее отрезали 30 сантиметров. Сколько сантиметров ленты осталось?", answer: "70", explanation: "1 метр - это 100 сантиметров. Вычти 30 из 100.", visual: { type: "ruler", startCm: 0, endCm: 100, markerCm: 70, label: "1 м = 100 см" } },
   { skillId: "measures", kind: "input", prompt: "Карандаш длиной 14 см, а ручка длиной 12 см. На сколько сантиметров карандаш длиннее ручки?", answer: "2", explanation: "Чтобы узнать, на сколько больше, нужно вычесть.", visual: { type: "ruler", segmentA: 14, segmentB: 12 } },
@@ -1223,6 +1268,14 @@ const TRAINER_MODES = [
     chips: ["на 2-9", "сложные", "быстрота"]
   },
   {
+    id: "mixedMath",
+    subject: "math",
+    icon: "🔀",
+    title: "Смешанный счет",
+    description: "Сложение, вычитание, умножение, деление и итоговое сравнение.",
+    chips: ["итоговый блок", "12 примеров", "после базы"]
+  },
+  {
     id: "lifeMath",
     subject: "math",
     icon: "🧭",
@@ -1306,6 +1359,7 @@ const SUBJECT_LAUNCHERS = [
     actions: [
       { label: "Счет до 100", action: "fast100" },
       { label: "Задачи", action: "mathStories" },
+      { label: "Смешанный", action: "mixedMath" },
       { label: "Таблица", action: "multiply", variant: "hard" }
     ]
   },
@@ -1948,6 +2002,7 @@ function buildTrainerTasks(modeId, variant) {
       () => makeFastArithmeticTask("unknown")
     ], "fast100", { maxReviews: 3 }),
     multiply: () => buildAdaptiveTasks(12, [() => makeMultiplicationTask(variant)], "multiply", { maxReviews: 3 }),
+    mixedMath: () => buildAdaptiveTasks(12, [makeMixedMathTask], "mixedMath", { maxReviews: 3 }),
     lifeMath: () => buildAdaptiveTasks(8, [makeLifeMathTask], "lifeMath", { maxReviews: 2 }),
     mathStories: () => buildAdaptiveTasks(8, [makeMathStoryTask], "mathStories", { maxReviews: 2 }),
     dictionary: () => buildAdaptiveTasks(12, [makeDictionaryTask, makeDictionaryMissingTask, makeDictionaryWriteTask], "dictionary", { maxReviews: 3 }),
@@ -2712,17 +2767,17 @@ function makeNumbersTask() {
 }
 
 function makeAddSubTask() {
-  const expression = sample(VERIFIED_FAST100_EXAMPLES);
-  const task = inputTask("addSub100", `${expression} = ?`, String(solveSimpleExpression(expression)), "Это пример из проверенного блока счета в пределах 100.");
+  const item = sample(MATH_FAST100_TASKS);
+  const task = inputTask("addSub100", `${item.example} = ?`, String(item.answer), `Тема: ${item.topic}.`);
+  task.math = makeMathTaskMeta(item);
   task.speedTargetSec = 7;
   return task;
 }
 
 function makeVerifiedComparisonTask() {
-  const expression = sample(VERIFIED_COMPARISON_EXAMPLES);
-  const [leftRaw, rightRaw] = expression.split("__").map((part) => part.trim());
-  const answer = compareSign(solveSimpleExpression(leftRaw), solveSimpleExpression(rightRaw));
-  const task = choiceTask("numbers100", `Поставь знак: ${expression.replace("__", "...")}`, answer, [">", "<", "="], "Это пример из проверенного блока сравнения.");
+  const item = sample(MATH_COMPARISON_TASKS);
+  const task = choiceTask("numbers100", `Поставь знак: ${item.example.replace("__", "...")}`, item.answer, [">", "<", "="], `Тема: ${item.topic}.`);
+  task.math = makeMathTaskMeta(item);
   task.speedTargetSec = 8;
   return task;
 }
@@ -2751,8 +2806,9 @@ function makeFastArithmeticTask(level) {
   }
 
   if (level === "unknown") {
-    const expression = sample(VERIFIED_UNKNOWN_EXAMPLES);
-    const task = inputTask("addSub100", `${expression}. Найди □.`, String(solveUnknownExpression(expression)), "Это задание из проверенного блока на неизвестное число.");
+    const item = sample(MATH_UNKNOWN_TASKS);
+    const task = inputTask("addSub100", `${item.example}. Найди □.`, String(item.answer), `Тема: ${item.topic}.`);
+    task.math = makeMathTaskMeta(item);
     task.speedTargetSec = 10;
     return task;
   }
@@ -2761,21 +2817,35 @@ function makeFastArithmeticTask(level) {
 }
 
 function makeMultiplicationTask(variant = "all") {
-  const examples = VERIFIED_MULTIPLICATION_EXAMPLES.filter((expression) => {
-    const [left, , right] = expression.split(" ");
+  const examples = MATH_MULTIPLICATION_TASKS.filter((item) => {
+    const [left, , right] = item.example.split(" ");
     const hasVariant = variant === "all" || String(left) === String(variant) || String(right) === String(variant);
     const hard = [6, 7, 8, 9].includes(Number(left)) || [6, 7, 8, 9].includes(Number(right));
     return variant === "hard" ? hard : hasVariant;
   });
-  const expression = sample(examples.length ? examples : VERIFIED_MULTIPLICATION_EXAMPLES);
-  const task = inputTask("multiplication50", `${expression} = ?`, String(solveSimpleExpression(expression)), "Это пример из проверенного блока таблицы умножения.");
+  const item = sample(examples.length ? examples : MATH_MULTIPLICATION_TASKS);
+  const task = inputTask("multiplication50", `${item.example} = ?`, String(item.answer), `Тема: ${item.topic}.`);
+  task.math = makeMathTaskMeta(item);
   task.speedTargetSec = 5;
   return task;
 }
 
 function makeDivisionTask() {
-  const expression = sample(VERIFIED_DIVISION_EXAMPLES);
-  return inputTask("division50", `${expression} = ?`, String(solveSimpleExpression(expression)), "Это пример из проверенного блока деления по таблице умножения.");
+  const item = sample(MATH_DIVISION_TASKS);
+  const task = inputTask("division50", `${item.example} = ?`, String(item.answer), `Тема: ${item.topic}.`);
+  task.math = makeMathTaskMeta(item);
+  task.speedTargetSec = 6;
+  return task;
+}
+
+function makeMixedMathTask() {
+  const item = sample([...MATH_MIXED_TASKS, ...MATH_COMPARISON_TASKS.filter((task) => task.topic === "смешанное сравнение")]);
+  const task = item.hasComparison
+    ? choiceTask("addSub100", `Поставь знак: ${item.example.replace("__", "...")}`, item.answer, [">", "<", "="], `Тема: ${item.topic}.`)
+    : inputTask("addSub100", `${item.example} = ?`, String(item.answer), `Тема: ${item.topic}.`);
+  task.math = makeMathTaskMeta(item);
+  task.speedTargetSec = item.hasComparison ? 8 : 7;
+  return task;
 }
 
 function makeWordProblemTask() {
@@ -2787,6 +2857,160 @@ function makeMathStoryTask() {
   const task = inputTask("wordProblems", prompt, String(answer), `${hint} Тип задачи: ${kind}.`);
   task.speedTargetSec = kind === "два действия" ? 25 : 18;
   return task;
+}
+
+function buildMathExampleTopics() {
+  const topics = [];
+
+  FAST100_TOPIC_META.forEach((meta, index) => {
+    topics.push({
+      ...meta,
+      block: "fast100",
+      hasComparison: false,
+      examples: [
+        ...VERIFIED_FAST100_EXAMPLES.slice(index * 10, index * 10 + 10),
+        ...VERIFIED_FAST100_EXAMPLES.slice(120 + index * 10, 120 + index * 10 + 10)
+      ]
+    });
+  });
+
+  COMPARISON_TOPIC_META.slice(0, 3).forEach((meta) => {
+    topics.push({ ...meta, block: "comparison", hasComparison: true, requiresTransition: false });
+  });
+
+  topics.push({
+    topic: "нахождение неизвестного слагаемого",
+    operation: "unknown_addend",
+    difficulty: 2,
+    requiresTransition: false,
+    hasComparison: false,
+    block: "unknown",
+    level: 6,
+    examples: [...VERIFIED_UNKNOWN_EXAMPLES.slice(0, 8), ...VERIFIED_UNKNOWN_EXAMPLES.slice(16, 28)]
+  });
+  topics.push({
+    topic: "нахождение неизвестного уменьшаемого или вычитаемого",
+    operation: "unknown_subtraction",
+    difficulty: 2,
+    requiresTransition: false,
+    hasComparison: false,
+    block: "unknown",
+    level: 6,
+    examples: [...VERIFIED_UNKNOWN_EXAMPLES.slice(8, 16), ...VERIFIED_UNKNOWN_EXAMPLES.slice(28, 40)]
+  });
+
+  [2, 3, 4, 5, 6, 7, 8, 9].forEach((factor) => {
+    topics.push({
+      topic: `таблица умножения на ${factor}`,
+      operation: "multiplication",
+      difficulty: factor <= 5 ? 2 : 3,
+      requiresTransition: false,
+      hasComparison: false,
+      block: "multiplication",
+      level: factor <= 5 ? 7 : 8,
+      examples: buildMultiplicationTableExamples(factor)
+    });
+  });
+
+  topics.push({
+    topic: "деление по таблице умножения",
+    operation: "division",
+    difficulty: 3,
+    requiresTransition: false,
+    hasComparison: false,
+    block: "division",
+    level: 9,
+    examples: VERIFIED_DIVISION_EXAMPLES.slice(0, 20)
+  });
+  topics.push({
+    topic: "смешанные примеры на умножение и деление",
+    operation: "mixed_multiplication_division",
+    difficulty: 3,
+    requiresTransition: false,
+    hasComparison: false,
+    block: "mixed",
+    level: 10,
+    examples: MIXED_MULTIPLICATION_DIVISION_EXAMPLES
+  });
+
+  COMPARISON_TOPIC_META.slice(3, 5).forEach((meta) => {
+    topics.push({ ...meta, block: "comparison", hasComparison: true, requiresTransition: false });
+  });
+
+  topics.push({
+    topic: "смешанный счет в пределах 100",
+    operation: "mixed",
+    difficulty: 3,
+    requiresTransition: true,
+    hasComparison: false,
+    block: "mixed",
+    level: 10,
+    examples: MIXED_100_EXAMPLES
+  });
+  topics.push({ ...COMPARISON_TOPIC_META[5], block: "comparison", hasComparison: true, requiresTransition: false });
+
+  return topics;
+}
+
+function buildMultiplicationTableExamples(factor) {
+  return [
+    ...Array.from({ length: 10 }, (_, index) => `${factor} × ${index + 1}`),
+    ...Array.from({ length: 10 }, (_, index) => index + 1)
+      .filter((value) => value !== factor)
+      .map((value) => `${value} × ${factor}`),
+    `${factor} × 0`
+  ];
+}
+
+function normalizeMathExample(group, example, groupIndex, exampleIndex) {
+  const answer = group.hasComparison ? solveComparisonExpression(example) : solveMathExampleAnswer(example);
+  return {
+    id: `math_${String(groupIndex + 1).padStart(2, "0")}_${String(exampleIndex + 1).padStart(2, "0")}`,
+    section: "математика",
+    block: group.block,
+    topic: group.topic,
+    example,
+    answer: String(answer),
+    operation: group.operation || inferMathOperation(example),
+    difficulty: group.difficulty,
+    requiresTransition: Boolean(group.requiresTransition),
+    hasComparison: Boolean(group.hasComparison),
+    level: group.level
+  };
+}
+
+function solveMathExampleAnswer(example) {
+  if (example.includes("□")) return solveUnknownExpression(example);
+  return solveSimpleExpression(example);
+}
+
+function solveComparisonExpression(example) {
+  const [leftRaw, rightRaw] = example.split("__").map((part) => part.trim());
+  return compareSign(solveSimpleExpression(leftRaw), solveSimpleExpression(rightRaw));
+}
+
+function inferMathOperation(example) {
+  if (example.includes("__")) return "comparison";
+  if (example.includes("□")) return "unknown";
+  if (example.includes("×") && example.includes(":")) return "mixed";
+  if (example.includes("×")) return "multiplication";
+  if (example.includes(":")) return "division";
+  if (example.includes("+") && example.includes("-")) return "mixed";
+  if (example.includes("+")) return "addition";
+  if (example.includes("-")) return "subtraction";
+  return "arithmetic";
+}
+
+function makeMathTaskMeta(item) {
+  return {
+    id: item.id,
+    topic: item.topic,
+    operation: item.operation,
+    difficulty: item.difficulty,
+    requiresTransition: item.requiresTransition,
+    hasComparison: item.hasComparison,
+    level: item.level
+  };
 }
 
 function makeGeometryTask() {
