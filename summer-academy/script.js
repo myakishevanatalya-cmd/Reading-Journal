@@ -50,7 +50,7 @@ const POSITIVE_LINES = [
   "Ошибки не мешают учиться, они показывают, где спрятано следующее сокровище.",
   "Маленький шаг каждый день делает знания крепче.",
   "Ты не просто отвечала, ты училась замечать закономерности.",
-  "Сегодня огонек знаний стал ярче."
+  "Сегодня маршрут стал светлее."
 ];
 
 const ACADEMY_JOKES = [
@@ -1367,129 +1367,192 @@ const TRAINER_MODES = [
 
 const ACADEMY_ISLANDS = [
   {
+    id: "math",
     subject: "math",
     icon: "🧮",
     title: "Остров математики",
-    text: "Счет, таблица, задачи и математика из обычной жизни.",
-    primary: { label: "Продолжить математику", action: "fast100" },
+    text: "Здесь числа помогают строить мосты, измерять дороги, считать покупки и решать истории.",
+    landmark: "Маяк счета",
+    position: { x: 22, y: 28 },
+    primary: { label: "Продолжить путь", action: "fast100" },
     routes: [
       {
+        id: "counting-shore",
         title: "Счетный берег",
-        description: "Числа до 100, сложение, вычитание, сравнение и пропущенное число.",
+        description: "Разминаем числа до 100: сложение, вычитание, сравнение и пропущенные числа.",
         skillIds: ["numbers100", "addSub100", "orderActions"],
         actions: [
           { label: "Разогрев", action: "fast10" },
           { label: "Счет до 100", action: "fast100" },
           { label: "Смешанный счет", action: "mixedMath" }
+        ],
+        stops: [
+          { id: "warmup", label: "Разогрев", action: "fast10", skillIds: ["numbers100"] },
+          { id: "fast100", label: "Счет до 100", action: "fast100", skillIds: ["numbers100", "addSub100"] },
+          { id: "mixed", label: "Смешанный счет", action: "mixedMath", skillIds: ["addSub100", "orderActions"] }
         ]
       },
       {
+        id: "times-mountain",
         title: "Гора таблицы",
-        description: "Умножение, деление и быстрые табличные случаи.",
+        description: "Поднимаемся по ступеням умножения и деления. Чем выше, тем увереннее ответы.",
         skillIds: ["multiplication50", "division50"],
         actions: [
           { label: "Таблица", action: "multiply" },
           { label: "Сложные случаи", action: "multiply", variant: "hard" }
+        ],
+        stops: [
+          { id: "multiply", label: "Таблица", action: "multiply", skillIds: ["multiplication50"] },
+          { id: "hard-table", label: "Сложные случаи", action: "multiply", variant: "hard", skillIds: ["multiplication50", "division50"] }
         ]
       },
       {
+        id: "story-workshop",
         title: "Мастерская задач",
-        description: "Текстовые задачи: понять условие, выбрать действие и записать ответ.",
+        description: "Разбираем истории: что было, что изменилось и что нужно найти.",
         skillIds: ["wordProblems"],
         actions: [
           { label: "Решать задачи", action: "mathStories" }
+        ],
+        stops: [
+          { id: "math-stories", label: "Открыть задачу", action: "mathStories", skillIds: ["wordProblems"] }
         ]
       },
       {
+        id: "measure-city",
         title: "Город измерений",
         description: "Часы, деньги, линейка, фигуры, маршруты и закономерности.",
         skillIds: ["measures", "geometry", "lifeMath"],
         actions: [
           { label: "Математика в жизни", action: "lifeMath" }
+        ],
+        stops: [
+          { id: "life-math", label: "Исследовать город", action: "lifeMath", skillIds: ["measures", "geometry", "lifeMath"] }
         ]
       }
     ]
   },
   {
+    id: "russian",
     subject: "russian",
     icon: "✍️",
     title: "Остров русского языка",
-    text: "Слова, правила, смысл, пословицы и игровые задания.",
-    primary: { label: "Продолжить русский", action: "wordDetective" },
+    text: "Здесь слова прячут буквы, правила оставляют следы, а смысл помогает найти верный ответ.",
+    landmark: "Башня букв",
+    position: { x: 70, y: 26 },
+    primary: { label: "Продолжить путь", action: "wordDetective" },
     routes: [
       {
+        id: "dictionary-meadow",
         title: "Словарная поляна",
-        description: "Словарные слова, трудные буквы и запоминание написания.",
+        description: "Трудные слова растут здесь как редкие растения. Их нужно узнавать и запоминать.",
         skillIds: ["dictionaryWords"],
         actions: [
           { label: "Словарные слова", action: "dictionary" }
+        ],
+        stops: [
+          { id: "dictionary", label: "Потренировать слова", action: "dictionary", skillIds: ["dictionaryWords"] }
         ]
       },
       {
-        title: "Орфографическая лаборатория",
+        id: "letter-lab",
+        title: "Лаборатория букв",
         description: "Жи-ши, ча-ща, безударные гласные, парные согласные и мягкий знак.",
         skillIds: ["spellingPairs", "unstressedVowels", "consonants", "separators", "prepositions", "soundLetters", "sentenceText", "wordLogic"],
         actions: [
           { label: "Детектив слов", action: "wordDetective" }
+        ],
+        stops: [
+          { id: "word-detective", label: "Открыть лабораторию", action: "wordDetective", skillIds: ["spellingPairs", "unstressedVowels", "consonants", "separators", "prepositions", "soundLetters", "sentenceText", "wordLogic"] }
         ]
       },
       {
-        title: "Игровой детектив",
-        description: "Потерянные буквы, записки, улики, предложения и словесная сортировка.",
+        id: "word-agency",
+        title: "Детективное бюро слов",
+        description: "Ищем потерянные буквы, исправляем записки, выбираем улики и собираем предложения.",
         skillIds: ["wordGames"],
         actions: [
           { label: "Игровой детектив", action: "russianGames" }
+        ],
+        stops: [
+          { id: "russian-games", label: "Начать расследование", action: "russianGames", skillIds: ["wordGames"] }
         ]
       },
       {
-        title: "Словесные головоломки",
-        description: "Кроссворды, буквенный круг, поиск слов и мини-сканворды.",
+        id: "puzzle-tower",
+        title: "Башня головоломок",
+        description: "Кроссворды, буквенный круг, поиск слов и другие словесные тайники.",
         skillIds: ["wordPuzzles"],
         actions: [
           { label: "Головоломки", action: "wordPuzzles" }
+        ],
+        stops: [
+          { id: "word-puzzles", label: "Открыть головоломку", action: "wordPuzzles", skillIds: ["wordPuzzles"] }
         ]
       },
       {
-        title: "Мудрые фразы",
-        description: "Пословицы, поговорки, смысл и жизненные ситуации.",
+        id: "wise-square",
+        title: "Площадь мудрых фраз",
+        description: "Пословицы, поговорки и ситуации, где важно понять смысл, а не просто угадать конец.",
         skillIds: ["proverbs"],
         actions: [
           { label: "Пословицы", action: "proverbs" }
+        ],
+        stops: [
+          { id: "proverbs", label: "Разобрать фразу", action: "proverbs", skillIds: ["proverbs"] }
         ]
       }
     ]
   },
   {
+    id: "reading",
     subject: "reading",
     icon: "📚",
     title: "Остров чтения",
-    text: "Короткие тексты, детали, поступки героев и главная мысль.",
-    primary: { label: "Читать текст", action: "readingQuest" },
+    text: "Здесь тексты становятся картами: в них есть детали, поступки, порядок событий и главная мысль.",
+    landmark: "Мост главной мысли",
+    position: { x: 35, y: 70 },
+    primary: { label: "Продолжить чтение", action: "readingQuest" },
     routes: [
       {
+        id: "short-text-trail",
         title: "Тропа коротких текстов",
-        description: "Прочитать текст, найти точную деталь и ответить без угадывания.",
+        description: "Читаем небольшой текст и ищем ответы прямо в нем.",
         skillIds: ["readingMeaning"],
         actions: [
           { label: "Читательский сыщик", action: "readingQuest" }
+        ],
+        stops: [
+          { id: "read-text", label: "Прочитать текст", action: "readingQuest", skillIds: ["readingMeaning"] },
+          { id: "main-idea", label: "Найти главную мысль", action: "readingQuest", skillIds: ["readingMeaning"] },
+          { id: "hero-traces", label: "Понять героя", action: "readingQuest", skillIds: ["readingMeaning"] }
         ]
       }
     ]
   },
   {
+    id: "break",
     subject: "world",
     icon: "🌿",
-    title: "Веселая перемена",
-    text: "Короткая пауза: шутка, загадка, факт или спокойная поддержка.",
+    title: "Бухта перемены",
+    text: "Тихое место между островами: шутка, загадка, факт, поддержка или маленькое движение.",
+    landmark: "Причал улыбок",
+    position: { x: 78, y: 72 },
     primary: { label: "Еще улыбку", action: "funBreak" },
     routes: [
       {
+        id: "break-bay",
         title: "Пауза между островами",
         description: "Без баллов и ошибок: только добрый отдых, загадки и маленькие движения.",
         skillIds: ["worldFacts"],
         actions: [
           { label: "Еще улыбку", action: "funBreak" },
           { label: "Огонек дня", action: "daily" }
+        ],
+        stops: [
+          { id: "smile-pier", label: "Еще улыбку", action: "funBreak", skillIds: ["worldFacts"] },
+          { id: "riddle-house", label: "Загадать", action: "funBreak", skillIds: ["worldFacts"] },
+          { id: "movement-meadow", label: "Мини-перемена", action: "funBreak", skillIds: ["worldFacts"] }
         ]
       }
     ]
@@ -1539,6 +1602,8 @@ const SUBJECT_LAUNCHERS = [
 
 const state = loadState();
 let session = null;
+let selectedIslandId = ACADEMY_ISLANDS[0]?.id || "math";
+let todayRouteAction = { action: "daily", variant: "" };
 
 const views = document.querySelectorAll(".view");
 const navButtons = document.querySelectorAll(".nav-button");
@@ -1604,7 +1669,7 @@ navButtons.forEach((button) => {
   button.addEventListener("click", () => showView(button.dataset.view));
 });
 
-startSessionBtn.addEventListener("click", () => startSession());
+startSessionBtn.addEventListener("click", handleTodayRouteAction);
 againSessionBtn.addEventListener("click", () => startSession());
 nextQuestionBtn.addEventListener("click", nextQuestion);
 exitSessionBtn.addEventListener("click", exitSession);
@@ -1685,14 +1750,16 @@ function renderToday() {
 
   const today = dateKey(new Date());
   const todaysSessions = state.dailySessions.filter((item) => item.date === today);
+  const nextStop = getNextStop();
+  todayRouteAction = { action: nextStop.stop?.action || "daily", variant: nextStop.stop?.variant || "" };
   if (todaysSessions.length) {
     todayStatus.textContent = "Сегодня огонек уже зажжен.";
-    todayFocus.textContent = "Можно отдохнуть или сделать еще одну короткую тренировку.";
-    startSessionBtn.textContent = "Еще 10 заданий";
+    todayFocus.textContent = `${nextStop.title}. Можно сделать короткий шаг или отдохнуть в Бухте перемены.`;
+    startSessionBtn.textContent = nextStop.button || "Еще короткий маршрут";
   } else {
-    todayStatus.textContent = "Готова к короткой тренировке?";
-    todayFocus.textContent = "10 заданий: математика, русский, чтение и повтор ошибок.";
-    startSessionBtn.textContent = "Зажечь огонек";
+    todayStatus.textContent = "Сегодняшний маршрут";
+    todayFocus.textContent = `${nextStop.title}. ${nextStop.text}`;
+    startSessionBtn.textContent = nextStop.button || "В путь";
   }
   renderSubjectLaunchers();
   renderGuide(todayGuideCard, "today");
@@ -1747,7 +1814,7 @@ function renderTrainers() {
   trainerGrid.innerHTML = "";
   ACADEMY_ISLANDS.forEach((island) => {
     const subject = SUBJECTS[island.subject];
-    const islandStats = getAcademyGroupStats(island.routes.flatMap((route) => route.skillIds));
+    const islandStats = getAcademyGroupStats(getIslandSkillIds(island));
     const card = document.createElement("article");
     card.className = "trainer-island";
     card.style.setProperty("--island-color", subject.color);
@@ -1767,31 +1834,15 @@ function renderTrainers() {
         <span>${islandStats.doneLabel}</span>
         <span>${islandStats.status}</span>
       </div>
-      <details class="trainer-island__routes">
-        <summary>Маршруты острова</summary>
-        <div class="peninsula-list">
-          ${island.routes.map((route) => {
-            const routeStats = getAcademyGroupStats(route.skillIds);
-            return `
-              <section class="peninsula-card">
-                <div>
-                  <h4>${route.title}</h4>
-                  <p>${route.description}</p>
-                </div>
-                <div class="peninsula-meta">
-                  <span>${routeStats.status}</span>
-                  <span>${routeStats.doneLabel}</span>
-                </div>
-                <div class="route-actions">
-                  ${renderAcademyActionButtons(route.actions)}
-                </div>
-              </section>
-            `;
-          }).join("")}
-        </div>
-      </details>
+      <div class="mini-route-line" aria-label="Маршруты острова">
+        ${island.routes.map((route) => {
+          const routeStats = getAcademyGroupStats(getRouteSkillIds(route));
+          return `<span>${route.title}<small>${routeStats.status}</small></span>`;
+        }).join("")}
+      </div>
       <div class="trainer-island__actions">
         ${renderAcademyActionButtons([island.primary], true)}
+        ${renderAcademyActionButtons([{ label: "Открыть карту", action: "openIsland", variant: island.id }])}
       </div>
     `;
     attachAcademyActionHandlers(card);
@@ -1800,8 +1851,8 @@ function renderTrainers() {
 }
 
 function renderAcademyActionButtons(actions, primary = false) {
-  return actions.map((item, index) => {
-    const buttonClass = primary || index === 0 ? "route-action route-action--primary" : "route-action";
+  return actions.map((item) => {
+    const buttonClass = primary ? "route-action route-action--primary" : "route-action";
     return `
       <button class="${buttonClass}" data-academy-action="${item.action}" data-academy-variant="${item.variant || ""}">
         ${item.label}
@@ -1821,6 +1872,11 @@ function handleAcademyAction(action, variant = "") {
     startSession();
     return;
   }
+  if (action === "openIsland") {
+    selectedIslandId = variant || selectedIslandId;
+    showView("map");
+    return;
+  }
   if (action === "funBreak") {
     showView("trainers");
     renderFunBreak("any", "main", true);
@@ -1828,6 +1884,123 @@ function handleAcademyAction(action, variant = "") {
     return;
   }
   startTrainer(action, variant);
+}
+
+function handleTodayRouteAction() {
+  handleAcademyAction(todayRouteAction.action || "daily", todayRouteAction.variant || "");
+}
+
+function getAllAcademyStops() {
+  return ACADEMY_ISLANDS.flatMap((island) => island.routes.flatMap((route) => {
+    const stops = route.stops?.length ? route.stops : route.actions.map((action, index) => ({
+      id: `${route.id || normalizeAnswer(route.title)}-${index}`,
+      label: action.label,
+      action: action.action,
+      variant: action.variant || "",
+      skillIds: route.skillIds || []
+    }));
+    return stops.map((stop) => ({ island, route, stop }));
+  }));
+}
+
+function getRouteSkillIds(route) {
+  return route.stops?.length
+    ? [...new Set(route.stops.flatMap((stop) => stop.skillIds || route.skillIds || []))]
+    : route.skillIds || [];
+}
+
+function getIslandSkillIds(island) {
+  return [...new Set(island.routes.flatMap(getRouteSkillIds))];
+}
+
+function getStopStats(stop) {
+  return getAcademyGroupStats(stop.skillIds || []);
+}
+
+function getAcademyStopState(stop) {
+  const stats = getStopStats(stop);
+  if (stats.hasProblem || (stats.attempts >= 3 && stats.accuracy < 70)) return "review";
+  if (stats.attempts >= 3 && stats.accuracy >= 85) return "mastered";
+  if (stats.attempts > 0) return "active";
+  return "new";
+}
+
+function getAcademyStateLabel(stateName) {
+  return {
+    new: "новая тропинка",
+    active: "идем по тропе",
+    review: "тропа просит фонарик",
+    mastered: "маяк горит ровно"
+  }[stateName] || "новая тропинка";
+}
+
+function getNextStop() {
+  const stops = getAllAcademyStops();
+  const dueMistake = state.mistakes.find((mistake) => !mistake.nextReviewAt || new Date(mistake.nextReviewAt).getTime() <= Date.now());
+  if (dueMistake) {
+    const action = skillToTrainerAction(dueMistake.skillId);
+    const matched = stops.find(({ stop }) => stop.action === action || stop.skillIds?.includes(dueMistake.skillId));
+    if (matched) {
+      return {
+        ...matched,
+        title: "Тропа просит фонарик",
+        text: `Филин Арчи сохранил место на карте: ${SKILLS[dueMistake.skillId]?.title || "повторение"}. Вернемся спокойно.`,
+        button: "Повторить трудное"
+      };
+    }
+  }
+
+  const dayBalance = getSubjectDayBalance(7);
+  const weekGap = getWeeklySubjectGap(dayBalance);
+  if (weekGap) {
+    const island = ACADEMY_ISLANDS.find((item) => item.subject === weekGap.subject);
+    const route = island?.routes[0];
+    const stop = route?.stops?.[0];
+    if (island && route && stop) {
+      return {
+        island,
+        route,
+        stop,
+        title: `Следующая остановка: ${route.title}`,
+        text: `${SUBJECTS[island.subject].label} ждет короткого визита. Один спокойный маршрут поддержит баланс недели.`,
+        button: "В путь"
+      };
+    }
+  }
+
+  const weakSkillId = Object.entries(state.skillStats)
+    .map(([skillId, stats]) => ({ skillId, stats, accuracy: stats.attempts ? stats.correct / stats.attempts : 1 }))
+    .filter((item) => item.stats.attempts >= 2 && item.accuracy < 0.7)
+    .sort((a, b) => a.accuracy - b.accuracy)[0]?.skillId;
+  if (weakSkillId) {
+    const matched = stops.find(({ stop }) => stop.skillIds?.includes(weakSkillId));
+    if (matched) {
+      return {
+        ...matched,
+        title: "Здесь еще немного туманно",
+        text: `${SKILLS[weakSkillId]?.title || "Маршрут"} лучше пройти еще раз без спешки.`,
+        button: "Поставить фонарик"
+      };
+    }
+  }
+
+  const newStop = stops.find(({ stop, island }) => island.id !== "break" && getAcademyStopState(stop) === "new");
+  if (newStop) {
+    return {
+      ...newStop,
+      title: `Новая тропинка: ${newStop.route.title}`,
+      text: `${newStop.stop.label} откроет еще один кусочек Архипелага Академии.`,
+      button: "Открыть тропинку"
+    };
+  }
+
+  const fallback = stops.find(({ island }) => island.id !== "break") || stops[0];
+  return {
+    ...fallback,
+    title: "Сегодняшний маршрут",
+    text: "Филин Арчи предлагает короткий путь: один остров, несколько заданий и маленькая перемена.",
+    button: "Продолжить маршрут"
+  };
 }
 
 function renderGuide(container, place) {
@@ -1839,7 +2012,7 @@ function renderGuide(container, place) {
   container.innerHTML = `
     <div class="guide-card__avatar" aria-hidden="true">🦉</div>
     <div>
-      <p class="eyebrow">Филин Академик</p>
+      <p class="eyebrow">Филин Арчи</p>
       <h3>${guide.title}</h3>
       <p>${guide.text} ${placeLine}</p>
       <button class="secondary-action" data-guide-action="${guide.action}" data-guide-variant="${guide.variant || ""}">${guide.button}</button>
@@ -2471,8 +2644,8 @@ function checkAnswer(rawAnswer, sourceElement) {
 
   session.locked = true;
   feedbackBox.textContent = correct
-    ? `Верно! ${session.usedHint ? "Ты воспользовалась подсказкой и дошла до ответа." : task.success || "Так держать."}`
-    : `Почти получилось. Правильный ответ: ${task.answer}. ${task.explanation}`;
+    ? `Есть. Тропа стала чуть светлее. ${session.usedHint ? "Подсказка помогла дойти до ответа." : task.success || ""}`
+    : `Здесь еще туманное место. Правильный ответ: ${task.answer}. ${task.explanation}`;
   renderSessionBreak(correct ? "after_success" : "after_error");
   nextQuestionBtn.classList.remove("hidden");
   const timeSpentSec = Math.round((Date.now() - session.questionStartedAt) / 1000);
@@ -2553,7 +2726,7 @@ function finishSession() {
   questProgressBar.style.width = "100%";
   questPanel.classList.add("hidden");
   finishPanel.classList.remove("hidden");
-  finishTitle.textContent = `${childName}, огонек знаний горит!`;
+  finishTitle.textContent = `${childName}, маршрут завершен!`;
   const slowCount = session.results.filter((item) => item.speedStatus === "slow").length;
   const fastCount = session.results.filter((item) => item.speedStatus === "fast").length;
   const speedLine = fastCount
@@ -2562,8 +2735,8 @@ function finishSession() {
       ? " Несколько верных ответов уже получились, теперь будем делать их легче."
       : "";
   finishText.textContent = mistakes
-    ? `${POSITIVE_LINES[correct % POSITIVE_LINES.length]} Лучше всего сегодня: ${bestSkill}. ${mistakes} задания вернутся для доброго повторения.${speedLine} ${getFunBreakLine("after_session")}`
-    : `Все задания получились! ${childName}, сегодня твоя Академия сияет особенно ярко.${speedLine} ${getFunBreakLine("after_session")}`;
+    ? `${POSITIVE_LINES[correct % POSITIVE_LINES.length]} Лучше всего сегодня: ${bestSkill}. ${mistakes} задания Филин Арчи сохранит на карте для спокойного повторения.${speedLine} ${getFunBreakLine("after_session")}`
+    : `Все задания получились! В Архипелаге зажегся еще один огонек маршрута.${speedLine} ${getFunBreakLine("after_session")}`;
   finishCorrect.textContent = String(correct);
   finishMistakes.textContent = String(mistakes);
   finishMinutes.textContent = String(minutes);
@@ -2805,55 +2978,111 @@ function updateMistakeBank(task, attempt) {
 }
 
 function renderMap() {
+  const nextStop = getNextStop();
+  const selectedIsland = ACADEMY_ISLANDS.find((island) => island.id === selectedIslandId) || ACADEMY_ISLANDS[0];
   academyMap.innerHTML = "";
-  ACADEMY_ISLANDS.forEach((island) => {
-    const subject = SUBJECTS[island.subject];
-    const islandStats = getAcademyGroupStats(island.routes.flatMap((route) => route.skillIds));
-    const card = document.createElement("article");
-    card.className = "island-card";
-    card.style.setProperty("--island-color", subject.color);
-    card.innerHTML = `
+  academyMap.innerHTML = `
+    <section class="next-stop-card">
+      <div>
+        <p class="eyebrow">Следующая остановка</p>
+        <h3>${nextStop.title}</h3>
+        <p>${nextStop.text}</p>
+      </div>
+      <button class="primary-action" data-academy-action="${nextStop.stop?.action || "daily"}" data-academy-variant="${nextStop.stop?.variant || ""}">
+        ${nextStop.button || "В путь"}
+      </button>
+    </section>
+    <section class="academy-world" aria-label="Архипелаг Академии">
+      <div class="world-map">
+        ${ACADEMY_ISLANDS.map((island) => {
+          const subject = SUBJECTS[island.subject];
+          const stats = getAcademyGroupStats(getIslandSkillIds(island));
+          const isActive = island.id === selectedIsland.id;
+          return `
+            <button class="world-island ${isActive ? "world-island--active" : ""}" type="button" data-island-id="${island.id}" aria-pressed="${isActive}" style="--island-color:${subject.color}; --island-x:${island.position?.x || 50}%; --island-y:${island.position?.y || 50}%">
+              <span class="world-island__marker">${island.icon}</span>
+              <span class="world-island__label">${island.title}</span>
+              <small>${stats.status}</small>
+            </button>
+          `;
+        }).join("")}
+      </div>
+      ${renderIslandDrawer(selectedIsland, nextStop.stop?.id || "")}
+    </section>
+  `;
+  attachAcademyActionHandlers(academyMap);
+  attachWorldMapHandlers(academyMap);
+}
+
+function renderIslandDrawer(island, nextStopId = "") {
+  const subject = SUBJECTS[island.subject];
+  const islandStats = getAcademyGroupStats(getIslandSkillIds(island));
+  return `
+    <article class="island-drawer" style="--island-color:${subject.color}">
       <div class="island-card__header">
         <div class="island-icon">${island.icon}</div>
         <div>
-          <p class="eyebrow">${subject.label}</p>
+          <p class="eyebrow">${island.landmark}</p>
           <h3>${island.title}</h3>
           <p>${island.text}</p>
         </div>
       </div>
-      <div class="skill-meter"><span style="width:${islandStats.accuracy}%"></span></div>
+      <div class="skill-meter" aria-label="${island.title}: ${islandStats.doneLabel}"><span style="width:${islandStats.accuracy}%"></span></div>
       <div class="island-meta">
         <span>${islandStats.doneLabel}</span>
         <span>${islandStats.status}</span>
       </div>
-      <div class="map-route-list">
-        ${island.routes.map((route) => {
-          const routeStats = getAcademyGroupStats(route.skillIds);
+      <div class="route-map">
+        ${island.routes.map((route) => renderRoutePath(route, nextStopId)).join("")}
+      </div>
+    </article>
+  `;
+}
+
+function renderRoutePath(route, nextStopId = "") {
+  const routeStats = getAcademyGroupStats(getRouteSkillIds(route));
+  return `
+    <section class="island-route">
+      <div class="island-route__heading">
+        <div>
+          <h4>${route.title}</h4>
+          <p>${route.description}</p>
+        </div>
+        <span>${routeStats.status}</span>
+      </div>
+      <div class="island-path">
+        ${(route.stops || []).map((stop, index) => {
+          const stateName = getAcademyStopState(stop);
+          const isNext = nextStopId === stop.id;
           return `
-            <section class="map-route">
-              <div>
-                <h4>${route.title}</h4>
-                <p>${route.description}</p>
-              </div>
-              <div class="skill-meter"><span style="width:${routeStats.accuracy}%"></span></div>
-              <div class="island-meta">
-                <span>${routeStats.doneLabel}</span>
-                <span>${routeStats.status}</span>
-              </div>
-              <div class="route-actions">
-                ${renderAcademyActionButtons(route.actions)}
-              </div>
-            </section>
+            <button class="path-node path-node--${stateName} ${isNext ? "path-node--next" : ""}" type="button" data-academy-action="${stop.action}" data-academy-variant="${stop.variant || ""}" ${isNext ? 'aria-current="step"' : ""}>
+              <span class="path-node__dot">${getPathNodeIcon(stateName, index)}</span>
+              <span>
+                <strong>${stop.label}</strong>
+                <small>${getAcademyStateLabel(stateName)}</small>
+              </span>
+            </button>
           `;
         }).join("")}
       </div>
-      <div class="trainer-island__actions">
-        ${renderAcademyActionButtons([island.primary], true)}
-      </div>
-    `;
-    attachAcademyActionHandlers(card);
-    academyMap.append(card);
+    </section>
+  `;
+}
+
+function attachWorldMapHandlers(container) {
+  container.querySelectorAll("[data-island-id]").forEach((button) => {
+    button.addEventListener("click", () => {
+      selectedIslandId = button.dataset.islandId;
+      renderMap();
+    });
   });
+}
+
+function getPathNodeIcon(stateName, index) {
+  if (stateName === "mastered") return "✓";
+  if (stateName === "review") return "!";
+  if (stateName === "active") return String(index + 1);
+  return "•";
 }
 
 function getAcademyGroupStats(skillIds) {
@@ -2868,13 +3097,13 @@ function getAcademyGroupStats(skillIds) {
   }, { attempts: 0, correct: 0, mistakes: 0, hasProblem: false, hasMastered: false });
 
   const accuracy = totals.attempts ? Math.round((totals.correct / totals.attempts) * 100) : 0;
-  let status = "новая тропинка";
+  let status = "карта свернута";
   if (totals.hasProblem || (totals.attempts >= 3 && accuracy < 70)) {
-    status = "нужно повторить";
+    status = "тропа просит фонарик";
   } else if (totals.hasMastered || accuracy >= 85) {
-    status = "получается уверенно";
+    status = "маяк горит ровно";
   } else if (totals.attempts > 0) {
-    status = "тренируем";
+    status = "идем по тропе";
   }
 
   return {
@@ -4000,9 +4229,9 @@ function hourWord(value) {
 }
 
 function getHeroLine(streak) {
-  if (streak >= 7) return `${childName}, твой огонек знаний горит уже неделю. Очень сильный ритм.`;
-  if (streak >= 3) return `${childName}, огонек разгорается. Сегодня хватит маленького шага.`;
-  return `${childName}, сегодня можно зажечь огонек знаний.`;
+  if (streak >= 7) return `${childName}, в Архипелаге уже неделю горят огоньки маршрутов. Очень ровный ритм.`;
+  if (streak >= 3) return `${childName}, карта становится светлее. Сегодня хватит одного спокойного шага.`;
+  return `${childName}, сегодня можно пройти короткий маршрут и вовремя отдохнуть.`;
 }
 
 function getStreakDays() {

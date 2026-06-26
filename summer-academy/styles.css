@@ -41,6 +41,12 @@ button {
   cursor: pointer;
 }
 
+button:focus-visible,
+summary:focus-visible {
+  outline: 3px solid rgba(246, 180, 67, 0.78);
+  outline-offset: 3px;
+}
+
 .app-shell {
   width: min(100%, 980px);
   min-height: 100vh;
@@ -50,7 +56,7 @@ button {
 
 .hero {
   position: relative;
-  min-height: 230px;
+  min-height: 180px;
   margin: 0 -14px 18px;
   overflow: hidden;
   background: #f4cc77;
@@ -69,7 +75,7 @@ button {
   position: relative;
   z-index: 1;
   display: flex;
-  min-height: 230px;
+  min-height: 180px;
   flex-direction: column;
   justify-content: flex-end;
   padding: 28px 18px 24px;
@@ -104,7 +110,7 @@ h1 {
   max-width: 700px;
   margin-bottom: 12px;
   font-family: "Marck Script", "Pangolin", "Segoe Print", cursive;
-  font-size: clamp(3.4rem, 10vw, 6rem);
+  font-size: clamp(2.8rem, 10vw, 5.2rem);
   font-weight: 400;
   line-height: 0.88;
   text-shadow: 0 4px 18px rgba(8, 15, 28, 0.45);
@@ -522,6 +528,206 @@ h3 {
   gap: 12px;
 }
 
+.next-stop-card {
+  display: grid;
+  gap: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(37, 48, 68, 0.08);
+  border-radius: 24px;
+  padding: 16px;
+  background:
+    linear-gradient(135deg, rgba(246, 180, 67, 0.24), rgba(132, 200, 167, 0.2)),
+    #fff;
+  box-shadow: var(--shadow);
+}
+
+.next-stop-card h3,
+.next-stop-card p {
+  margin-bottom: 0;
+}
+
+.academy-world {
+  display: grid;
+  gap: 14px;
+}
+
+.world-map {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  min-height: 360px;
+  overflow: hidden;
+  border: 1px solid rgba(37, 48, 68, 0.08);
+  border-radius: 28px;
+  padding: 16px;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(125, 185, 223, 0.3), transparent 9rem),
+    radial-gradient(circle at 76% 24%, rgba(217, 113, 143, 0.24), transparent 8rem),
+    radial-gradient(circle at 40% 76%, rgba(132, 200, 167, 0.26), transparent 9rem),
+    linear-gradient(145deg, #eaf7ff 0%, #fff8df 52%, #eef7f1 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55), var(--shadow);
+}
+
+.world-map::before {
+  content: "";
+  position: absolute;
+  inset: 28px;
+  border: 2px dashed rgba(37, 48, 68, 0.12);
+  border-radius: 48% 52% 44% 56%;
+  transform: rotate(-7deg);
+}
+
+.world-island {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 10px;
+  align-items: center;
+  border-radius: 18px;
+  padding: 10px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 8px 22px rgba(56, 64, 82, 0.12);
+  text-align: left;
+}
+
+.world-island__marker {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--island-color) 72%, #ffffff);
+  font-size: 1.35rem;
+}
+
+.world-island__label {
+  font-family: "Pangolin", "Segoe Print", cursive;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.world-island small {
+  grid-column: 2;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.world-island--active {
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--island-color) 26%, transparent);
+  outline: 3px solid color-mix(in srgb, var(--island-color) 42%, #ffffff);
+}
+
+.island-drawer {
+  display: grid;
+  gap: 12px;
+  border: 1px solid rgba(37, 48, 68, 0.08);
+  border-radius: 24px;
+  padding: 16px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--island-color) 18%, #ffffff), #ffffff 62%),
+    #fff;
+  box-shadow: 0 10px 28px rgba(56, 64, 82, 0.1);
+}
+
+.route-map {
+  display: grid;
+  gap: 12px;
+}
+
+.island-route {
+  display: grid;
+  gap: 10px;
+  border-radius: 18px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow: inset 0 0 0 1px rgba(37, 48, 68, 0.07);
+}
+
+.island-route__heading {
+  display: grid;
+  gap: 6px;
+}
+
+.island-route h4 {
+  margin: 0 0 4px;
+  font-family: "Pangolin", "Segoe Print", cursive;
+  font-size: 1.05rem;
+}
+
+.island-route p {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.island-route__heading > span {
+  width: fit-content;
+  border-radius: 999px;
+  padding: 5px 8px;
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 850;
+}
+
+.island-path {
+  position: relative;
+  display: grid;
+  gap: 8px;
+}
+
+.path-node {
+  position: relative;
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 10px;
+  align-items: center;
+  border-radius: 16px;
+  padding: 9px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 0 0 1px rgba(37, 48, 68, 0.08);
+  text-align: left;
+}
+
+.path-node__dot {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--island-color) 28%, #ffffff);
+  color: var(--ink);
+  font-weight: 950;
+}
+
+.path-node strong,
+.path-node small {
+  display: block;
+}
+
+.path-node small {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.path-node--review .path-node__dot {
+  background: #ffe3dc;
+  color: var(--danger);
+}
+
+.path-node--mastered .path-node__dot {
+  background: color-mix(in srgb, var(--mint) 52%, #ffffff);
+  color: var(--leaf);
+}
+
+.path-node--next {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--island-color) 42%, #ffffff), 0 8px 20px rgba(56, 64, 82, 0.12);
+}
+
 .trainer-grid {
   display: grid;
   gap: 12px;
@@ -560,6 +766,7 @@ h3 {
 }
 
 .trainer-island p,
+.island-drawer p,
 .peninsula-card p,
 .map-route p {
   margin-bottom: 0;
@@ -602,6 +809,30 @@ h3 {
 .map-route-list {
   display: grid;
   gap: 10px;
+}
+
+.mini-route-line {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.mini-route-line span {
+  display: grid;
+  min-width: 154px;
+  gap: 3px;
+  border-radius: 14px;
+  padding: 9px 10px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: inset 0 0 0 1px rgba(37, 48, 68, 0.07);
+  font-weight: 850;
+}
+
+.mini-route-line small {
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 800;
 }
 
 .trainer-island__routes {
@@ -661,6 +892,23 @@ h3 {
   color: #fff;
   background: var(--island-color, var(--sun-strong));
   box-shadow: 0 8px 18px color-mix(in srgb, var(--island-color) 24%, transparent);
+}
+
+.trainer-island,
+.subject-card,
+.route-action,
+.path-node,
+.world-island,
+.nav-button {
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.trainer-island h3,
+.island-drawer h3,
+.peninsula-card h4,
+.map-route h4 {
+  font-family: "Pangolin", "Segoe Print", cursive;
+  font-weight: 700;
 }
 
 .trainer-card {
@@ -1219,7 +1467,37 @@ h3 {
   }
 
   .academy-map {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
+  }
+
+  .next-stop-card {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+
+  .world-map {
+    min-height: 430px;
+  }
+
+  .world-island {
+    position: absolute;
+    left: var(--island-x);
+    top: var(--island-y);
+    width: 210px;
+    transform: translate(-50%, -50%);
+  }
+
+  .world-island--active {
+    transform: translate(-50%, -50%) scale(1.04);
+  }
+
+  .island-route__heading {
+    grid-template-columns: 1fr auto;
+    align-items: start;
+  }
+
+  .island-path {
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
   }
 
   .trainer-grid {
@@ -1228,5 +1506,42 @@ h3 {
 
   .parent-actions {
     grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (hover: hover) {
+  .trainer-island:hover,
+  .subject-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .route-action:hover,
+  .path-node:hover {
+    transform: translateY(-1px);
+  }
+
+  .world-island:hover {
+    box-shadow: 0 14px 30px color-mix(in srgb, var(--island-color) 24%, transparent);
+  }
+
+  .world-island--active:hover {
+    transform: translate(-50%, -50%) scale(1.04);
+  }
+}
+
+@media (hover: hover) and (max-width: 719px) {
+  .world-island:hover {
+    transform: translateY(-1px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }
