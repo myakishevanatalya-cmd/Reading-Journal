@@ -527,6 +527,142 @@ h3 {
   gap: 12px;
 }
 
+.trainer-island {
+  display: grid;
+  gap: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(37, 48, 68, 0.08);
+  border-radius: 24px;
+  padding: 16px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--island-color) 18%, #ffffff), #ffffff 58%),
+    #fff;
+  box-shadow: 0 10px 28px rgba(56, 64, 82, 0.1);
+}
+
+.trainer-island__top,
+.island-card__header {
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.trainer-island__icon {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  place-items: center;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--island-color) 34%, #ffffff);
+  font-size: 1.55rem;
+}
+
+.trainer-island p,
+.peninsula-card p,
+.map-route p {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.island-progress {
+  height: 9px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(37, 48, 68, 0.1);
+}
+
+.island-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--island-color, var(--mint));
+}
+
+.island-summary,
+.peninsula-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.island-summary span,
+.peninsula-meta span,
+.island-meta span {
+  border-radius: 999px;
+  padding: 5px 8px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.peninsula-list,
+.map-route-list {
+  display: grid;
+  gap: 10px;
+}
+
+.trainer-island__routes {
+  display: grid;
+  gap: 10px;
+}
+
+.trainer-island__routes summary {
+  width: fit-content;
+  border-radius: 999px;
+  padding: 8px 12px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--island-color) 30%, #dce4ee);
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.trainer-island__routes[open] summary {
+  margin-bottom: 10px;
+}
+
+.peninsula-card,
+.map-route {
+  display: grid;
+  gap: 10px;
+  border-radius: 16px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.66);
+  box-shadow: inset 0 0 0 1px rgba(37, 48, 68, 0.07);
+}
+
+.peninsula-card h4,
+.map-route h4 {
+  margin: 0 0 4px;
+  font-size: 0.98rem;
+}
+
+.route-actions,
+.trainer-island__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.route-action {
+  min-height: 38px;
+  border-radius: 14px;
+  padding: 8px 11px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--island-color) 30%, #dce4ee);
+  font-weight: 850;
+}
+
+.route-action--primary {
+  color: #fff;
+  background: var(--island-color, var(--sun-strong));
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--island-color) 24%, transparent);
+}
+
 .trainer-card {
   display: grid;
   gap: 10px;
@@ -619,9 +755,7 @@ h3 {
 .island-card {
   position: relative;
   display: grid;
-  grid-template-columns: 54px 1fr;
   gap: 12px;
-  align-items: center;
   overflow: hidden;
   border: 1px solid rgba(37, 48, 68, 0.08);
   border-radius: 20px;
@@ -642,6 +776,11 @@ h3 {
 
 .island-card h3 {
   margin-bottom: 6px;
+}
+
+.island-card p {
+  margin-bottom: 0;
+  color: var(--muted);
 }
 
 .skill-meter {

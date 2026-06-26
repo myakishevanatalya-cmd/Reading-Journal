@@ -1365,6 +1365,137 @@ const TRAINER_MODES = [
   }
 ];
 
+const ACADEMY_ISLANDS = [
+  {
+    subject: "math",
+    icon: "🧮",
+    title: "Остров математики",
+    text: "Счет, таблица, задачи и математика из обычной жизни.",
+    primary: { label: "Продолжить математику", action: "fast100" },
+    routes: [
+      {
+        title: "Счетный берег",
+        description: "Числа до 100, сложение, вычитание, сравнение и пропущенное число.",
+        skillIds: ["numbers100", "addSub100", "orderActions"],
+        actions: [
+          { label: "Разогрев", action: "fast10" },
+          { label: "Счет до 100", action: "fast100" },
+          { label: "Смешанный счет", action: "mixedMath" }
+        ]
+      },
+      {
+        title: "Гора таблицы",
+        description: "Умножение, деление и быстрые табличные случаи.",
+        skillIds: ["multiplication50", "division50"],
+        actions: [
+          { label: "Таблица", action: "multiply" },
+          { label: "Сложные случаи", action: "multiply", variant: "hard" }
+        ]
+      },
+      {
+        title: "Мастерская задач",
+        description: "Текстовые задачи: понять условие, выбрать действие и записать ответ.",
+        skillIds: ["wordProblems"],
+        actions: [
+          { label: "Решать задачи", action: "mathStories" }
+        ]
+      },
+      {
+        title: "Город измерений",
+        description: "Часы, деньги, линейка, фигуры, маршруты и закономерности.",
+        skillIds: ["measures", "geometry", "lifeMath"],
+        actions: [
+          { label: "Математика в жизни", action: "lifeMath" }
+        ]
+      }
+    ]
+  },
+  {
+    subject: "russian",
+    icon: "✍️",
+    title: "Остров русского языка",
+    text: "Слова, правила, смысл, пословицы и игровые задания.",
+    primary: { label: "Продолжить русский", action: "wordDetective" },
+    routes: [
+      {
+        title: "Словарная поляна",
+        description: "Словарные слова, трудные буквы и запоминание написания.",
+        skillIds: ["dictionaryWords"],
+        actions: [
+          { label: "Словарные слова", action: "dictionary" }
+        ]
+      },
+      {
+        title: "Орфографическая лаборатория",
+        description: "Жи-ши, ча-ща, безударные гласные, парные согласные и мягкий знак.",
+        skillIds: ["spellingPairs", "unstressedVowels", "consonants", "separators", "prepositions", "soundLetters", "sentenceText", "wordLogic"],
+        actions: [
+          { label: "Детектив слов", action: "wordDetective" }
+        ]
+      },
+      {
+        title: "Игровой детектив",
+        description: "Потерянные буквы, записки, улики, предложения и словесная сортировка.",
+        skillIds: ["wordGames"],
+        actions: [
+          { label: "Игровой детектив", action: "russianGames" }
+        ]
+      },
+      {
+        title: "Словесные головоломки",
+        description: "Кроссворды, буквенный круг, поиск слов и мини-сканворды.",
+        skillIds: ["wordPuzzles"],
+        actions: [
+          { label: "Головоломки", action: "wordPuzzles" }
+        ]
+      },
+      {
+        title: "Мудрые фразы",
+        description: "Пословицы, поговорки, смысл и жизненные ситуации.",
+        skillIds: ["proverbs"],
+        actions: [
+          { label: "Пословицы", action: "proverbs" }
+        ]
+      }
+    ]
+  },
+  {
+    subject: "reading",
+    icon: "📚",
+    title: "Остров чтения",
+    text: "Короткие тексты, детали, поступки героев и главная мысль.",
+    primary: { label: "Читать текст", action: "readingQuest" },
+    routes: [
+      {
+        title: "Тропа коротких текстов",
+        description: "Прочитать текст, найти точную деталь и ответить без угадывания.",
+        skillIds: ["readingMeaning"],
+        actions: [
+          { label: "Читательский сыщик", action: "readingQuest" }
+        ]
+      }
+    ]
+  },
+  {
+    subject: "world",
+    icon: "🌿",
+    title: "Веселая перемена",
+    text: "Короткая пауза: шутка, загадка, факт или спокойная поддержка.",
+    primary: { label: "Еще улыбку", action: "funBreak" },
+    routes: [
+      {
+        title: "Пауза между островами",
+        description: "Без баллов и ошибок: только добрый отдых, загадки и маленькие движения.",
+        skillIds: ["worldFacts"],
+        actions: [
+          { label: "Еще улыбку", action: "funBreak" },
+          { label: "Огонек дня", action: "daily" }
+        ]
+      }
+    ]
+  }
+];
+
 const SUBJECT_LAUNCHERS = [
   {
     subject: "math",
@@ -1614,31 +1745,89 @@ function renderSubjectLaunchers() {
 function renderTrainers() {
   renderGuide(trainerGuideCard, "trainers");
   trainerGrid.innerHTML = "";
-  TRAINER_MODES.forEach((mode) => {
-    const subject = SUBJECTS[mode.subject];
+  ACADEMY_ISLANDS.forEach((island) => {
+    const subject = SUBJECTS[island.subject];
+    const islandStats = getAcademyGroupStats(island.routes.flatMap((route) => route.skillIds));
     const card = document.createElement("article");
-    card.className = "trainer-card";
-    card.style.setProperty("--trainer-color", subject.color);
+    card.className = "trainer-island";
+    card.style.setProperty("--island-color", subject.color);
     card.innerHTML = `
-      <div class="trainer-card__top">
-        <div class="trainer-card__icon">${mode.icon}</div>
+      <div class="trainer-island__top">
+        <div class="trainer-island__icon">${island.icon}</div>
         <div>
-          <h3>${mode.title}</h3>
-          <p>${mode.description}</p>
+          <p class="eyebrow">${subject.label}</p>
+          <h3>${island.title}</h3>
+          <p>${island.text}</p>
         </div>
       </div>
-      <div class="pill-row">
-        ${mode.chips.map((chip) => `<span class="pill">${chip}</span>`).join("")}
+      <div class="island-progress">
+        <span style="width:${islandStats.accuracy}%"></span>
       </div>
-      <div class="trainer-actions">
-        ${renderTrainerActions(mode)}
+      <div class="island-summary">
+        <span>${islandStats.doneLabel}</span>
+        <span>${islandStats.status}</span>
+      </div>
+      <details class="trainer-island__routes">
+        <summary>Маршруты острова</summary>
+        <div class="peninsula-list">
+          ${island.routes.map((route) => {
+            const routeStats = getAcademyGroupStats(route.skillIds);
+            return `
+              <section class="peninsula-card">
+                <div>
+                  <h4>${route.title}</h4>
+                  <p>${route.description}</p>
+                </div>
+                <div class="peninsula-meta">
+                  <span>${routeStats.status}</span>
+                  <span>${routeStats.doneLabel}</span>
+                </div>
+                <div class="route-actions">
+                  ${renderAcademyActionButtons(route.actions)}
+                </div>
+              </section>
+            `;
+          }).join("")}
+        </div>
+      </details>
+      <div class="trainer-island__actions">
+        ${renderAcademyActionButtons([island.primary], true)}
       </div>
     `;
-    card.querySelectorAll("[data-trainer]").forEach((button) => {
-      button.addEventListener("click", () => startTrainer(button.dataset.trainer, button.dataset.variant || ""));
-    });
+    attachAcademyActionHandlers(card);
     trainerGrid.append(card);
   });
+}
+
+function renderAcademyActionButtons(actions, primary = false) {
+  return actions.map((item, index) => {
+    const buttonClass = primary || index === 0 ? "route-action route-action--primary" : "route-action";
+    return `
+      <button class="${buttonClass}" data-academy-action="${item.action}" data-academy-variant="${item.variant || ""}">
+        ${item.label}
+      </button>
+    `;
+  }).join("");
+}
+
+function attachAcademyActionHandlers(container) {
+  container.querySelectorAll("[data-academy-action]").forEach((button) => {
+    button.addEventListener("click", () => handleAcademyAction(button.dataset.academyAction, button.dataset.academyVariant || ""));
+  });
+}
+
+function handleAcademyAction(action, variant = "") {
+  if (action === "daily") {
+    startSession();
+    return;
+  }
+  if (action === "funBreak") {
+    showView("trainers");
+    renderFunBreak("any", "main", true);
+    document.querySelector("#funBreak")?.scrollIntoView({ behavior: "smooth", block: "center" });
+    return;
+  }
+  startTrainer(action, variant);
 }
 
 function renderGuide(container, place) {
@@ -2617,29 +2806,83 @@ function updateMistakeBank(task, attempt) {
 
 function renderMap() {
   academyMap.innerHTML = "";
-  Object.entries(SKILLS).forEach(([skillId, skill]) => {
-    const subject = SUBJECTS[skill.subject];
-    const stats = state.skillStats[skillId] || { attempts: 0, correct: 0, streak: 0, mistakes: 0 };
-    const accuracy = stats.attempts ? Math.round((stats.correct / stats.attempts) * 100) : 0;
-    const status = getSkillStatus(stats);
+  ACADEMY_ISLANDS.forEach((island) => {
+    const subject = SUBJECTS[island.subject];
+    const islandStats = getAcademyGroupStats(island.routes.flatMap((route) => route.skillIds));
     const card = document.createElement("article");
     card.className = "island-card";
     card.style.setProperty("--island-color", subject.color);
     card.innerHTML = `
-      <div class="island-icon">${subject.icon}</div>
-      <div>
-        <h3>${skill.title}</h3>
-        <p>${skill.description}</p>
-        <div class="skill-meter"><span style="width:${accuracy}%"></span></div>
-        <div class="island-meta">
-          <span>${subject.label}</span>
-          <span>${accuracy}% верно</span>
-          <span>${status}</span>
+      <div class="island-card__header">
+        <div class="island-icon">${island.icon}</div>
+        <div>
+          <p class="eyebrow">${subject.label}</p>
+          <h3>${island.title}</h3>
+          <p>${island.text}</p>
         </div>
       </div>
+      <div class="skill-meter"><span style="width:${islandStats.accuracy}%"></span></div>
+      <div class="island-meta">
+        <span>${islandStats.doneLabel}</span>
+        <span>${islandStats.status}</span>
+      </div>
+      <div class="map-route-list">
+        ${island.routes.map((route) => {
+          const routeStats = getAcademyGroupStats(route.skillIds);
+          return `
+            <section class="map-route">
+              <div>
+                <h4>${route.title}</h4>
+                <p>${route.description}</p>
+              </div>
+              <div class="skill-meter"><span style="width:${routeStats.accuracy}%"></span></div>
+              <div class="island-meta">
+                <span>${routeStats.doneLabel}</span>
+                <span>${routeStats.status}</span>
+              </div>
+              <div class="route-actions">
+                ${renderAcademyActionButtons(route.actions)}
+              </div>
+            </section>
+          `;
+        }).join("")}
+      </div>
+      <div class="trainer-island__actions">
+        ${renderAcademyActionButtons([island.primary], true)}
+      </div>
     `;
+    attachAcademyActionHandlers(card);
     academyMap.append(card);
   });
+}
+
+function getAcademyGroupStats(skillIds) {
+  const totals = skillIds.reduce((acc, skillId) => {
+    const stats = state.skillStats[skillId] || { attempts: 0, correct: 0, mistakes: 0, streak: 0 };
+    acc.attempts += stats.attempts || 0;
+    acc.correct += stats.correct || 0;
+    acc.mistakes += stats.mistakes || 0;
+    acc.hasProblem = acc.hasProblem || (stats.mistakes || 0) > (stats.correct || 0) && (stats.attempts || 0) >= 2;
+    acc.hasMastered = acc.hasMastered || (stats.attempts || 0) >= 3 && (stats.correct || 0) / Math.max(1, stats.attempts || 0) >= 0.85;
+    return acc;
+  }, { attempts: 0, correct: 0, mistakes: 0, hasProblem: false, hasMastered: false });
+
+  const accuracy = totals.attempts ? Math.round((totals.correct / totals.attempts) * 100) : 0;
+  let status = "новая тропинка";
+  if (totals.hasProblem || (totals.attempts >= 3 && accuracy < 70)) {
+    status = "нужно повторить";
+  } else if (totals.hasMastered || accuracy >= 85) {
+    status = "получается уверенно";
+  } else if (totals.attempts > 0) {
+    status = "тренируем";
+  }
+
+  return {
+    ...totals,
+    accuracy,
+    status,
+    doneLabel: totals.attempts ? `${totals.correct}/${totals.attempts} верно` : "еще не открыто"
+  };
 }
 
 function renderMistakes() {
