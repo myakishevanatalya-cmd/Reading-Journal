@@ -4,6 +4,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const childName = urlParams.get("name") || "Катя";
 const childId = urlParams.get("child") || "katya";
 const isParentMode = urlParams.get("parent") === "1";
+const isPreviewMode = isParentMode;
 const STORAGE_KEY = `summer-academy-v1:${childId}`;
 
 const SUBJECTS = {
@@ -1663,6 +1664,11 @@ const parentNavBtn = document.querySelector("#parentNavBtn");
 
 if (isParentMode) {
   parentNavBtn.hidden = false;
+  document.body.classList.add("preview-mode");
+  importInput.disabled = true;
+  resetBtn.disabled = true;
+  importInput.closest(".file-import")?.classList.add("file-import--disabled");
+  resetBtn.title = "В режиме родителя прогресс ребенка не меняется.";
 }
 
 navButtons.forEach((button) => {
@@ -1715,6 +1721,7 @@ function loadState() {
 }
 
 function saveState() {
+  if (isPreviewMode) return;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
@@ -2674,10 +2681,12 @@ function checkAnswer(rawAnswer, sourceElement) {
   };
 
   session.results.push(attempt);
-  state.attempts.push(attempt);
-  updateSkillStats(attempt);
-  updateTaskProgress(task, attempt);
-  updateMistakeBank(task, attempt);
+  if (!isPreviewMode) {
+    state.attempts.push(attempt);
+    updateSkillStats(attempt);
+    updateTaskProgress(task, attempt);
+    updateMistakeBank(task, attempt);
+  }
   scheduleInSessionReview(task, attempt);
   saveState();
 }
@@ -2709,18 +2718,20 @@ function finishSession() {
   const mistakes = session.results.length - correct;
   const minutes = Math.max(1, Math.round((Date.now() - session.startedAt) / 60000));
   const bestSkill = getBestSkill(session.results);
-  state.dailySessions.push({
-    id: session.id,
-    mode: session.mode,
-    title: session.title,
-    date: dateKey(new Date()),
-    startedAt: new Date(session.startedAt).toISOString(),
-    finishedAt: new Date().toISOString(),
-    total: session.results.length,
-    correct,
-    mistakes,
-    minutes
-  });
+  if (!isPreviewMode) {
+    state.dailySessions.push({
+      id: session.id,
+      mode: session.mode,
+      title: session.title,
+      date: dateKey(new Date()),
+      startedAt: new Date(session.startedAt).toISOString(),
+      finishedAt: new Date().toISOString(),
+      total: session.results.length,
+      correct,
+      mistakes,
+      minutes
+    });
+  }
   saveState();
 
   questProgressBar.style.width = "100%";
@@ -2784,6 +2795,10 @@ function getTaskProgress(task) {
 
 function markTaskShown(task) {
   if (task.markedShown) return;
+  if (isPreviewMode) {
+    task.markedShown = true;
+    return;
+  }
   const progress = getTaskProgress(task);
   progress.type = task.type;
   progress.choices = task.choices || [];
@@ -4413,6 +4428,11 @@ function exportProgress() {
 }
 
 function importProgress(event) {
+  if (isPreviewMode) {
+    event.target.value = "";
+    alert("Режим родителя работает как просмотр: импорт прогресса здесь не сохраняется.");
+    return;
+  }
   const file = event.target.files?.[0];
   if (!file) return;
   const reader = new FileReader();
@@ -4431,6 +4451,10 @@ function importProgress(event) {
 }
 
 function resetProgress() {
+  if (isPreviewMode) {
+    alert("Режим родителя работает как просмотр: прогресс ребенка не сбрасывается.");
+    return;
+  }
   const ok = confirm("Сбросить весь прогресс Летней Академии? Читательский дневник это не затронет.");
   if (!ok) return;
   localStorage.removeItem(STORAGE_KEY);
