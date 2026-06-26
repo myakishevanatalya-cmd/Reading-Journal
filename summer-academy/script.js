@@ -63,6 +63,29 @@ const ACADEMY_JOKES = [
   "Число 100 гордилось собой, пока не встретило задачу в два действия."
 ];
 
+const DICTIONARY_WORDS = [
+  { id: "korova", word: "корова", theme: "природа и животные", choices: ["карова", "корова", "кароваа"], hint: "Корова - словарное слово, запоминаем букву о.", missingText: "к...рова", missingAnswer: "о" },
+  { id: "sobaka", word: "собака", theme: "природа и животные", choices: ["сабака", "собака", "собако"], hint: "Собака - словарное слово, его удобно проговаривать по слогам.", missingText: "с...бака", missingAnswer: "о" },
+  { id: "moloko", word: "молоко", theme: "продукты и еда", choices: ["малако", "молоко", "молако"], hint: "В словарных словах написание проверяем по словарю.", missingText: "м...локо", missingAnswer: "о" },
+  { id: "vorona", word: "ворона", theme: "природа и животные", choices: ["варона", "ворона", "воронна"], hint: "Ворона - словарное слово." },
+  { id: "uchenik", word: "ученик", theme: "школа и учеба", choices: ["ученик", "учиник", "ученек"], hint: "Ученик - словарное слово, запоминаем букву е." },
+  { id: "karandash", word: "карандаш", theme: "школа и учеба", choices: ["карандаш", "корондаш", "карандош"], hint: "В слове карандаш запоминаем две буквы а.", missingText: "к...рандаш", missingAnswer: "а" },
+  { id: "tetrad", word: "тетрадь", theme: "школа и учеба", choices: ["тетрадь", "титрадь", "тетрать"], hint: "Тетрадь - словарное слово, мягкий знак остается в конце.", missingText: "т...традь", missingAnswer: "е" },
+  { id: "penal", word: "пенал", theme: "школа и учеба", choices: ["пенал", "пинал", "пеналл"], hint: "Пенал - словарное слово из школьной темы.", missingText: "п...нал", missingAnswer: "е" },
+  { id: "gazeta", word: "газета", theme: "общение и частотные слова", choices: ["газета", "газита", "гозета"], hint: "Газета - словарное слово, запоминаем букву а.", missingText: "г...зета", missingAnswer: "а" },
+  { id: "bereza", word: "береза", theme: "природа и растения", choices: ["береза", "биреза", "бериза"], hint: "Береза - словарное слово, запоминаем первую е.", missingText: "б...реза", missingAnswer: "е" },
+  { id: "veter", word: "ветер", theme: "природа и наблюдения", choices: ["ветер", "витер", "ветир"], hint: "Ветер - словарное слово.", missingText: "в...тер", missingAnswer: "е" },
+  { id: "soroka", word: "сорока", theme: "природа и животные", choices: ["сорока", "сарока", "сорокаа"], hint: "Сорока - словарное слово, запоминаем о.", missingText: "с...рока", missingAnswer: "о" },
+  { id: "moroz", word: "мороз", theme: "природа и календарь", choices: ["мороз", "мароз", "морос"], hint: "Мороз - словарное слово, написание нужно запомнить.", missingText: "м...роз", missingAnswer: "о" },
+  { id: "sahar", word: "сахар", theme: "продукты и еда", choices: ["сахар", "сохар", "сахор"], hint: "Сахар - словарное слово.", missingText: "с...хар", missingAnswer: "а" },
+  { id: "morkov", word: "морковь", theme: "продукты и еда", choices: ["морковь", "марковь", "моркофь"], hint: "Морковь - словарное слово с мягким знаком.", missingText: "м...рковь", missingAnswer: "о" },
+  { id: "palto", word: "пальто", theme: "дом, быт и вещи", choices: ["пальто", "палто", "польто"], hint: "Пальто пишется с мягким знаком.", missingText: "п...льто", missingAnswer: "а" },
+  { id: "vokzal", word: "вокзал", theme: "места, город и страна", choices: ["вокзал", "вогзал", "вакзал"], hint: "Вокзал - словарное слово.", missingText: "в...кзал", missingAnswer: "о" },
+  { id: "alleya", word: "аллея", theme: "места, город и страна", choices: ["аллея", "алея", "аллеяа"], hint: "В слове аллея две буквы л." },
+  { id: "spasibo", word: "спасибо", theme: "общение и частотные слова", choices: ["спасибо", "спосибо", "спасиба"], hint: "Спасибо - вежливое словарное слово.", missingText: "сп...сибо", missingAnswer: "а" },
+  { id: "biblioteka", word: "библиотека", theme: "книги и чтение", choices: ["библиотека", "беблиотека", "библиатека"], hint: "Библиотека - длинное словарное слово, его лучше читать по частям." }
+];
+
 const FUN_BREAK_ITEMS = [
   { id: 1, type: "anekdot", title: "Анекдот на перемене", text: "Учитель спрашивает: \"Почему ты опоздал?\" Ученик отвечает: \"Я шел медленно, чтобы не устать до урока\".", answer: "", tag: "школа", tone: "funny", showAfter: "any", weight: 4, isActive: true },
   { id: 2, type: "anekdot", title: "Анекдот на перемене", text: "Мама спрашивает: \"Ты сделал уроки?\" Сын отвечает: \"Почти. Я уже открыл тетрадь\".", answer: "", tag: "школа", tone: "funny", showAfter: "any", weight: 4, isActive: true },
@@ -1222,6 +1245,7 @@ function loadState() {
     attempts: [],
     skillStats: {},
     taskProgress: {},
+    wordProgress: {},
     dailySessions: [],
     mistakes: [],
     createdAt: new Date().toISOString()
@@ -1234,6 +1258,7 @@ function loadState() {
     loaded.mistakes = Array.isArray(loaded.mistakes) ? loaded.mistakes : [];
     loaded.skillStats = loaded.skillStats && typeof loaded.skillStats === "object" ? loaded.skillStats : {};
     loaded.taskProgress = loaded.taskProgress && typeof loaded.taskProgress === "object" ? loaded.taskProgress : {};
+    loaded.wordProgress = loaded.wordProgress && typeof loaded.wordProgress === "object" ? loaded.wordProgress : {};
     return loaded;
   } catch {
     return fallback;
@@ -1819,6 +1844,9 @@ function progressToReviewTask(progress) {
     choices: progress.choices || [],
     acceptedAnswers: progress.acceptedAnswers || [],
     explanation: `Это дальнее повторение, чтобы знание не потерялось. ${progress.explanation || ""}`,
+    dictionaryWord: progress.dictionaryWord || "",
+    dictionaryWordId: progress.dictionaryWordId || "",
+    dictionaryTheme: progress.dictionaryTheme || "",
     isReview: true,
     taskKey: progress.taskKey
   };
@@ -1877,7 +1905,11 @@ function taskFromMistake(mistake) {
     task.type = "input";
     task.choices = [];
   }
-  task.explanation = `Это задание вернулось для мягкого повторения. ${task.explanation}`;
+  task.acceptedAnswers = mistake.acceptedAnswers || task.acceptedAnswers || [];
+  task.dictionaryWord = mistake.dictionaryWord || task.dictionaryWord || "";
+  task.dictionaryWordId = mistake.dictionaryWordId || task.dictionaryWordId || "";
+  task.dictionaryTheme = mistake.dictionaryTheme || task.dictionaryTheme || "";
+  task.explanation = `Это задание вернулось для мягкого повторения. ${mistake.explanation || task.explanation}`;
   task.isReview = true;
   task.taskKey = mistake.taskKey || makeTaskKey(task);
   return task;
@@ -2012,6 +2044,9 @@ function checkAnswer(rawAnswer, sourceElement) {
     taskKey: task.taskKey,
     prompt: task.prompt,
     answer: task.answer,
+    dictionaryWord: task.dictionaryWord || "",
+    dictionaryWordId: task.dictionaryWordId || "",
+    dictionaryTheme: task.dictionaryTheme || "",
     userAnswer: rawAnswer,
     correct,
     isReview: Boolean(task.isReview),
@@ -2114,6 +2149,9 @@ function getTaskProgress(task) {
     choices: task.choices || [],
     acceptedAnswers: task.acceptedAnswers || [],
     explanation: task.explanation || "",
+    dictionaryWord: task.dictionaryWord || "",
+    dictionaryWordId: task.dictionaryWordId || "",
+    dictionaryTheme: task.dictionaryTheme || "",
     shownCount: 0,
     correctCount: 0,
     wrongCount: 0,
@@ -2133,10 +2171,14 @@ function markTaskShown(task) {
   progress.choices = task.choices || [];
   progress.acceptedAnswers = task.acceptedAnswers || [];
   progress.explanation = task.explanation || "";
+  progress.dictionaryWord = task.dictionaryWord || progress.dictionaryWord || "";
+  progress.dictionaryWordId = task.dictionaryWordId || progress.dictionaryWordId || "";
+  progress.dictionaryTheme = task.dictionaryTheme || progress.dictionaryTheme || "";
   progress.shownCount += 1;
   progress.lastShownAt = new Date().toISOString();
   if (progress.status === "new" && progress.shownCount > 0) progress.status = "active";
   state.taskProgress[progress.taskKey] = progress;
+  if (task.dictionaryWord) markDictionaryWordShown(task);
   task.markedShown = true;
 }
 
@@ -2149,6 +2191,9 @@ function updateTaskProgress(task, attempt) {
   progress.choices = task.choices || [];
   progress.acceptedAnswers = task.acceptedAnswers || [];
   progress.explanation = task.explanation || "";
+  progress.dictionaryWord = task.dictionaryWord || progress.dictionaryWord || "";
+  progress.dictionaryWordId = task.dictionaryWordId || progress.dictionaryWordId || "";
+  progress.dictionaryTheme = task.dictionaryTheme || progress.dictionaryTheme || "";
   progress.lastAnsweredAt = attempt.timestamp;
 
   if (attempt.correct) {
@@ -2173,6 +2218,68 @@ function updateTaskProgress(task, attempt) {
   }
 
   state.taskProgress[progress.taskKey] = progress;
+  if (task.dictionaryWord) updateDictionaryWordProgress(task, attempt);
+}
+
+function getDictionaryWordProgress(itemOrWord) {
+  const word = typeof itemOrWord === "string" ? itemOrWord : itemOrWord.word;
+  const wordId = typeof itemOrWord === "string" ? normalizeAnswer(itemOrWord) : itemOrWord.id;
+  return state.wordProgress[wordId] || {
+    wordId,
+    word,
+    shownCount: 0,
+    correctCount: 0,
+    wrongCount: 0,
+    streak: 0,
+    status: "new",
+    lastShownAt: "",
+    lastAnsweredAt: "",
+    lastWrongAt: "",
+    nextReviewAt: ""
+  };
+}
+
+function markDictionaryWordShown(task) {
+  const wordId = task.dictionaryWordId || normalizeAnswer(task.dictionaryWord);
+  const progress = getDictionaryWordProgress({ id: wordId, word: task.dictionaryWord });
+  progress.shownCount += 1;
+  progress.lastShownAt = new Date().toISOString();
+  if (progress.status === "new") progress.status = "active";
+  state.wordProgress[wordId] = progress;
+}
+
+function updateDictionaryWordProgress(task, attempt) {
+  const wordId = task.dictionaryWordId || normalizeAnswer(task.dictionaryWord);
+  const progress = getDictionaryWordProgress({ id: wordId, word: task.dictionaryWord });
+  progress.lastAnsweredAt = attempt.timestamp;
+
+  if (attempt.correct) {
+    progress.correctCount += 1;
+    progress.streak += 1;
+    if (progress.streak >= 3 && !attempt.usedHint) {
+      progress.status = "mastered";
+      progress.nextReviewAt = addDaysIso(14);
+    } else if (progress.streak >= 2) {
+      progress.status = "review";
+      progress.nextReviewAt = addDaysIso(7);
+    } else {
+      progress.status = "learning";
+      progress.nextReviewAt = addDaysIso(2);
+    }
+  } else {
+    progress.wrongCount += 1;
+    progress.streak = 0;
+    progress.lastWrongAt = attempt.timestamp;
+    progress.status = progress.wrongCount >= 2 ? "problem" : "learning";
+    progress.nextReviewAt = addDaysIso(2);
+  }
+
+  state.wordProgress[wordId] = progress;
+}
+
+function isWordDueForReview(progress) {
+  if (!progress.nextReviewAt) return false;
+  return new Date(progress.nextReviewAt).getTime() <= Date.now();
 }
 
 function isTaskDueForReview(progress) {
@@ -2236,7 +2343,12 @@ function updateMistakeBank(task, attempt) {
       taskKey: task.taskKey,
       prompt: task.prompt,
       answer: task.answer,
+      dictionaryWord: task.dictionaryWord || "",
+      dictionaryWordId: task.dictionaryWordId || "",
+      dictionaryTheme: task.dictionaryTheme || "",
       choices: task.choices || [],
+      acceptedAnswers: task.acceptedAnswers || [],
+      explanation: task.explanation || "",
       lastWrongAt: attempt.timestamp,
       nextReviewAt: addDaysIso(2),
       repeats: task.isReview ? previousRepeats + 1 : previousRepeats
@@ -2525,56 +2637,69 @@ function makeWordDetectiveTask() {
   return task;
 }
 
+function pickDictionaryWord(options = {}) {
+  const pool = getActiveDictionaryWords(options);
+  const scored = pool.map((item) => ({ item, score: scoreDictionaryWord(item) }));
+  const total = scored.reduce((sum, entry) => sum + entry.score, 0);
+  let cursor = Math.random() * total;
+  for (const entry of scored) {
+    cursor -= entry.score;
+    if (cursor <= 0) return entry.item;
+  }
+  return scored[scored.length - 1]?.item || DICTIONARY_WORDS[0];
+}
+
+function getActiveDictionaryWords(options = {}) {
+  const source = options.requireMissing
+    ? DICTIONARY_WORDS.filter((item) => item.missingText)
+    : DICTIONARY_WORDS;
+  const active = source.filter((item) => {
+    const progress = getDictionaryWordProgress(item);
+    return ["active", "learning", "review", "problem"].includes(progress.status);
+  });
+  const newWords = source.filter((item) => getDictionaryWordProgress(item).status === "new");
+  const masteredDue = source.filter((item) => {
+    const progress = getDictionaryWordProgress(item);
+    return progress.status === "mastered" && isWordDueForReview(progress);
+  });
+  const pool = [...active, ...masteredDue];
+
+  if (pool.length < 12) {
+    pool.push(...newWords.slice(0, Math.max(0, 16 - pool.length)));
+  }
+
+  return pool.length ? pool.slice(0, 16) : source.slice(0, 16);
+}
+
+function scoreDictionaryWord(item) {
+  const progress = getDictionaryWordProgress(item);
+  let score = 1;
+  if (progress.status === "new") score += 1.5;
+  if (progress.status === "active") score += 1;
+  if (progress.status === "learning") score += 2;
+  if (progress.status === "review") score += 3;
+  if (progress.status === "problem") score += 5;
+  if (progress.status === "mastered") score -= 0.5;
+  if (isWordDueForReview(progress)) score += 2;
+  return Math.max(0.5, score);
+}
+
 function makeDictionaryTask() {
-  const items = [
-    ["корова", ["карова", "корова", "кароваа"], "Это словарное слово, его нужно запомнить."],
-    ["собака", ["сабака", "собака", "собако"], "Это словарное слово, его удобно проговаривать по слогам."],
-    ["молоко", ["малако", "молоко", "молако"], "В словарных словах написание проверяем по словарю."],
-    ["ворона", ["варона", "ворона", "воронна"], "Это словарное слово."],
-    ["ученик", ["ученик", "учиник", "ученек"], "Это словарное слово, запоминаем букву е."],
-    ["карандаш", ["карандаш", "корондаш", "карандош"], "В слове карандаш запоминаем две буквы а."],
-    ["тетрадь", ["тетрадь", "титрадь", "тетрать"], "Тетрадь - словарное слово, мягкий знак остается в конце."],
-    ["пенал", ["пенал", "пинал", "пеналл"], "Пенал - словарное слово из школьной темы."],
-    ["газета", ["газета", "газита", "гозета"], "Газета - словарное слово, запоминаем букву а."],
-    ["береза", ["береза", "биреза", "бериза"], "Береза - словарное слово, запоминаем первую е."],
-    ["ветер", ["ветер", "витер", "ветир"], "Ветер - словарное слово."],
-    ["сорока", ["сорока", "сарока", "сорокаа"], "Сорока - словарное слово, запоминаем о."],
-    ["мороз", ["мороз", "мароз", "морос"], "Мороз - словарное слово, написание нужно запомнить."],
-    ["сахар", ["сахар", "сохар", "сахор"], "Сахар - словарное слово."],
-    ["морковь", ["морковь", "марковь", "моркофь"], "Морковь - словарное слово с мягким знаком."],
-    ["пальто", ["пальто", "палто", "польто"], "Пальто пишется с мягким знаком."],
-    ["вокзал", ["вокзал", "вогзал", "вакзал"], "Вокзал - словарное слово."],
-    ["аллея", ["аллея", "алея", "аллеяа"], "В слове аллея две буквы л."],
-    ["спасибо", ["спасибо", "спосибо", "спасиба"], "Спасибо - вежливое словарное слово."],
-    ["библиотека", ["библиотека", "беблиотека", "библиатека"], "Библиотека - длинное словарное слово, его лучше читать по частям."]
-  ];
-  const [answer, choices, explanation] = sample(items);
-  return choiceTask("dictionaryWords", "Выбери правильное словарное слово.", answer, choices, explanation);
+  const item = pickDictionaryWord();
+  const task = choiceTask("dictionaryWords", `Выбери правильное словарное слово: ${item.theme}.`, item.word, item.choices, item.hint);
+  task.dictionaryWord = item.word;
+  task.dictionaryWordId = item.id;
+  task.dictionaryTheme = item.theme;
+  return task;
 }
 
 function makeDictionaryMissingTask() {
-  const items = [
-    ["к...рова", "о", ["а", "о", "е", "и"], "Корова - словарное слово, запоминаем букву о."],
-    ["с...бака", "о", ["а", "о", "е", "и"], "Собака - словарное слово."],
-    ["м...локо", "о", ["а", "о", "е", "и"], "Молоко пишется с буквой о."],
-    ["т...традь", "е", ["а", "о", "е", "и"], "Тетрадь - словарное слово, первая гласная е."],
-    ["б...реза", "е", ["а", "о", "е", "и"], "Береза - словарное слово, запоминаем е."],
-    ["р...бота", "а", ["а", "о", "е", "и"], "Работа пишется с буквой а."],
-    ["м...газин", "а", ["а", "о", "е", "и"], "Магазин - словарное слово."],
-    ["к...рандаш", "а", ["а", "о", "е", "и"], "Карандаш пишется с буквой а."],
-    ["п...нал", "е", ["а", "о", "е", "и"], "Пенал пишется с буквой е."],
-    ["г...зета", "а", ["а", "о", "е", "и"], "Газета пишется с буквой а."],
-    ["в...тер", "е", ["а", "о", "е", "и"], "Ветер пишется с буквой е."],
-    ["с...рока", "о", ["а", "о", "е", "и"], "Сорока пишется с буквой о."],
-    ["м...роз", "о", ["а", "о", "е", "и"], "Мороз пишется с буквой о."],
-    ["с...хар", "а", ["а", "о", "е", "и"], "Сахар пишется с буквой а."],
-    ["м...рковь", "о", ["а", "о", "е", "и"], "Морковь пишется с буквой о."],
-    ["п...льто", "а", ["а", "о", "е", "и"], "Пальто пишется с буквой а и мягким знаком."],
-    ["в...кзал", "о", ["а", "о", "е", "и"], "Вокзал пишется с буквой о."],
-    ["сп...сибо", "а", ["а", "о", "е", "и"], "Спасибо пишется с буквой а."]
-  ];
-  const [word, answer, choices, explanation] = sample(items);
-  return choiceTask("dictionaryWords", `Вставь букву: ${word}`, answer, choices, explanation);
+  const item = pickDictionaryWord({ requireMissing: true });
+  const task = choiceTask("dictionaryWords", `Вставь букву: ${item.missingText}`, item.missingAnswer, ["а", "о", "е", "и"], item.hint);
+  task.dictionaryWord = item.word;
+  task.dictionaryWordId = item.id;
+  task.dictionaryTheme = item.theme;
+  return task;
 }
 
 function makeRussianGameTask() {
