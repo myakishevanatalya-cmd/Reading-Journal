@@ -338,6 +338,40 @@ const FUN_BREAK_ITEMS = [
   { id: 100, type: "dialogue", title: "Веселый диалог", text: "\"Почему перемена такая короткая?\" - \"Потому что знания уже соскучились\".", answer: "", tag: "школа", tone: "funny", showAfter: "any", weight: 4, isActive: true }
 ];
 
+const READING_TEXT_META = {
+  "Трудная задача": { id: "hard_task", theme: "школа и учеба", difficulty: 1 },
+  "Помощь на перемене": { id: "recess_help", theme: "дружба и помощь", difficulty: 1 },
+  "Найденный брелок": { id: "found_keychain", theme: "честность и чужие вещи", difficulty: 1 },
+  "Яблочный пирог": { id: "apple_pie", theme: "семья и забота", difficulty: 1 },
+  "Утренняя роса": { id: "morning_dew", theme: "природа и наблюдения", difficulty: 1 },
+  "Книга о дельфинах": { id: "dolphin_book", theme: "книги и чтение", difficulty: 1 },
+  "Огурчики под листьями": { id: "cucumbers_under_leaves", theme: "летние дела", difficulty: 1 },
+  "Забытая сменка": { id: "forgotten_indoor_shoes", theme: "ответственность", difficulty: 1 },
+  "Трудное слово": { id: "hard_word", theme: "школа и учеба", difficulty: 1 },
+  "Башня из песка": { id: "sand_tower", theme: "дружба и помощь", difficulty: 1 },
+  "Синий фломастер": { id: "blue_marker", theme: "честность и чужие вещи", difficulty: 1 },
+  "Шнурки": { id: "shoelaces", theme: "семья и забота", difficulty: 1 },
+  "Муравьиная работа": { id: "ant_work", theme: "природа и наблюдения", difficulty: 1 },
+  "Первая интересная книга": { id: "first_interesting_book", theme: "книги и чтение", difficulty: 1 },
+  "Безопасное место": { id: "safe_place", theme: "летние дела", difficulty: 1 },
+  "Голодный кот": { id: "hungry_cat", theme: "ответственность", difficulty: 1 },
+  "Неровная линия": { id: "uneven_line", theme: "школа и учеба", difficulty: 1 },
+  "Сломанная молния": { id: "broken_zipper", theme: "дружба и помощь", difficulty: 1 },
+  "Небо в луже": { id: "sky_in_puddle", theme: "природа и наблюдения", difficulty: 1 },
+  "Список для портфеля": { id: "backpack_list", theme: "ответственность и порядок", difficulty: 1 }
+};
+
+const READING_QUESTION_TYPES = ["detail", "reason", "detail", "sequence", "inference"];
+
+const READING_QUESTION_HINTS = {
+  detail: "Найди точную деталь в тексте.",
+  reason: "Подумай, почему герой так поступил.",
+  sequence: "Восстанови порядок событий по тексту.",
+  inference: "Сделай вывод по поступкам героя.",
+  title: "Подумай, какое название передает главное.",
+  main_idea: "Выбери мысль, ради которой написан текст."
+};
+
 const READING_TEXTS = [
   {
     title: "Трудная задача",
@@ -579,7 +613,7 @@ const READING_TEXTS = [
       ["Какой вывод можно сделать?", "список помогает ничего не забыть"]
     ]
   }
-];
+].map((item, index) => normalizeReadingText(item, index));
 
 const MATH_STORY_TASKS = [
   ["сложение", "У Кати было 24 наклейки. Мама подарила ей еще 8 наклеек. Сколько наклеек стало у Кати?", 32, "Нужно узнать, сколько стало всего."],
@@ -3258,19 +3292,54 @@ function makeProverbTask() {
   return choiceTask("proverbs", `Какая пословица подходит к ситуации? ${item.situation}`, item.text, choices, `Подходит: ${item.text}`);
 }
 
+function normalizeReadingText(item, index) {
+  const meta = READING_TEXT_META[item.title] || {};
+  const id = meta.id || `reading_text_${index + 1}`;
+  return {
+    id,
+    theme: meta.theme || "понимание текста",
+    difficulty: meta.difficulty || 1,
+    title: item.title,
+    text: item.text,
+    mainIdea: item.mainIdea,
+    questions: item.questions.map(([question, answer], questionIndex) => {
+      const type = inferReadingQuestionType(question, questionIndex);
+      return {
+        id: `${id}_q${questionIndex + 1}`,
+        question,
+        answer,
+        type,
+        hint: READING_QUESTION_HINTS[type] || "Вернись к тексту и найди подтверждение."
+      };
+    })
+  };
+}
+
+function inferReadingQuestionType(question, index) {
+  const normalized = question.toLowerCase();
+  if (normalized.includes("заголов")) return "title";
+  if (normalized.includes("главн")) return "main_idea";
+  if (normalized.includes("почему")) return "reason";
+  if (normalized.includes("что было") || normalized.includes("когда") || normalized.includes("после того")) return "sequence";
+  if (normalized.includes("вывод") || normalized.includes("характер") || normalized.includes("какой можно") || normalized.includes("как измени")) return "inference";
+  return READING_QUESTION_TYPES[index] || "detail";
+}
+
 function makeReadingTask() {
   const item = sample(READING_TEXTS);
-  const [question, answer] = sample(item.questions);
+  const questionItem = sample(item.questions);
+  const { question, answer } = questionItem;
   const choices = buildReadingChoices(answer, item);
-  const task = choiceTask("readingMeaning", question, answer, choices, `Главная мысль: ${item.mainIdea}`);
+  const task = choiceTask("readingMeaning", question, answer, choices, `${questionItem.hint} Главная мысль: ${item.mainIdea}`);
+  task.reading = { textId: item.id, theme: item.theme, questionType: questionItem.type };
   task.visual = { type: "readingText", title: item.title, text: item.text };
   return task;
 }
 
 function buildReadingChoices(answer, item) {
-  const localPool = item.questions.map((question) => question[1]).filter((value) => value !== answer);
+  const localPool = item.questions.map((question) => question.answer).filter((value) => value !== answer);
   const globalPool = READING_TEXTS
-    .flatMap((text) => text.questions.map((question) => question[1]))
+    .flatMap((text) => text.questions.map((question) => question.answer))
     .filter((value) => value !== answer && !localPool.includes(value));
   return shuffle([answer, ...shuffle(localPool).slice(0, 1), ...shuffle(globalPool).slice(0, 2)]).slice(0, 4);
 }
