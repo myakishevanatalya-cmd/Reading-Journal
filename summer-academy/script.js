@@ -64,26 +64,94 @@ const ACADEMY_JOKES = [
 ];
 
 const DICTIONARY_WORDS = [
-  { id: "korova", word: "корова", theme: "природа и животные", choices: ["карова", "корова", "кароваа"], hint: "Корова - словарное слово, запоминаем букву о.", missingText: "к...рова", missingAnswer: "о" },
-  { id: "sobaka", word: "собака", theme: "природа и животные", choices: ["сабака", "собака", "собако"], hint: "Собака - словарное слово, его удобно проговаривать по слогам.", missingText: "с...бака", missingAnswer: "о" },
-  { id: "moloko", word: "молоко", theme: "продукты и еда", choices: ["малако", "молоко", "молако"], hint: "В словарных словах написание проверяем по словарю.", missingText: "м...локо", missingAnswer: "о" },
-  { id: "vorona", word: "ворона", theme: "природа и животные", choices: ["варона", "ворона", "воронна"], hint: "Ворона - словарное слово." },
-  { id: "uchenik", word: "ученик", theme: "школа и учеба", choices: ["ученик", "учиник", "ученек"], hint: "Ученик - словарное слово, запоминаем букву е." },
-  { id: "karandash", word: "карандаш", theme: "школа и учеба", choices: ["карандаш", "корондаш", "карандош"], hint: "В слове карандаш запоминаем две буквы а.", missingText: "к...рандаш", missingAnswer: "а" },
-  { id: "tetrad", word: "тетрадь", theme: "школа и учеба", choices: ["тетрадь", "титрадь", "тетрать"], hint: "Тетрадь - словарное слово, мягкий знак остается в конце.", missingText: "т...традь", missingAnswer: "е" },
-  { id: "penal", word: "пенал", theme: "школа и учеба", choices: ["пенал", "пинал", "пеналл"], hint: "Пенал - словарное слово из школьной темы.", missingText: "п...нал", missingAnswer: "е" },
-  { id: "gazeta", word: "газета", theme: "общение и частотные слова", choices: ["газета", "газита", "гозета"], hint: "Газета - словарное слово, запоминаем букву а.", missingText: "г...зета", missingAnswer: "а" },
-  { id: "bereza", word: "береза", theme: "природа и растения", choices: ["береза", "биреза", "бериза"], hint: "Береза - словарное слово, запоминаем первую е.", missingText: "б...реза", missingAnswer: "е" },
-  { id: "veter", word: "ветер", theme: "природа и наблюдения", choices: ["ветер", "витер", "ветир"], hint: "Ветер - словарное слово.", missingText: "в...тер", missingAnswer: "е" },
-  { id: "soroka", word: "сорока", theme: "природа и животные", choices: ["сорока", "сарока", "сорокаа"], hint: "Сорока - словарное слово, запоминаем о.", missingText: "с...рока", missingAnswer: "о" },
-  { id: "moroz", word: "мороз", theme: "природа и календарь", choices: ["мороз", "мароз", "морос"], hint: "Мороз - словарное слово, написание нужно запомнить.", missingText: "м...роз", missingAnswer: "о" },
-  { id: "sahar", word: "сахар", theme: "продукты и еда", choices: ["сахар", "сохар", "сахор"], hint: "Сахар - словарное слово.", missingText: "с...хар", missingAnswer: "а" },
-  { id: "morkov", word: "морковь", theme: "продукты и еда", choices: ["морковь", "марковь", "моркофь"], hint: "Морковь - словарное слово с мягким знаком.", missingText: "м...рковь", missingAnswer: "о" },
-  { id: "palto", word: "пальто", theme: "дом, быт и вещи", choices: ["пальто", "палто", "польто"], hint: "Пальто пишется с мягким знаком.", missingText: "п...льто", missingAnswer: "а" },
-  { id: "vokzal", word: "вокзал", theme: "места, город и страна", choices: ["вокзал", "вогзал", "вакзал"], hint: "Вокзал - словарное слово.", missingText: "в...кзал", missingAnswer: "о" },
-  { id: "alleya", word: "аллея", theme: "места, город и страна", choices: ["аллея", "алея", "аллеяа"], hint: "В слове аллея две буквы л." },
-  { id: "spasibo", word: "спасибо", theme: "общение и частотные слова", choices: ["спасибо", "спосибо", "спасиба"], hint: "Спасибо - вежливое словарное слово.", missingText: "сп...сибо", missingAnswer: "а" },
-  { id: "biblioteka", word: "библиотека", theme: "книги и чтение", choices: ["библиотека", "беблиотека", "библиатека"], hint: "Библиотека - длинное словарное слово, его лучше читать по частям." }
+  { id: "adres", word: "адрес", category: "school", categoryLabel: "школа и учеба", priority: 1, difficultyLevel: 1, dangerPlace: "буква а в начале слова", hint: "запомни: адрес пишется с буквой а", exampleSentence: "Запиши свой адрес.", isProperName: false, isPhrase: false },
+  { id: "biblioteka", word: "библиотека", category: "school", categoryLabel: "школа и учеба", priority: 2, difficultyLevel: 3, dangerPlace: "сочетание библио", hint: "запомни начало слова: библио", exampleSentence: "В школе есть библиотека.", isProperName: false, isPhrase: false },
+  { id: "gazeta", word: "газета", category: "school", categoryLabel: "школа и учеба", priority: 2, difficultyLevel: 1, dangerPlace: "буква а", hint: "запомни: газета пишется через а", exampleSentence: "Дедушка читает газету.", isProperName: false, isPhrase: false },
+  { id: "kalendar", word: "календарь", category: "school", categoryLabel: "школа и учеба", priority: 2, difficultyLevel: 2, dangerPlace: "буква а, мягкий знак", hint: "запомни: календарь пишется через а", exampleSentence: "На стене висит календарь.", isProperName: false, isPhrase: false },
+  { id: "karandash", word: "карандаш", category: "school", categoryLabel: "школа и учеба", priority: 1, difficultyLevel: 2, dangerPlace: "буквы а, а", hint: "запомни две буквы а", exampleSentence: "У меня новый карандаш.", isProperName: false, isPhrase: false },
+  { id: "kartina", word: "картина", category: "school", categoryLabel: "школа и учеба", priority: 2, difficultyLevel: 1, dangerPlace: "буква а", hint: "запомни: картина пишется через а", exampleSentence: "На стене висит картина.", isProperName: false, isPhrase: false },
+  { id: "klass", word: "класс", category: "school", categoryLabel: "школа и учеба", priority: 1, difficultyLevel: 1, dangerPlace: "двойная с", hint: "запомни: в слове класс две буквы с", exampleSentence: "Наш класс идет на экскурсию.", isProperName: false, isPhrase: false },
+  { id: "penal", word: "пенал", category: "school", categoryLabel: "школа и учеба", priority: 2, difficultyLevel: 1, dangerPlace: "буква е", hint: "запомни: пенал пишется через е", exampleSentence: "В пенале лежит ручка.", isProperName: false, isPhrase: false },
+  { id: "risunok", word: "рисунок", category: "school", categoryLabel: "школа и учеба", priority: 2, difficultyLevel: 1, dangerPlace: "буква и", hint: "запомни: рисунок пишется через и", exampleSentence: "Мой рисунок получился ярким.", isProperName: false, isPhrase: false },
+  { id: "russkiy", word: "русский", category: "school", categoryLabel: "школа и учеба", priority: 4, difficultyLevel: 2, dangerPlace: "двойная с", hint: "запомни: русский пишется с двумя с", exampleSentence: "Мы изучаем русский язык.", isProperName: false, isPhrase: false },
+  { id: "tetrad", word: "тетрадь", category: "school", categoryLabel: "школа и учеба", priority: 1, difficultyLevel: 1, dangerPlace: "буква е", hint: "запомни: тетрадь пишется через е", exampleSentence: "Открой тетрадь.", isProperName: false, isPhrase: false },
+  { id: "uchenik", word: "ученик", category: "school", categoryLabel: "школа и учеба", priority: 1, difficultyLevel: 1, dangerPlace: "буква е", hint: "запомни: ученик пишется через е", exampleSentence: "Ученик решил задачу.", isProperName: false, isPhrase: false },
+  { id: "uchenitsa", word: "ученица", category: "school", categoryLabel: "школа и учеба", priority: 2, difficultyLevel: 1, dangerPlace: "буква е", hint: "запомни: ученица пишется через е", exampleSentence: "Ученица пишет красиво.", isProperName: false, isPhrase: false },
+  { id: "familiya", word: "фамилия", category: "school", categoryLabel: "школа и учеба", priority: 2, difficultyLevel: 2, dangerPlace: "буква а", hint: "запомни: фамилия пишется через а", exampleSentence: "Напиши свою фамилию.", isProperName: false, isPhrase: false },
+  { id: "yazyk", word: "язык", category: "school", categoryLabel: "школа и учеба", priority: 2, difficultyLevel: 2, dangerPlace: "буква ы", hint: "запомни букву ы", exampleSentence: "Русский язык очень богатый.", isProperName: false, isPhrase: false },
+  { id: "kvartira", word: "квартира", category: "home", categoryLabel: "дом, быт и вещи", priority: 2, difficultyLevel: 2, dangerPlace: "буква а", hint: "запомни: квартира пишется через а", exampleSentence: "Наша квартира светлая.", isProperName: false, isPhrase: false },
+  { id: "komnata", word: "комната", category: "home", categoryLabel: "дом, быт и вещи", priority: 2, difficultyLevel: 1, dangerPlace: "буква о", hint: "запомни: комната пишется через о", exampleSentence: "В комнате стоит стол.", isProperName: false, isPhrase: false },
+  { id: "lopata", word: "лопата", category: "home", categoryLabel: "дом, быт и вещи", priority: 2, difficultyLevel: 1, dangerPlace: "буква о", hint: "запомни: лопата пишется через о", exampleSentence: "Лопата нужна в огороде.", isProperName: false, isPhrase: false },
+  { id: "mashina", word: "машина", category: "home", categoryLabel: "дом, быт и вещи", priority: 1, difficultyLevel: 1, dangerPlace: "буква а", hint: "запомни: машина пишется через а", exampleSentence: "Во дворе стоит машина.", isProperName: false, isPhrase: false },
+  { id: "odezhda", word: "одежда", category: "home", categoryLabel: "дом, быт и вещи", priority: 2, difficultyLevel: 2, dangerPlace: "буква о", hint: "запомни: одежда пишется через о", exampleSentence: "Зимняя одежда висит в шкафу.", isProperName: false, isPhrase: false },
+  { id: "palto", word: "пальто", category: "home", categoryLabel: "дом, быт и вещи", priority: 2, difficultyLevel: 2, dangerPlace: "мягкий знак", hint: "запомни мягкий знак", exampleSentence: "Надень теплое пальто.", isProperName: false, isPhrase: false },
+  { id: "platok", word: "платок", category: "home", categoryLabel: "дом, быт и вещи", priority: 2, difficultyLevel: 1, dangerPlace: "буква а", hint: "запомни: платок пишется через а", exampleSentence: "У бабушки красивый платок.", isProperName: false, isPhrase: false },
+  { id: "posuda", word: "посуда", category: "home", categoryLabel: "дом, быт и вещи", priority: 2, difficultyLevel: 1, dangerPlace: "буква о", hint: "запомни: посуда пишется через о", exampleSentence: "Чистая посуда стоит на полке.", isProperName: false, isPhrase: false },
+  { id: "rabota", word: "работа", category: "home", categoryLabel: "дом, быт и вещи", priority: 2, difficultyLevel: 1, dangerPlace: "буква а", hint: "запомни: работа пишется через а", exampleSentence: "Работа выполнена аккуратно.", isProperName: false, isPhrase: false },
+  { id: "sapog", word: "сапог", category: "home", categoryLabel: "дом, быт и вещи", priority: 2, difficultyLevel: 1, dangerPlace: "буква а", hint: "запомни: сапог пишется через а", exampleSentence: "У двери стоит сапог.", isProperName: false, isPhrase: false },
+  { id: "stakan", word: "стакан", category: "home", categoryLabel: "дом, быт и вещи", priority: 2, difficultyLevel: 1, dangerPlace: "буква а", hint: "запомни: стакан пишется через а", exampleSentence: "На столе стоит стакан.", isProperName: false, isPhrase: false },
+  { id: "topor", word: "топор", category: "home", categoryLabel: "дом, быт и вещи", priority: 4, difficultyLevel: 1, dangerPlace: "буква о", hint: "запомни: топор пишется через о", exampleSentence: "В сарае лежит топор.", isProperName: false, isPhrase: false },
+  { id: "kapusta", word: "капуста", category: "food", categoryLabel: "продукты и еда", priority: 2, difficultyLevel: 1, dangerPlace: "буква а", hint: "запомни: капуста пишется через а", exampleSentence: "На грядке растет капуста.", isProperName: false, isPhrase: false },
+  { id: "kartofel", word: "картофель", category: "food", categoryLabel: "продукты и еда", priority: 2, difficultyLevel: 2, dangerPlace: "буква а, мягкий знак", hint: "запомни: картофель пишется через а", exampleSentence: "Мы сварили картофель.", isProperName: false, isPhrase: false },
+  { id: "moloko", word: "молоко", category: "food", categoryLabel: "продукты и еда", priority: 1, difficultyLevel: 2, dangerPlace: "буквы о, о", hint: "запомни две буквы о", exampleSentence: "Я пью молоко.", isProperName: false, isPhrase: false },
+  { id: "morkov", word: "морковь", category: "food", categoryLabel: "продукты и еда", priority: 2, difficultyLevel: 2, dangerPlace: "буква о, мягкий знак", hint: "запомни: морковь пишется через о", exampleSentence: "В суп добавили морковь.", isProperName: false, isPhrase: false },
+  { id: "obed", word: "обед", category: "food", categoryLabel: "продукты и еда", priority: 4, difficultyLevel: 1, dangerPlace: "буква о", hint: "запомни: обед пишется через о", exampleSentence: "Скоро будет обед.", isProperName: false, isPhrase: false },
+  { id: "pomidor", word: "помидор", category: "food", categoryLabel: "продукты и еда", priority: 2, difficultyLevel: 1, dangerPlace: "буква о", hint: "запомни: помидор пишется через о", exampleSentence: "На тарелке лежит помидор.", isProperName: false, isPhrase: false },
+  { id: "sahar", word: "сахар", category: "food", categoryLabel: "продукты и еда", priority: 2, difficultyLevel: 1, dangerPlace: "буква а", hint: "запомни: сахар пишется через а", exampleSentence: "В чай положили сахар.", isProperName: false, isPhrase: false },
+  { id: "bereza", word: "берёза", category: "nature", categoryLabel: "природа, животные и растения", priority: 1, difficultyLevel: 1, dangerPlace: "буква е, буква ё", hint: "запомни: берёза пишется через е и ё", exampleSentence: "У дома растет берёза.", isProperName: false, isPhrase: false },
+  { id: "veter", word: "ветер", category: "nature", categoryLabel: "природа, животные и растения", priority: 1, difficultyLevel: 1, dangerPlace: "буква е", hint: "запомни первую букву е", exampleSentence: "Дует сильный ветер.", isProperName: false, isPhrase: false },
+  { id: "vorobey", word: "воробей", category: "nature", categoryLabel: "природа, животные и растения", priority: 1, difficultyLevel: 2, dangerPlace: "буква о в начале слова", hint: "запомни: воробей пишется через о", exampleSentence: "На ветке сидит воробей.", isProperName: false, isPhrase: false },
+  { id: "vorona", word: "ворона", category: "nature", categoryLabel: "природа, животные и растения", priority: 2, difficultyLevel: 1, dangerPlace: "буква о", hint: "запомни: ворона пишется через о", exampleSentence: "На крыше сидит ворона.", isProperName: false, isPhrase: false },
+  { id: "zayats", word: "заяц", category: "nature", categoryLabel: "природа, животные и растения", priority: 1, difficultyLevel: 1, dangerPlace: "буква я", hint: "запомни: заяц пишется с буквой я", exampleSentence: "Белый заяц прыгнул в кусты.", isProperName: false, isPhrase: false },
+  { id: "zemlyanika", word: "земляника", category: "nature", categoryLabel: "природа, животные и растения", priority: 2, difficultyLevel: 2, dangerPlace: "буква е", hint: "запомни: земляника пишется через е", exampleSentence: "В лесу поспела земляника.", isProperName: false, isPhrase: false },
+  { id: "korova", word: "корова", category: "nature", categoryLabel: "природа, животные и растения", priority: 1, difficultyLevel: 1, dangerPlace: "буква о", hint: "запомни: корова пишется через о", exampleSentence: "На лугу пасется корова.", isProperName: false, isPhrase: false },
+  { id: "lisitsa", word: "лисица", category: "nature", categoryLabel: "природа, животные и растения", priority: 2, difficultyLevel: 1, dangerPlace: "буква и", hint: "запомни: лисица пишется через и", exampleSentence: "Рыжая лисица бежит по лесу.", isProperName: false, isPhrase: false },
+  { id: "medved", word: "медведь", category: "nature", categoryLabel: "природа, животные и растения", priority: 2, difficultyLevel: 1, dangerPlace: "буква е", hint: "запомни: медведь пишется через е", exampleSentence: "Медведь живет в лесу.", isProperName: false, isPhrase: false },
+  { id: "moroz", word: "мороз", category: "nature", categoryLabel: "природа, животные и растения", priority: 2, difficultyLevel: 1, dangerPlace: "буква о", hint: "запомни: мороз пишется через о", exampleSentence: "Утром был сильный мороз.", isProperName: false, isPhrase: false },
+  { id: "oreh", word: "орех", category: "nature", categoryLabel: "природа, животные и растения", priority: 2, difficultyLevel: 1, dangerPlace: "буква о", hint: "запомни: орех пишется через о", exampleSentence: "Белка нашла орех.", isProperName: false, isPhrase: false },
+  { id: "osina", word: "осина", category: "nature", categoryLabel: "природа, животные и растения", priority: 2, difficultyLevel: 1, dangerPlace: "буква о", hint: "запомни: осина пишется через о", exampleSentence: "У дороги растет осина.", isProperName: false, isPhrase: false },
+  { id: "pesok", word: "песок", category: "nature", categoryLabel: "природа, животные и растения", priority: 2, difficultyLevel: 1, dangerPlace: "буква е", hint: "запомни: песок пишется через е", exampleSentence: "На берегу лежит песок.", isProperName: false, isPhrase: false },
+  { id: "petuh", word: "петух", category: "nature", categoryLabel: "природа, животные и растения", priority: 2, difficultyLevel: 1, dangerPlace: "буква е", hint: "запомни: петух пишется через е", exampleSentence: "Петух громко поет.", isProperName: false, isPhrase: false },
+  { id: "sobaka", word: "собака", category: "nature", categoryLabel: "природа, животные и растения", priority: 1, difficultyLevel: 1, dangerPlace: "буква о", hint: "запомни: собака пишется через о", exampleSentence: "Собака сторожит дом.", isProperName: false, isPhrase: false },
+  { id: "soroka", word: "сорока", category: "nature", categoryLabel: "природа, животные и растения", priority: 2, difficultyLevel: 1, dangerPlace: "буква о", hint: "запомни: сорока пишется через о", exampleSentence: "Сорока сидит на заборе.", isProperName: false, isPhrase: false },
+  { id: "yagoda", word: "ягода", category: "nature", categoryLabel: "природа, животные и растения", priority: 2, difficultyLevel: 1, dangerPlace: "буква я", hint: "запомни: ягода пишется через я", exampleSentence: "На ветке созрела ягода.", isProperName: false, isPhrase: false },
+  { id: "aprel", word: "апрель", category: "time", categoryLabel: "время и календарь", priority: 3, difficultyLevel: 1, dangerPlace: "буква а", hint: "запомни: апрель пишется через а", exampleSentence: "В апреле тает снег.", isProperName: false, isPhrase: false },
+  { id: "voskresenye", word: "воскресенье", category: "time", categoryLabel: "время и календарь", priority: 3, difficultyLevel: 3, dangerPlace: "буква о, мягкий знак", hint: "запомни: воскресенье пишется через о", exampleSentence: "В воскресенье мы гуляли.", isProperName: false, isPhrase: false },
+  { id: "vchera", word: "вчера", category: "time", categoryLabel: "время и календарь", priority: 3, difficultyLevel: 1, dangerPlace: "буква е", hint: "запомни: вчера пишется через е", exampleSentence: "Вчера шел дождь.", isProperName: false, isPhrase: false },
+  { id: "zavtra", word: "завтра", category: "time", categoryLabel: "время и календарь", priority: 3, difficultyLevel: 1, dangerPlace: "буква а", hint: "запомни: завтра пишется через а", exampleSentence: "Завтра будет праздник.", isProperName: false, isPhrase: false },
+  { id: "mesyats", word: "месяц", category: "time", categoryLabel: "время и календарь", priority: 3, difficultyLevel: 1, dangerPlace: "буква е", hint: "запомни: месяц пишется через е", exampleSentence: "Прошел один месяц.", isProperName: false, isPhrase: false },
+  { id: "noyabr", word: "ноябрь", category: "time", categoryLabel: "время и календарь", priority: 3, difficultyLevel: 2, dangerPlace: "буква о, мягкий знак", hint: "запомни: ноябрь пишется через о", exampleSentence: "В ноябре часто холодно.", isProperName: false, isPhrase: false },
+  { id: "odnazhdy", word: "однажды", category: "time", categoryLabel: "время и календарь", priority: 3, difficultyLevel: 2, dangerPlace: "буква о", hint: "запомни: однажды пишется через о", exampleSentence: "Однажды мы пошли в лес.", isProperName: false, isPhrase: false },
+  { id: "oktyabr", word: "октябрь", category: "time", categoryLabel: "время и календарь", priority: 3, difficultyLevel: 2, dangerPlace: "буква о, мягкий знак", hint: "запомни: октябрь пишется через о", exampleSentence: "Октябрь был дождливым.", isProperName: false, isPhrase: false },
+  { id: "prazdnik", word: "праздник", category: "time", categoryLabel: "время и календарь", priority: 3, difficultyLevel: 2, dangerPlace: "буква д", hint: "запомни: в слове праздник есть буква д", exampleSentence: "Скоро будет праздник.", isProperName: false, isPhrase: false },
+  { id: "sentyabr", word: "сентябрь", category: "time", categoryLabel: "время и календарь", priority: 3, difficultyLevel: 2, dangerPlace: "буква е, мягкий знак", hint: "запомни: сентябрь пишется через е", exampleSentence: "В сентябре начинается учеба.", isProperName: false, isPhrase: false },
+  { id: "subbota", word: "суббота", category: "time", categoryLabel: "время и календарь", priority: 3, difficultyLevel: 2, dangerPlace: "буква у, двойная б", hint: "запомни: суббота пишется с у и двумя б", exampleSentence: "В субботу мы поедем в парк.", isProperName: false, isPhrase: false },
+  { id: "fevral", word: "февраль", category: "time", categoryLabel: "время и календарь", priority: 3, difficultyLevel: 1, dangerPlace: "буква е", hint: "запомни: февраль пишется через е", exampleSentence: "Февраль - зимний месяц.", isProperName: false, isPhrase: false },
+  { id: "yanvar", word: "январь", category: "time", categoryLabel: "время и календарь", priority: 3, difficultyLevel: 1, dangerPlace: "буква я, мягкий знак", hint: "запомни: январь пишется через я", exampleSentence: "Январь - первый месяц года.", isProperName: false, isPhrase: false },
+  { id: "bystro", word: "быстро", category: "communication", categoryLabel: "общение и частотные слова", priority: 3, difficultyLevel: 1, dangerPlace: "буква ы", hint: "запомни: быстро пишется через ы", exampleSentence: "Он быстро решил задачу.", isProperName: false, isPhrase: false },
+  { id: "vdrug", word: "вдруг", category: "communication", categoryLabel: "общение и частотные слова", priority: 3, difficultyLevel: 1, dangerPlace: "буква д", hint: "запомни букву д", exampleSentence: "Вдруг начался дождь.", isProperName: false, isPhrase: false },
+  { id: "veselo", word: "весело", category: "communication", categoryLabel: "общение и частотные слова", priority: 3, difficultyLevel: 1, dangerPlace: "буква е", hint: "запомни: весело пишется через е", exampleSentence: "Детям было весело.", isProperName: false, isPhrase: false },
+  { id: "do_svidaniya", word: "до свидания", category: "communication", categoryLabel: "общение и частотные слова", priority: 3, difficultyLevel: 2, dangerPlace: "раздельное написание", hint: "запомни: до свидания пишется раздельно", exampleSentence: "Мы сказали: до свидания.", isProperName: false, isPhrase: true },
+  { id: "zdravstvuy", word: "здравствуй", category: "communication", categoryLabel: "общение и частотные слова", priority: 3, difficultyLevel: 3, dangerPlace: "буква в", hint: "запомни: в слове здравствуй есть буква в", exampleSentence: "Здравствуй, мой друг!", isProperName: false, isPhrase: false },
+  { id: "interesnyy", word: "интересный", category: "communication", categoryLabel: "общение и частотные слова", priority: 3, difficultyLevel: 2, dangerPlace: "буква и", hint: "запомни: интересный пишется через и", exampleSentence: "Это интересный рассказ.", isProperName: false, isPhrase: false },
+  { id: "narod", word: "народ", category: "communication", categoryLabel: "общение и частотные слова", priority: 3, difficultyLevel: 1, dangerPlace: "буква а", hint: "запомни: народ пишется через а", exampleSentence: "На площади собрался народ.", isProperName: false, isPhrase: false },
+  { id: "privet", word: "привет", category: "communication", categoryLabel: "общение и частотные слова", priority: 3, difficultyLevel: 1, dangerPlace: "буква и", hint: "запомни: привет пишется через и", exampleSentence: "Привет, ребята!", isProperName: false, isPhrase: false },
+  { id: "rebyata", word: "ребята", category: "communication", categoryLabel: "общение и частотные слова", priority: 3, difficultyLevel: 1, dangerPlace: "буква е", hint: "запомни: ребята пишется через е", exampleSentence: "Ребята играют во дворе.", isProperName: false, isPhrase: false },
+  { id: "spasibo", word: "спасибо", category: "communication", categoryLabel: "общение и частотные слова", priority: 3, difficultyLevel: 1, dangerPlace: "буква а", hint: "запомни: спасибо пишется через а", exampleSentence: "Спасибо за помощь.", isProperName: false, isPhrase: false },
+  { id: "tovarishch", word: "товарищ", category: "communication", categoryLabel: "общение и частотные слова", priority: 3, difficultyLevel: 2, dangerPlace: "буква о", hint: "запомни: товарищ пишется через о", exampleSentence: "Мой товарищ помог мне.", isProperName: false, isPhrase: false },
+  { id: "horosho", word: "хорошо", category: "communication", categoryLabel: "общение и частотные слова", priority: 3, difficultyLevel: 1, dangerPlace: "буквы о, о", hint: "запомни две буквы о", exampleSentence: "Сегодня мне хорошо.", isProperName: false, isPhrase: false },
+  { id: "alleya", word: "аллея", category: "places", categoryLabel: "места, город и страна", priority: 4, difficultyLevel: 2, dangerPlace: "двойная л", hint: "запомни: аллея пишется с двумя л", exampleSentence: "В парке есть красивая аллея.", isProperName: false, isPhrase: false },
+  { id: "vokzal", word: "вокзал", category: "places", categoryLabel: "места, город и страна", priority: 4, difficultyLevel: 2, dangerPlace: "буква о", hint: "запомни: вокзал пишется через о", exampleSentence: "Мы приехали на вокзал.", isProperName: false, isPhrase: false },
+  { id: "vostok", word: "восток", category: "places", categoryLabel: "места, город и страна", priority: 4, difficultyLevel: 1, dangerPlace: "буква о", hint: "запомни: восток пишется через о", exampleSentence: "Солнце встает на востоке.", isProperName: false, isPhrase: false },
+  { id: "gorod", word: "город", category: "places", categoryLabel: "места, город и страна", priority: 1, difficultyLevel: 1, dangerPlace: "буква о", hint: "запомни: город пишется через о", exampleSentence: "Это большой город.", isProperName: false, isPhrase: false },
+  { id: "derevnya", word: "деревня", category: "places", categoryLabel: "места, город и страна", priority: 4, difficultyLevel: 1, dangerPlace: "буква е", hint: "запомни: деревня пишется через е", exampleSentence: "Летом мы едем в деревню.", isProperName: false, isPhrase: false },
+  { id: "doroga", word: "дорога", category: "places", categoryLabel: "места, город и страна", priority: 1, difficultyLevel: 1, dangerPlace: "буква о", hint: "запомни: дорога пишется через о", exampleSentence: "Дорога ведет к лесу.", isProperName: false, isPhrase: false },
+  { id: "zavod", word: "завод", category: "places", categoryLabel: "места, город и страна", priority: 4, difficultyLevel: 1, dangerPlace: "буква а", hint: "запомни: завод пишется через а", exampleSentence: "В городе работает завод.", isProperName: false, isPhrase: false },
+  { id: "metro", word: "метро", category: "places", categoryLabel: "места, город и страна", priority: 4, difficultyLevel: 1, dangerPlace: "буква е", hint: "запомни: метро пишется через е", exampleSentence: "Мы едем на метро.", isProperName: false, isPhrase: false },
+  { id: "moskva", word: "Москва", category: "places", categoryLabel: "места, город и страна", priority: 4, difficultyLevel: 2, dangerPlace: "заглавная буква", hint: "название города пишется с заглавной буквы", exampleSentence: "Москва - столица России.", isProperName: true, isPhrase: false },
+  { id: "rodina", word: "Родина", category: "places", categoryLabel: "места, город и страна", priority: 4, difficultyLevel: 2, dangerPlace: "заглавная буква", hint: "если слово означает страну, пишем с заглавной буквы", exampleSentence: "Родина начинается с семьи.", isProperName: true, isPhrase: false },
+  { id: "ulitsa", word: "улица", category: "places", categoryLabel: "места, город и страна", priority: 4, difficultyLevel: 1, dangerPlace: "буква и", hint: "запомни: улица пишется через и", exampleSentence: "Наша улица широкая.", isProperName: false, isPhrase: false },
+  { id: "zheltyy", word: "жёлтый", category: "features", categoryLabel: "цвета и признаки", priority: 4, difficultyLevel: 1, dangerPlace: "буква ё", hint: "запомни: жёлтый пишется через ё", exampleSentence: "У меня жёлтый карандаш.", isProperName: false, isPhrase: false }
 ];
 
 const FUN_BREAK_ITEMS = [
@@ -1743,6 +1811,8 @@ function buildDailySession() {
     makeGeometryTask,
     makeMeasuresTask,
     makeDictionaryTask,
+    makeDictionaryMissingTask,
+    makeDictionaryWriteTask,
     makeWordDetectiveTask,
     makeReadingTask,
     makeRussianGameTask,
@@ -1765,7 +1835,7 @@ function buildTrainerTasks(modeId, variant) {
     multiply: () => buildAdaptiveTasks(12, [() => makeMultiplicationTask(variant)], "multiply", { maxReviews: 3 }),
     lifeMath: () => buildAdaptiveTasks(8, [makeLifeMathTask], "lifeMath", { maxReviews: 2 }),
     mathStories: () => buildAdaptiveTasks(8, [makeMathStoryTask], "mathStories", { maxReviews: 2 }),
-    dictionary: () => buildAdaptiveTasks(10, [makeDictionaryTask, makeDictionaryMissingTask], "dictionary", { maxReviews: 3 }),
+    dictionary: () => buildAdaptiveTasks(12, [makeDictionaryTask, makeDictionaryMissingTask, makeDictionaryWriteTask], "dictionary", { maxReviews: 3 }),
     wordDetective: () => buildAdaptiveTasks(10, [makeWordDetectiveTask], "wordDetective", { maxReviews: 3 }),
     playroom: () => buildAdaptiveTasks(8, [makeRussianGameTask, makeWordPuzzleTask], "playroom", { maxReviews: 2 }),
     russianGames: () => buildAdaptiveTasks(8, [makeRussianGameTask], "russianGames", { maxReviews: 2 }),
@@ -1847,6 +1917,7 @@ function progressToReviewTask(progress) {
     dictionaryWord: progress.dictionaryWord || "",
     dictionaryWordId: progress.dictionaryWordId || "",
     dictionaryTheme: progress.dictionaryTheme || "",
+    strictAnswer: Boolean(progress.strictAnswer),
     isReview: true,
     taskKey: progress.taskKey
   };
@@ -1909,6 +1980,7 @@ function taskFromMistake(mistake) {
   task.dictionaryWord = mistake.dictionaryWord || task.dictionaryWord || "";
   task.dictionaryWordId = mistake.dictionaryWordId || task.dictionaryWordId || "";
   task.dictionaryTheme = mistake.dictionaryTheme || task.dictionaryTheme || "";
+  task.strictAnswer = Boolean(mistake.strictAnswer || task.strictAnswer);
   task.explanation = `Это задание вернулось для мягкого повторения. ${mistake.explanation || task.explanation}`;
   task.isReview = true;
   task.taskKey = mistake.taskKey || makeTaskKey(task);
@@ -1997,22 +2069,19 @@ function checkAnswer(rawAnswer, sourceElement) {
   if (session.locked) return;
 
   const task = session.tasks[session.index];
-  const userAnswer = normalizeAnswer(rawAnswer);
-  const correctAnswer = normalizeAnswer(task.answer);
-  const acceptedAnswers = [task.answer, ...(task.acceptedAnswers || [])].map(normalizeAnswer);
-  if (!userAnswer) {
+  if (!String(rawAnswer).trim()) {
     feedbackBox.classList.remove("hidden");
     feedbackBox.textContent = "Сначала напиши ответ, потом проверим.";
     return;
   }
 
   session.tryCount += 1;
-  const correct = acceptedAnswers.includes(userAnswer);
+  const correct = isAnswerAccepted(rawAnswer, task);
   const finalAttempt = correct || session.tryCount >= 2;
 
   if (task.type !== "input") {
     answerArea.querySelectorAll(".choice-button").forEach((button) => {
-      const isAnswer = normalizeAnswer(button.textContent) === correctAnswer;
+      const isAnswer = answersMatch(button.textContent, task.answer, task.strictAnswer);
       button.classList.toggle("correct", finalAttempt && isAnswer);
       button.classList.toggle("wrong", button === sourceElement && !correct);
     });
@@ -2152,6 +2221,7 @@ function getTaskProgress(task) {
     dictionaryWord: task.dictionaryWord || "",
     dictionaryWordId: task.dictionaryWordId || "",
     dictionaryTheme: task.dictionaryTheme || "",
+    strictAnswer: Boolean(task.strictAnswer),
     shownCount: 0,
     correctCount: 0,
     wrongCount: 0,
@@ -2174,6 +2244,7 @@ function markTaskShown(task) {
   progress.dictionaryWord = task.dictionaryWord || progress.dictionaryWord || "";
   progress.dictionaryWordId = task.dictionaryWordId || progress.dictionaryWordId || "";
   progress.dictionaryTheme = task.dictionaryTheme || progress.dictionaryTheme || "";
+  progress.strictAnswer = Boolean(task.strictAnswer || progress.strictAnswer);
   progress.shownCount += 1;
   progress.lastShownAt = new Date().toISOString();
   if (progress.status === "new" && progress.shownCount > 0) progress.status = "active";
@@ -2194,6 +2265,7 @@ function updateTaskProgress(task, attempt) {
   progress.dictionaryWord = task.dictionaryWord || progress.dictionaryWord || "";
   progress.dictionaryWordId = task.dictionaryWordId || progress.dictionaryWordId || "";
   progress.dictionaryTheme = task.dictionaryTheme || progress.dictionaryTheme || "";
+  progress.strictAnswer = Boolean(task.strictAnswer || progress.strictAnswer);
   progress.lastAnsweredAt = attempt.timestamp;
 
   if (attempt.correct) {
@@ -2346,6 +2418,7 @@ function updateMistakeBank(task, attempt) {
       dictionaryWord: task.dictionaryWord || "",
       dictionaryWordId: task.dictionaryWordId || "",
       dictionaryTheme: task.dictionaryTheme || "",
+      strictAnswer: Boolean(task.strictAnswer),
       choices: task.choices || [],
       acceptedAnswers: task.acceptedAnswers || [],
       explanation: task.explanation || "",
@@ -2650,9 +2723,7 @@ function pickDictionaryWord(options = {}) {
 }
 
 function getActiveDictionaryWords(options = {}) {
-  const source = options.requireMissing
-    ? DICTIONARY_WORDS.filter((item) => item.missingText)
-    : DICTIONARY_WORDS;
+  const source = DICTIONARY_WORDS;
   const active = source.filter((item) => {
     const progress = getDictionaryWordProgress(item);
     return ["active", "learning", "review", "problem"].includes(progress.status);
@@ -2686,20 +2757,148 @@ function scoreDictionaryWord(item) {
 
 function makeDictionaryTask() {
   const item = pickDictionaryWord();
-  const task = choiceTask("dictionaryWords", `Выбери правильное словарное слово: ${item.theme}.`, item.word, item.choices, item.hint);
-  task.dictionaryWord = item.word;
-  task.dictionaryWordId = item.id;
-  task.dictionaryTheme = item.theme;
-  return task;
+  return attachDictionaryMeta(
+    choiceTask("dictionaryWords", `Выбери правильное словарное слово. Тема: ${item.categoryLabel}.`, item.word, buildDictionaryChoices(item), item.hint),
+    item
+  );
 }
 
 function makeDictionaryMissingTask() {
-  const item = pickDictionaryWord({ requireMissing: true });
-  const task = choiceTask("dictionaryWords", `Вставь букву: ${item.missingText}`, item.missingAnswer, ["а", "о", "е", "и"], item.hint);
+  const item = pickDictionaryWord();
+  const letterTask = buildDictionaryLetterTask(item);
+  const task = choiceTask("dictionaryWords", letterTask.prompt, letterTask.answer, letterTask.choices, item.hint);
+  return attachDictionaryMeta(task, item);
+}
+
+function makeDictionaryWriteTask() {
+  const item = pickDictionaryWord();
+  return attachDictionaryMeta(
+    inputTask("dictionaryWords", `Напиши слово полностью. Подсказка: ${getDictionaryWritePrompt(item)}`, item.word, item.hint),
+    item
+  );
+}
+
+function attachDictionaryMeta(task, item) {
   task.dictionaryWord = item.word;
   task.dictionaryWordId = item.id;
-  task.dictionaryTheme = item.theme;
+  task.dictionaryTheme = item.category;
+  task.strictAnswer = needsStrictDictionaryAnswer(item);
+  task.success = "Верно! Ты запомнил трудное место.";
   return task;
+}
+
+function buildDictionaryChoices(item) {
+  if (item.isPhrase) {
+    return [item.word, item.word.replaceAll(" ", ""), item.word.replace(" ", "  ")];
+  }
+  if (item.isProperName) {
+    return [item.word, item.word.toLowerCase(), replaceFirstVowel(item.word, "а")];
+  }
+
+  const choices = [item.word];
+  if (item.word.includes("ё")) choices.push(item.word.replaceAll("ё", "е"));
+  if (item.dangerPlace.includes("двойная")) choices.push(removeFirstDoubleLetter(item.word));
+  if (item.dangerPlace.includes("мягкий знак")) choices.push(item.word.replaceAll("ь", ""));
+  choices.push(replaceDangerLetter(item));
+  choices.push(replaceFirstVowel(item.word, item.word.includes("а") ? "о" : "а"));
+
+  return fillDictionaryChoices(item.word, choices);
+}
+
+function buildDictionaryLetterTask(item) {
+  if (item.isPhrase) {
+    return {
+      prompt: "Выбери правильное написание.",
+      answer: item.word,
+      choices: [item.word, item.word.replaceAll(" ", "")]
+    };
+  }
+  if (item.isProperName) {
+    return {
+      prompt: `Выбери первую букву: _${item.word.slice(1)}`,
+      answer: item.word[0],
+      choices: [item.word[0], item.word[0].toLowerCase()]
+    };
+  }
+
+  const target = getDangerLetter(item);
+  const index = target ? item.word.indexOf(target) : -1;
+  if (index >= 0) {
+    return {
+      prompt: `Вставь букву: ${item.word.slice(0, index)}_${item.word.slice(index + 1)}`,
+      answer: target,
+      choices: getLetterChoices(target)
+    };
+  }
+
+  return {
+    prompt: "Выбери правильное написание.",
+    answer: item.word,
+    choices: buildDictionaryChoices(item)
+  };
+}
+
+function getDictionaryWritePrompt(item) {
+  const lower = item.exampleSentence.toLowerCase();
+  if (item.word === "карандаш") return "предмет, которым пишут или рисуют";
+  if (item.word === "молоко") return "белый напиток, который дают коровы";
+  if (item.word === "собака") return "домашнее животное, которое лает";
+  if (item.word === "тетрадь") return "в ней пишут на уроке";
+  if (item.word === "Москва") return "столица России";
+  if (item.word === "Родина") return "страна, где человек родился и живет";
+  if (item.word === "до свидания") return "вежливые слова при прощании";
+  return `${item.dangerPlace}. Пример: ${lower}`;
+}
+
+function needsStrictDictionaryAnswer(item) {
+  return item.isProperName || item.isPhrase || item.word.includes("ё");
+}
+
+function fillDictionaryChoices(answer, choices) {
+  const fallback = DICTIONARY_WORDS
+    .map((item) => item.word)
+    .filter((word) => normalizeAnswer(word) !== normalizeAnswer(answer));
+  const unique = [];
+  [...choices, ...shuffle(fallback)].forEach((choice) => {
+    if (choice && !unique.includes(choice)) unique.push(choice);
+  });
+  return unique.slice(0, 3);
+}
+
+function getDangerLetter(item) {
+  const match = item.dangerPlace.match(/букв[аы]? ([а-яё])/i);
+  if (match) return match[1].toLowerCase();
+  if (item.dangerPlace.includes("двойная")) {
+    const doubleMatch = item.word.match(/([а-яё])\1/i);
+    return doubleMatch ? doubleMatch[1].toLowerCase() : "";
+  }
+  if (item.dangerPlace.includes("мягкий знак")) return "ь";
+  return "";
+}
+
+function getLetterChoices(answer) {
+  if (answer === "ь") return ["ь", "ъ", "-"];
+  if (answer === "ё") return ["ё", "е", "о"];
+  if (answer === "д") return ["д", "т", "-"];
+  if (answer === "в") return ["в", "ф", "-"];
+  if (answer === "б") return ["б", "п", "в"];
+  if (answer === "ы") return ["ы", "и", "е"];
+  return [...new Set([answer, "а", "о", "е", "и"])].slice(0, 4);
+}
+
+function replaceDangerLetter(item) {
+  const letter = getDangerLetter(item);
+  const replacements = { а: "о", о: "а", е: "и", и: "е", я: "е", ы: "и", у: "о", д: "", в: "", ё: "е", ь: "" };
+  if (!letter || !(letter in replacements)) return "";
+  return item.word.replace(letter, replacements[letter]);
+}
+
+function replaceFirstVowel(word, replacement) {
+  return word.replace(/[аоиеёуяыэю]/i, replacement);
+}
+
+function removeFirstDoubleLetter(word) {
+  return word.replace(/([а-яё])\1/i, "$1");
 }
 
 function makeRussianGameTask() {
@@ -3430,6 +3629,15 @@ function resetProgress() {
 
 function normalizeAnswer(value) {
   return String(value).trim().toLowerCase().replaceAll("ё", "е");
+}
+
+function isAnswerAccepted(rawAnswer, task) {
+  return [task.answer, ...(task.acceptedAnswers || [])].some((answer) => answersMatch(rawAnswer, answer, task.strictAnswer));
+}
+
+function answersMatch(rawAnswer, expectedAnswer, strict = false) {
+  if (strict) return String(rawAnswer).trim() === String(expectedAnswer).trim();
+  return normalizeAnswer(rawAnswer) === normalizeAnswer(expectedAnswer);
 }
 
 function dateKey(date) {
