@@ -1890,6 +1890,12 @@ function renderDailyIslandMap() {
             <span class="daily-island__mountain"></span>
             <span class="daily-island__forest"></span>
             <span class="daily-island__shore"></span>
+            <span class="daily-island__trail"></span>
+            <span class="daily-island__river"></span>
+            <span class="daily-island__detail daily-island__detail--a"></span>
+            <span class="daily-island__detail daily-island__detail--b"></span>
+            <span class="daily-island__detail daily-island__detail--c"></span>
+            <span class="daily-island__detail daily-island__detail--d"></span>
           </div>
           <div class="daily-island__header">
             <span>${island.icon}</span>

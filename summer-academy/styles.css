@@ -698,6 +698,277 @@ h3 {
   opacity: 0.86;
 }
 
+.daily-island {
+  min-height: 520px;
+  padding: 20px;
+  border: 10px solid rgba(207, 235, 250, 0.9);
+  border-radius: 34px;
+  background:
+    radial-gradient(circle at 14% 18%, rgba(255, 255, 255, 0.42) 0 2px, transparent 3px),
+    radial-gradient(circle at 74% 24%, rgba(255, 255, 255, 0.34) 0 2px, transparent 3px),
+    linear-gradient(155deg, #72bfe3 0%, #438fca 58%, #2f6da9 100%);
+  box-shadow: 0 24px 42px rgba(43, 88, 111, 0.2);
+}
+
+.daily-island::before {
+  background:
+    radial-gradient(ellipse at 18% 22%, transparent 0 28%, rgba(255, 255, 255, 0.16) 29% 30%, transparent 31%),
+    radial-gradient(ellipse at 78% 62%, transparent 0 30%, rgba(255, 255, 255, 0.14) 31% 32%, transparent 33%),
+    linear-gradient(120deg, transparent 0 45%, rgba(255, 255, 255, 0.13) 46% 47%, transparent 48%),
+    linear-gradient(68deg, transparent 0 48%, rgba(255, 255, 255, 0.12) 49% 50%, transparent 51%);
+  background-size: 100% 100%, 100% 100%, 54px 54px, 68px 68px;
+}
+
+.daily-island__land {
+  inset: 118px 34px 34px;
+  overflow: hidden;
+  border-radius: 36px;
+  transform: perspective(780px) rotateX(10deg) rotateZ(-1deg);
+  transform-origin: center bottom;
+  box-shadow:
+    inset 0 12px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -22px 0 rgba(68, 83, 48, 0.24),
+    0 20px 0 #d6b36c,
+    0 30px 0 rgba(75, 65, 51, 0.26),
+    0 36px 34px rgba(23, 78, 101, 0.32);
+}
+
+.daily-island--math .daily-island__land {
+  background:
+    radial-gradient(circle at 17% 72%, #d9bd6a 0 10%, transparent 11%),
+    linear-gradient(145deg, #d6c26c 0%, #8eb35f 42%, #4e896d 100%);
+  clip-path: polygon(8% 50%, 17% 26%, 39% 7%, 62% 13%, 86% 27%, 96% 53%, 80% 80%, 50% 94%, 22% 83%, 9% 66%);
+}
+
+.daily-island--russian .daily-island__land {
+  background:
+    radial-gradient(circle at 34% 38%, rgba(255, 199, 221, 0.85) 0 10%, transparent 11%),
+    radial-gradient(circle at 68% 66%, rgba(255, 230, 158, 0.8) 0 12%, transparent 13%),
+    linear-gradient(145deg, #f0cc76 0%, #8fca7a 48%, #5d9868 100%);
+  clip-path: polygon(9% 46%, 22% 22%, 48% 8%, 75% 18%, 94% 44%, 86% 72%, 60% 90%, 30% 84%, 10% 64%);
+}
+
+.daily-island--reading .daily-island__land {
+  background:
+    radial-gradient(circle at 75% 72%, #ddbd6d 0 16%, transparent 17%),
+    linear-gradient(145deg, #f1d48b 0%, #91c88a 50%, #609e78 100%);
+  clip-path: polygon(7% 58%, 16% 31%, 39% 14%, 69% 18%, 92% 38%, 88% 69%, 65% 89%, 33% 91%, 10% 78%);
+}
+
+.daily-island--world .daily-island__land {
+  background:
+    radial-gradient(circle at 54% 57%, rgba(24, 105, 78, 0.56) 0 22%, transparent 23%),
+    radial-gradient(circle at 22% 73%, #e1c36f 0 9%, transparent 10%),
+    linear-gradient(145deg, #d9ca62 0%, #80bd62 42%, #327a53 100%);
+  clip-path: polygon(13% 48%, 21% 22%, 49% 7%, 75% 17%, 93% 40%, 88% 69%, 65% 91%, 34% 84%, 11% 67%);
+}
+
+.daily-island__trail,
+.daily-island__river,
+.daily-island__detail {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.daily-island__trail {
+  left: 18%;
+  top: 50%;
+  width: 66%;
+  height: 42%;
+  border-top: 12px solid rgba(246, 226, 158, 0.86);
+  border-radius: 50%;
+  transform: rotate(-12deg);
+}
+
+.daily-island__river {
+  display: none;
+}
+
+.daily-island--math .daily-island__mountain {
+  left: 24%;
+  bottom: 42%;
+  width: 104px;
+  height: 108px;
+  opacity: 0.96;
+  background:
+    linear-gradient(135deg, transparent 0 43%, rgba(255, 255, 255, 0.82) 44% 56%, transparent 57%),
+    linear-gradient(145deg, #b6c1cf, #6f7f91);
+}
+
+.daily-island--math .daily-island__detail--a,
+.daily-island--math .daily-island__detail--b {
+  width: 54px;
+  height: 42px;
+  background: linear-gradient(145deg, #7b8798, #4d5d6f);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  opacity: 0.74;
+}
+
+.daily-island--math .daily-island__detail--a {
+  left: 52%;
+  top: 22%;
+}
+
+.daily-island--math .daily-island__detail--b {
+  left: 67%;
+  top: 46%;
+  transform: scale(0.72);
+}
+
+.daily-island--russian .daily-island__detail,
+.daily-island--world .daily-island__detail {
+  width: 36px;
+  height: 52px;
+  border-radius: 999px 999px 12px 12px;
+  background:
+    radial-gradient(circle at 50% 23%, #ffb9cf 0 16px, transparent 17px),
+    linear-gradient(#6e9b58 0 100%);
+}
+
+.daily-island--russian .daily-island__detail--a { left: 25%; top: 33%; }
+.daily-island--russian .daily-island__detail--b { left: 58%; top: 28%; transform: scale(0.85); }
+.daily-island--russian .daily-island__detail--c { left: 70%; top: 60%; transform: scale(0.75); }
+
+.daily-island--reading .daily-island__river {
+  display: block;
+  left: 11%;
+  top: 36%;
+  width: 74%;
+  height: 58%;
+  border-right: 22px solid rgba(111, 190, 219, 0.78);
+  border-bottom: 18px solid rgba(111, 190, 219, 0.78);
+  border-radius: 48%;
+  transform: rotate(-20deg);
+}
+
+.daily-island--reading .daily-island__detail--a,
+.daily-island--reading .daily-island__detail--b {
+  width: 56px;
+  height: 40px;
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, #f6fff3 0 47%, #d9e6ff 48% 52%, #fff 53%),
+    linear-gradient(#8c6fcb, #8c6fcb);
+  box-shadow: 0 8px 0 rgba(99, 77, 139, 0.18);
+  transform: rotate(-10deg);
+}
+
+.daily-island--reading .daily-island__detail--a { left: 29%; top: 38%; }
+.daily-island--reading .daily-island__detail--b { left: 58%; top: 61%; transform: rotate(12deg) scale(0.8); }
+
+.daily-island--world .daily-island__forest {
+  right: 18%;
+  bottom: 39%;
+  width: 160px;
+  height: 76px;
+}
+
+.daily-island--world .daily-island__detail {
+  background:
+    radial-gradient(circle at 50% 18%, #4ca95d 0 14px, transparent 15px),
+    linear-gradient(#8d6d46 0 100%);
+}
+
+.daily-island--world .daily-island__detail--a { left: 20%; top: 34%; transform: rotate(-10deg); }
+.daily-island--world .daily-island__detail--b { left: 30%; top: 58%; transform: scale(0.85) rotate(7deg); }
+.daily-island--world .daily-island__detail--c { left: 70%; top: 34%; transform: scale(0.9) rotate(11deg); }
+.daily-island--world .daily-island__detail--d { left: 78%; top: 61%; transform: scale(0.78) rotate(-8deg); }
+
+.daily-house-list {
+  inset: 118px 34px 34px;
+}
+
+.daily-house {
+  width: 54px;
+  min-height: 58px;
+  grid-template-columns: 1fr;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 12px 12px 15px 15px;
+  background: linear-gradient(180deg, #fff8e8 0%, #e7c889 100%);
+  box-shadow: 0 14px 18px rgba(45, 74, 82, 0.22), inset 0 0 0 2px rgba(255, 255, 255, 0.52);
+}
+
+.daily-house::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -17px;
+  width: 62px;
+  height: 34px;
+  border-radius: 12px 12px 4px 4px;
+  background: linear-gradient(145deg, #f07152, #bd4a38);
+  transform: translateX(-50%) skewX(-10deg);
+  box-shadow: 0 6px 0 rgba(114, 64, 47, 0.16);
+}
+
+.daily-house::after {
+  left: 50%;
+  bottom: -13px;
+  width: 64px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(35, 74, 59, 0.18);
+  transform: translateX(-50%);
+  box-shadow: none;
+  z-index: -1;
+}
+
+.daily-house__icon {
+  position: relative;
+  z-index: 2;
+  width: 34px;
+  height: 34px;
+  margin-top: 13px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.78);
+  font-size: 1rem;
+}
+
+.daily-house > span:not(.daily-house__icon) {
+  position: absolute;
+  left: 50%;
+  top: 65px;
+  width: 156px;
+  border-radius: 14px;
+  padding: 7px 9px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 10px 22px rgba(34, 70, 92, 0.18);
+  transform: translateX(-50%) translateY(4px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.daily-house:hover > span:not(.daily-house__icon),
+.daily-house--today > span:not(.daily-house__icon),
+.daily-house--catchup > span:not(.daily-house__icon),
+.daily-house--lit > span:not(.daily-house__icon) {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.daily-house--today,
+.daily-house--catchup,
+.daily-house--lit {
+  z-index: 12;
+}
+
+.daily-house--today {
+  box-shadow: 0 16px 24px rgba(45, 74, 82, 0.24), 0 0 0 5px rgba(255, 255, 255, 0.76), 0 0 0 8px color-mix(in srgb, var(--island-color) 44%, #ffffff);
+}
+
+.daily-house--catchup {
+  background: linear-gradient(180deg, #fff7df 0%, #f0c56f 100%);
+  box-shadow: 0 16px 24px rgba(45, 74, 82, 0.24), 0 0 0 5px rgba(255, 229, 169, 0.82);
+}
+
+.daily-house--lit {
+  background: linear-gradient(180deg, #fff6cc 0%, #f4b84e 100%);
+  box-shadow: 0 18px 28px rgba(45, 74, 82, 0.26), 0 0 26px rgba(255, 190, 73, 0.85);
+}
+
 .subject-card {
   position: relative;
   display: grid;
