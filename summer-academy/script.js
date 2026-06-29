@@ -1900,7 +1900,8 @@ function renderDailyIslandMap() {
             </div>
           </div>
           <div class="daily-house-list">
-            ${islandHouses.map((house) => {
+            ${islandHouses.map((house, index) => {
+              const point = getHouseMapPoint(island.id, index, islandHouses.length);
               const stateClass = getHouseStateClass(house, planIds);
               const status = house.todayStats.lit
                 ? "горит сегодня"
@@ -1908,7 +1909,7 @@ function renderDailyIslandMap() {
                   ? `${house.todayStats.correct}/${DAILY_HOUSE_PASS_COUNT} огонька`
                   : "тренажер";
               return `
-                <button class="daily-house ${stateClass}" type="button" data-academy-action="${house.stop.action}" data-academy-variant="${house.stop.variant || ""}" data-academy-house="${house.houseId}" ${house.todayStats.lit ? 'aria-pressed="true"' : ""}>
+                <button class="daily-house ${stateClass}" type="button" style="--house-x:${point.x}%; --house-y:${point.y}%;" data-academy-action="${house.stop.action}" data-academy-variant="${house.stop.variant || ""}" data-academy-house="${house.houseId}" title="${house.label}: ${status}" ${house.todayStats.lit ? 'aria-pressed="true"' : ""}>
                   <span class="daily-house__icon">${house.todayStats.lit ? "🔥" : house.icon}</span>
                   <span>
                     <strong>${house.label}</strong>
@@ -2086,6 +2087,43 @@ function getIslandTerrain(islandId) {
     reading: "Книжная бухта",
     world: "Лес наблюдений"
   }[islandId] || "Остров";
+}
+
+function getHouseMapPoint(islandId, index, total) {
+  const points = {
+    math: [
+      { x: 24, y: 45 },
+      { x: 40, y: 31 },
+      { x: 58, y: 42 },
+      { x: 36, y: 65 },
+      { x: 62, y: 64 },
+      { x: 76, y: 52 }
+    ],
+    russian: [
+      { x: 28, y: 55 },
+      { x: 46, y: 36 },
+      { x: 63, y: 50 },
+      { x: 42, y: 70 },
+      { x: 70, y: 66 }
+    ],
+    reading: [
+      { x: 25, y: 48 },
+      { x: 49, y: 37 },
+      { x: 68, y: 58 }
+    ],
+    world: [
+      { x: 50, y: 52 },
+      { x: 34, y: 44 },
+      { x: 66, y: 46 }
+    ]
+  };
+  const islandPoints = points[islandId] || [];
+  if (islandPoints[index]) return islandPoints[index];
+  const angle = (Math.PI * 2 * index) / Math.max(1, total);
+  return {
+    x: 50 + Math.cos(angle) * 24,
+    y: 52 + Math.sin(angle) * 18
+  };
 }
 
 function getIslandDisplayTitle(island) {

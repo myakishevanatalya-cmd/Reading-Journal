@@ -503,6 +503,201 @@ h3 {
   opacity: 0.78;
 }
 
+.daily-island-grid {
+  gap: 18px;
+}
+
+.daily-island {
+  min-height: 430px;
+  align-content: stretch;
+  padding: 18px;
+  background:
+    radial-gradient(circle at 12% 22%, rgba(255, 255, 255, 0.58) 0 2px, transparent 3px),
+    radial-gradient(circle at 72% 18%, rgba(255, 255, 255, 0.46) 0 2px, transparent 3px),
+    radial-gradient(circle at 36% 80%, rgba(255, 255, 255, 0.38) 0 2px, transparent 3px),
+    linear-gradient(145deg, #8ed3ee 0%, #5fb4dc 48%, #3d92c4 100%);
+  border: 8px solid rgba(255, 255, 255, 0.62);
+  border-radius: 36px;
+}
+
+.daily-island::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    repeating-radial-gradient(ellipse at 20% 24%, rgba(255, 255, 255, 0.34) 0 2px, transparent 3px 26px),
+    repeating-radial-gradient(ellipse at 82% 68%, rgba(255, 255, 255, 0.24) 0 2px, transparent 3px 30px);
+  opacity: 0.62;
+  pointer-events: none;
+}
+
+.daily-island::after {
+  z-index: 5;
+}
+
+.daily-island__sky {
+  display: none;
+}
+
+.daily-island__land {
+  inset: 108px 28px 24px;
+  z-index: 3;
+  border-radius: 42% 58% 46% 54%;
+  background:
+    radial-gradient(circle at 22% 74%, #f3d987 0 18%, transparent 19%),
+    radial-gradient(circle at 76% 28%, #d5bd68 0 16%, transparent 17%),
+    linear-gradient(145deg, #f5d679 0%, #d3c96e 28%, #77bd68 62%, #509b5f 100%);
+  clip-path: polygon(8% 44%, 18% 18%, 39% 7%, 63% 11%, 84% 25%, 95% 49%, 82% 78%, 58% 92%, 31% 86%, 12% 67%);
+  box-shadow:
+    inset 0 -18px 0 rgba(85, 131, 66, 0.18),
+    inset 0 8px 0 rgba(255, 255, 255, 0.2),
+    0 20px 0 rgba(238, 205, 128, 0.62),
+    0 24px 26px rgba(33, 87, 112, 0.25);
+}
+
+.daily-island__land::before {
+  display: none;
+}
+
+.daily-island--math .daily-island__land {
+  clip-path: polygon(7% 50%, 19% 20%, 42% 4%, 65% 13%, 89% 28%, 96% 54%, 78% 83%, 49% 95%, 24% 84%, 9% 66%);
+  background:
+    radial-gradient(circle at 28% 70%, #f4d484 0 17%, transparent 18%),
+    linear-gradient(145deg, #ead176 0%, #9cc66c 48%, #4f8e78 100%);
+}
+
+.daily-island--russian .daily-island__land {
+  clip-path: polygon(10% 42%, 24% 17%, 52% 8%, 80% 21%, 93% 46%, 84% 74%, 59% 90%, 29% 85%, 9% 64%);
+  background:
+    radial-gradient(circle at 38% 36%, rgba(255, 205, 224, 0.7) 0 12%, transparent 13%),
+    radial-gradient(circle at 70% 63%, rgba(255, 226, 151, 0.7) 0 13%, transparent 14%),
+    linear-gradient(145deg, #f7d783, #83c879 55%, #619d6e);
+}
+
+.daily-island--reading .daily-island__land {
+  clip-path: polygon(5% 58%, 15% 27%, 38% 13%, 69% 17%, 93% 38%, 89% 68%, 66% 88%, 33% 91%, 11% 77%);
+  background:
+    radial-gradient(circle at 72% 72%, #efd17c 0 18%, transparent 19%),
+    linear-gradient(145deg, #ffe0a1, #93ca89 54%, #65a879);
+}
+
+.daily-island--world .daily-island__land {
+  clip-path: polygon(12% 46%, 23% 19%, 49% 8%, 73% 16%, 92% 39%, 88% 68%, 65% 90%, 35% 84%, 11% 67%);
+  background:
+    radial-gradient(circle at 52% 54%, rgba(43, 116, 79, 0.55) 0 22%, transparent 23%),
+    linear-gradient(145deg, #d6d06f, #77b56c 48%, #3e815a);
+}
+
+.daily-island__mountain {
+  z-index: 4;
+  left: 22%;
+  bottom: 39%;
+  width: 82px;
+  height: 86px;
+  background:
+    linear-gradient(135deg, transparent 0 42%, rgba(255, 255, 255, 0.74) 43% 54%, transparent 55%),
+    #96a4b4;
+  filter: drop-shadow(0 8px 0 rgba(86, 104, 126, 0.18));
+}
+
+.daily-island--russian .daily-island__mountain {
+  display: block;
+  left: 66%;
+  bottom: 42%;
+  width: 54px;
+  height: 58px;
+  opacity: 0.26;
+}
+
+.daily-island--reading .daily-island__mountain {
+  right: 18%;
+  bottom: 42%;
+}
+
+.daily-island__forest {
+  z-index: 4;
+  right: 18%;
+  bottom: 37%;
+  width: 118px;
+  height: 62px;
+  filter: drop-shadow(0 8px 0 rgba(43, 106, 73, 0.12));
+}
+
+.daily-island__shore {
+  z-index: 4;
+  left: 24%;
+  right: 24%;
+  bottom: 38px;
+  height: 18px;
+  opacity: 0.9;
+}
+
+.daily-island__header {
+  z-index: 7;
+  width: min(100%, 430px);
+  align-self: start;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  box-shadow: 0 12px 24px rgba(31, 76, 101, 0.14);
+}
+
+.daily-house-list {
+  position: absolute;
+  inset: 108px 28px 24px;
+  z-index: 8;
+  display: block;
+}
+
+.daily-house {
+  position: absolute;
+  left: var(--house-x);
+  top: var(--house-y);
+  width: 116px;
+  min-height: 70px;
+  grid-template-columns: 34px 1fr;
+  gap: 7px;
+  padding: 7px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 12px 22px rgba(31, 76, 101, 0.18), inset 0 0 0 1px rgba(37, 48, 68, 0.08);
+  transform: translate(-50%, -50%);
+}
+
+.daily-house::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -11px;
+  width: 18px;
+  height: 18px;
+  border-radius: 0 0 6px 0;
+  background: inherit;
+  transform: translateX(-50%) rotate(45deg);
+  box-shadow: 4px 4px 8px rgba(31, 76, 101, 0.08);
+  z-index: -1;
+}
+
+.daily-house__icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+}
+
+.daily-house strong {
+  font-size: 0.82rem;
+  line-height: 1.04;
+}
+
+.daily-house small {
+  font-size: 0.68rem;
+  line-height: 1.05;
+}
+
+.daily-house--quiet {
+  opacity: 0.86;
+}
+
 .subject-card {
   position: relative;
   display: grid;
@@ -1773,9 +1968,12 @@ button:disabled,
   }
 
   .route-action:hover,
-  .path-node:hover,
-  .daily-house:hover {
+  .path-node:hover {
     transform: translateY(-1px);
+  }
+
+  .daily-house:hover {
+    transform: translate(-50%, -50%) translateY(-3px);
   }
 
   .world-island:hover {
