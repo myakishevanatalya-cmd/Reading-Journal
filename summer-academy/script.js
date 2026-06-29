@@ -1363,6 +1363,14 @@ const TRAINER_MODES = [
     title: "Читательский сыщик",
     description: "Короткие тексты, главная мысль, порядок событий и точные ответы.",
     chips: ["смысл", "внимание", "без спешки"]
+  },
+  {
+    id: "worldQuest",
+    subject: "world",
+    icon: "🌿",
+    title: "Лесная экспедиция",
+    description: "Короткие вопросы про природу, наблюдения, космос и человека.",
+    chips: ["5 вопросов", "факты", "наблюдательность"]
   }
 ];
 
@@ -1532,26 +1540,26 @@ const ACADEMY_ISLANDS = [
     ]
   },
   {
-    id: "break",
+    id: "world",
     subject: "world",
     icon: "🌿",
-    title: "Бухта перемены",
-    text: "Тихое место между островами: шутка, загадка, факт, поддержка или маленькое движение.",
-    landmark: "Причал улыбок",
+    title: "Остров окружающего мира",
+    text: "Лесной остров с тропами наблюдений, короткими фактами, загадками природы и мягкими переменами.",
+    landmark: "Лесная обсерватория",
     position: { x: 78, y: 72 },
-    primary: { label: "Еще улыбку", action: "funBreak" },
+    primary: { label: "В экспедицию", action: "worldQuest" },
     routes: [
       {
-        id: "break-bay",
-        title: "Пауза между островами",
-        description: "Без баллов и ошибок: только добрый отдых, загадки и маленькие движения.",
+        id: "forest-expedition",
+        title: "Лесная экспедиция",
+        description: "Наблюдаем природу, отвечаем на короткие вопросы и иногда делаем добрую паузу.",
         skillIds: ["worldFacts"],
         actions: [
-          { label: "Еще улыбку", action: "funBreak" },
+          { label: "Факты природы", action: "worldQuest" },
           { label: "Огонек дня", action: "daily" }
         ],
         stops: [
-          { id: "smile-pier", label: "Еще улыбку", action: "funBreak", skillIds: ["worldFacts"] },
+          { id: "world-facts", label: "Дом наблюдений", action: "worldQuest", skillIds: ["worldFacts"] },
           { id: "riddle-house", label: "Загадать", action: "funBreak", skillIds: ["worldFacts"] },
           { id: "movement-meadow", label: "Мини-перемена", action: "funBreak", skillIds: ["worldFacts"] }
         ]
@@ -1559,6 +1567,13 @@ const ACADEMY_ISLANDS = [
     ]
   }
 ];
+
+const DAILY_HOUSE_TASK_COUNT = 5;
+const DAILY_HOUSE_PASS_COUNT = 4;
+const DAILY_HOUSE_MAX = 4;
+const DAILY_HOUSE_MIN = 3;
+const SUMMER_FINISH_MONTH = 7;
+const SUMMER_FINISH_DAY = 31;
 
 const SUBJECT_LAUNCHERS = [
   {
@@ -1604,7 +1619,7 @@ const SUBJECT_LAUNCHERS = [
 const state = loadState();
 let session = null;
 let selectedIslandId = ACADEMY_ISLANDS[0]?.id || "math";
-let todayRouteAction = { action: "daily", variant: "" };
+let todayRouteAction = { action: "daily", variant: "", houseId: "" };
 
 const views = document.querySelectorAll(".view");
 const navButtons = document.querySelectorAll(".nav-button");
@@ -1757,22 +1772,33 @@ function renderToday() {
 
   const today = dateKey(new Date());
   const todaysSessions = state.dailySessions.filter((item) => item.date === today);
-  const nextStop = getNextStop();
-  todayRouteAction = { action: nextStop.stop?.action || "daily", variant: nextStop.stop?.variant || "" };
-  if (todaysSessions.length) {
-    todayStatus.textContent = "Сегодня огонек уже зажжен.";
-    todayFocus.textContent = `${nextStop.title}. Можно сделать короткий шаг или отдохнуть в Бухте перемены.`;
-    startSessionBtn.textContent = nextStop.button || "Еще короткий маршрут";
+  const dailyPlan = getTodayHousePlan();
+  const pendingHouse = dailyPlan.find((house) => !house.todayStats.lit);
+  todayRouteAction = pendingHouse
+    ? { action: pendingHouse.stop.action, variant: pendingHouse.stop.variant || "", houseId: pendingHouse.houseId }
+    : { action: "daily", variant: "", houseId: "" };
+  const litCount = dailyPlan.filter((house) => house.todayStats.lit).length;
+  const remaining = dailyPlan.length - litCount;
+  if (!remaining && dailyPlan.length) {
+    todayStatus.textContent = "Все домики дня горят.";
+    todayFocus.textContent = `Сегодня зажжено ${litCount} из ${dailyPlan.length}. Острова стали ярче, до 31 августа осталось ${getDaysUntilSummerFinish()} дн.`;
+    startSessionBtn.textContent = "Свободная тренировка";
+  } else if (todaysSessions.length || litCount) {
+    todayStatus.textContent = "Маршрут уже начат.";
+    todayFocus.textContent = `Горит ${litCount} из ${dailyPlan.length}. Осталось зажечь: ${remaining}. Если домик не загорелся, добери огоньки в тренажере.`;
+    startSessionBtn.textContent = pendingHouse?.planType === "catchup" ? "Догнать домик" : "Зажечь домик";
   } else {
-    todayStatus.textContent = "Сегодняшний маршрут";
-    todayFocus.textContent = `${nextStop.title}. ${nextStop.text}`;
-    startSessionBtn.textContent = nextStop.button || "В путь";
+    todayStatus.textContent = "Сегодня нужно зажечь домики.";
+    todayFocus.textContent = `${dailyPlan.length} домика на разных островах. Домик загорится, когда получится 4 верных огонька из 5.`;
+    startSessionBtn.textContent = "Начать с домика";
   }
   renderSubjectLaunchers();
   renderGuide(todayGuideCard, "today");
 }
 
 function renderSubjectLaunchers() {
+  renderDailyIslandMap();
+  return;
   subjectLaunchGrid.innerHTML = "";
   const dayBalance = getSubjectDayBalance(7);
   SUBJECT_LAUNCHERS.forEach((launcher) => {
@@ -1816,6 +1842,89 @@ function renderSubjectLaunchers() {
   });
 }
 
+function renderDailyIslandMap() {
+  const launchHeading = document.querySelector(".subject-launch__heading");
+  if (launchHeading) {
+    launchHeading.innerHTML = `
+      <p class="eyebrow">Карта дня</p>
+      <h3>Зажги домики на островах</h3>
+    `;
+  }
+  const dailyPlan = getTodayHousePlan();
+  const planIds = new Set(dailyPlan.map((house) => house.houseId));
+  const todayKey = dateKey(new Date());
+  const houses = getScoredAcademyHouses().map((house) => {
+    const planned = dailyPlan.find((item) => item.houseId === house.houseId);
+    return {
+      ...house,
+      planType: planned?.planType || "",
+      todayStats: getHouseDayStats(house, todayKey)
+    };
+  });
+  const housesByIsland = houses.reduce((acc, house) => {
+    acc[house.island.id] = acc[house.island.id] || [];
+    acc[house.island.id].push(house);
+    return acc;
+  }, {});
+  const litToday = dailyPlan.filter((house) => house.todayStats.lit).length;
+  const catchUpCount = dailyPlan.filter((house) => house.planType === "catchup" && !house.todayStats.lit).length;
+
+  subjectLaunchGrid.classList.add("daily-island-grid");
+  subjectLaunchGrid.innerHTML = `
+    <section class="daily-route-panel">
+      <div>
+        <p class="eyebrow">План дня</p>
+        <h3>${litToday}/${dailyPlan.length} домика горят</h3>
+        <p>${catchUpCount ? `Есть ${catchUpCount} домик для догоняния. ` : ""}Домик загорается, когда набрано ${DAILY_HOUSE_PASS_COUNT} верных огонька из ${DAILY_HOUSE_TASK_COUNT}.</p>
+      </div>
+      <div class="daily-route-panel__date">до 31 августа: ${getDaysUntilSummerFinish()} дн.</div>
+    </section>
+    ${ACADEMY_ISLANDS.map((island) => {
+      const subject = SUBJECTS[island.subject];
+      const islandHouses = housesByIsland[island.id] || [];
+      const light = getIslandLightPercent(island);
+      return `
+        <article class="daily-island daily-island--${island.id}" style="--island-color:${subject.color}; --island-light:${light}%; --island-dim:${Math.max(0.05, 0.32 - light * 0.0028)}">
+          <div class="daily-island__sky" aria-hidden="true"></div>
+          <div class="daily-island__land" aria-hidden="true">
+            <span class="daily-island__mountain"></span>
+            <span class="daily-island__forest"></span>
+            <span class="daily-island__shore"></span>
+          </div>
+          <div class="daily-island__header">
+            <span>${island.icon}</span>
+            <div>
+              <p class="eyebrow">${getIslandTerrain(island.id)}</p>
+              <h3>${getIslandDisplayTitle(island)}</h3>
+              <small>яркость острова ${light}%</small>
+            </div>
+          </div>
+          <div class="daily-house-list">
+            ${islandHouses.map((house) => {
+              const stateClass = getHouseStateClass(house, planIds);
+              const status = house.todayStats.lit
+                ? "горит сегодня"
+                : planIds.has(house.houseId)
+                  ? `${house.todayStats.correct}/${DAILY_HOUSE_PASS_COUNT} огонька`
+                  : "тренажер";
+              return `
+                <button class="daily-house ${stateClass}" type="button" data-academy-action="${house.stop.action}" data-academy-variant="${house.stop.variant || ""}" data-academy-house="${house.houseId}" ${house.todayStats.lit ? 'aria-pressed="true"' : ""}>
+                  <span class="daily-house__icon">${house.todayStats.lit ? "🔥" : house.icon}</span>
+                  <span>
+                    <strong>${house.label}</strong>
+                    <small>${house.planType === "catchup" && !house.todayStats.lit ? "догнать: " : ""}${status}</small>
+                  </span>
+                </button>
+              `;
+            }).join("")}
+          </div>
+        </article>
+      `;
+    }).join("")}
+  `;
+  attachAcademyActionHandlers(subjectLaunchGrid);
+}
+
 function renderTrainers() {
   renderGuide(trainerGuideCard, "trainers");
   trainerGrid.innerHTML = "";
@@ -1830,7 +1939,7 @@ function renderTrainers() {
         <div class="trainer-island__icon">${island.icon}</div>
         <div>
           <p class="eyebrow">${subject.label}</p>
-          <h3>${island.title}</h3>
+          <h3>${getIslandDisplayTitle(island)}</h3>
           <p>${island.text}</p>
         </div>
       </div>
@@ -1861,7 +1970,7 @@ function renderAcademyActionButtons(actions, primary = false) {
   return actions.map((item) => {
     const buttonClass = primary ? "route-action route-action--primary" : "route-action";
     return `
-      <button class="${buttonClass}" data-academy-action="${item.action}" data-academy-variant="${item.variant || ""}">
+      <button class="${buttonClass}" data-academy-action="${item.action}" data-academy-variant="${item.variant || ""}" data-academy-house="${item.houseId || ""}">
         ${item.label}
       </button>
     `;
@@ -1870,11 +1979,11 @@ function renderAcademyActionButtons(actions, primary = false) {
 
 function attachAcademyActionHandlers(container) {
   container.querySelectorAll("[data-academy-action]").forEach((button) => {
-    button.addEventListener("click", () => handleAcademyAction(button.dataset.academyAction, button.dataset.academyVariant || ""));
+    button.addEventListener("click", () => handleAcademyAction(button.dataset.academyAction, button.dataset.academyVariant || "", button.dataset.academyHouse || ""));
   });
 }
 
-function handleAcademyAction(action, variant = "") {
+function handleAcademyAction(action, variant = "", houseId = "") {
   if (action === "daily") {
     startSession();
     return;
@@ -1890,11 +1999,205 @@ function handleAcademyAction(action, variant = "") {
     document.querySelector("#funBreak")?.scrollIntoView({ behavior: "smooth", block: "center" });
     return;
   }
-  startTrainer(action, variant);
+  startTrainer(action, variant, houseId);
 }
 
 function handleTodayRouteAction() {
-  handleAcademyAction(todayRouteAction.action || "daily", todayRouteAction.variant || "");
+  handleAcademyAction(todayRouteAction.action || "daily", todayRouteAction.variant || "", todayRouteAction.houseId || "");
+}
+
+function getScoredAcademyHouses() {
+  const houses = [];
+  ACADEMY_ISLANDS.forEach((island) => {
+    island.routes.forEach((route) => {
+      (route.stops || []).forEach((stop) => {
+        if (stop.optional || stop.action === "funBreak") return;
+        houses.push(createAcademyHouse(island, route, stop));
+      });
+    });
+    if (island.id === "world" && !houses.some((house) => house.island.id === "world")) {
+      houses.push(createAcademyHouse(island, island.routes[0], {
+        id: "world-facts",
+        label: "Дом наблюдений",
+        action: "worldQuest",
+        skillIds: ["worldFacts"]
+      }));
+    }
+  });
+  return houses;
+}
+
+function createAcademyHouse(island, route, stop) {
+  return {
+    houseId: `${island.id}:${stop.id}`,
+    island,
+    route,
+    stop,
+    label: getHouseLabel(stop),
+    icon: getHouseIcon(stop.action),
+    terrain: getIslandTerrain(island.id)
+  };
+}
+
+function getHouseLabel(stop) {
+  const labels = {
+    warmup: "Дом разминки",
+    fast100: "Дом счета",
+    mixed: "Дом смешанного счета",
+    multiply: "Дом таблицы",
+    "hard-table": "Дом трудных случаев",
+    "math-stories": "Дом задач",
+    "life-math": "Город измерений",
+    dictionary: "Дом словарных слов",
+    "word-detective": "Лаборатория букв",
+    "russian-games": "Бюро слов",
+    "word-puzzles": "Башня головоломок",
+    proverbs: "Дом пословиц",
+    "read-text": "Дом текста",
+    "main-idea": "Мост главной мысли",
+    "hero-traces": "Дом героев",
+    "world-facts": "Дом наблюдений"
+  };
+  return labels[stop.id] || stop.label;
+}
+
+function getHouseIcon(action) {
+  return {
+    fast10: "⚡",
+    fast100: "🏠",
+    mixedMath: "🔢",
+    multiply: "✖",
+    mathStories: "📘",
+    lifeMath: "🧭",
+    dictionary: "✍",
+    wordDetective: "🔎",
+    russianGames: "🕵",
+    wordPuzzles: "🧩",
+    proverbs: "📜",
+    readingQuest: "📖",
+    worldQuest: "🌿"
+  }[action] || "🏠";
+}
+
+function getIslandTerrain(islandId) {
+  return {
+    math: "Горы счета",
+    russian: "Сады букв",
+    reading: "Книжная бухта",
+    world: "Лес наблюдений"
+  }[islandId] || "Остров";
+}
+
+function getIslandDisplayTitle(island) {
+  return island.id === "world" ? "Остров окружающего мира" : island.title;
+}
+
+function getTodayHousePlan() {
+  const today = new Date();
+  const todayKey = dateKey(today);
+  const planned = getPlannedHousesForDate(today).map((house) => ({ ...house, planType: "today" }));
+  const catchUp = [];
+  for (let daysBack = 1; daysBack <= 7 && catchUp.length < 1; daysBack += 1) {
+    const missedDate = new Date(today);
+    missedDate.setDate(missedDate.getDate() - daysBack);
+    const missedKey = dateKey(missedDate);
+    const missedHouse = getPlannedHousesForDate(missedDate)
+      .find((house) => !getHouseDayStats(house, missedKey).lit && !planned.some((item) => item.houseId === house.houseId));
+    if (missedHouse) catchUp.push({ ...missedHouse, planType: "catchup" });
+  }
+  const merged = [...catchUp, ...planned];
+  const unique = [];
+  merged.forEach((house) => {
+    if (!unique.some((item) => item.houseId === house.houseId)) unique.push(house);
+  });
+  return unique.slice(0, DAILY_HOUSE_MAX).map((house) => ({
+    ...house,
+    todayStats: getHouseDayStats(house, todayKey)
+  }));
+}
+
+function getPlannedHousesForDate(date) {
+  const houses = getScoredAcademyHouses();
+  const bySubject = houses.reduce((acc, house) => {
+    const subject = house.island.subject;
+    acc[subject] = acc[subject] || [];
+    acc[subject].push(house);
+    return acc;
+  }, {});
+  const dayIndex = getSummerDayIndex(date);
+  const pick = (subject, offset = 0) => {
+    const list = bySubject[subject] || [];
+    if (!list.length) return null;
+    return list[(dayIndex + offset) % list.length];
+  };
+  const plan = [
+    pick("math", 0),
+    pick("russian", 1),
+    pick("reading", 2)
+  ].filter(Boolean);
+  if (dayIndex % 2 === 0 || plan.length < DAILY_HOUSE_MIN) {
+    const world = pick("world", 3);
+    if (world) plan.push(world);
+  }
+  return plan.slice(0, dayIndex % 2 === 0 ? DAILY_HOUSE_MAX : DAILY_HOUSE_MIN);
+}
+
+function getHouseDayStats(house, dayKey) {
+  const attempts = state.attempts.filter((attempt) => attempt.date === dayKey && attempt.houseId === house.houseId);
+  const houseSessions = state.dailySessions.filter((item) => item.date === dayKey && item.houseId === house.houseId);
+  const bestSession = houseSessions.reduce((best, item) => {
+    if (!best) return item;
+    return (item.correct || 0) > (best.correct || 0) ? item : best;
+  }, null);
+  const correct = bestSession ? bestSession.correct : attempts.filter((attempt) => attempt.correct).length;
+  const total = bestSession ? bestSession.total : attempts.length;
+  return {
+    total,
+    correct,
+    needed: Math.max(0, DAILY_HOUSE_PASS_COUNT - correct),
+    lit: correct >= DAILY_HOUSE_PASS_COUNT && total >= DAILY_HOUSE_TASK_COUNT,
+    accuracy: total ? Math.round((correct / total) * 100) : 0
+  };
+}
+
+function getSummerDayIndex(date) {
+  const start = new Date(date.getFullYear(), 5, 1);
+  const normalized = new Date(date);
+  normalized.setHours(0, 0, 0, 0);
+  return Math.max(0, Math.floor((normalized - start) / 86400000));
+}
+
+function getSummerFinishDate() {
+  return new Date(new Date().getFullYear(), SUMMER_FINISH_MONTH, SUMMER_FINISH_DAY);
+}
+
+function getDaysUntilSummerFinish() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const finish = getSummerFinishDate();
+  finish.setHours(0, 0, 0, 0);
+  return Math.max(0, Math.ceil((finish - today) / 86400000));
+}
+
+function getIslandLightPercent(island) {
+  const houses = getScoredAcademyHouses().filter((house) => house.island.id === island.id);
+  const houseIds = new Set(houses.map((house) => house.houseId));
+  const completedHouseDays = new Set();
+  state.attempts.forEach((attempt) => {
+    if (!attempt.houseId || !houseIds.has(attempt.houseId)) return;
+    const house = houses.find((item) => item.houseId === attempt.houseId);
+    if (house && getHouseDayStats(house, attempt.date).lit) {
+      completedHouseDays.add(`${attempt.date}:${attempt.houseId}`);
+    }
+  });
+  return Math.min(100, completedHouseDays.size * 4);
+}
+
+function getHouseStateClass(house, planIds) {
+  if (house.todayStats?.lit) return "daily-house--lit";
+  if (house.planType === "catchup") return "daily-house--catchup";
+  if (planIds.has(house.houseId)) return "daily-house--today";
+  return "daily-house--quiet";
 }
 
 function getAllAcademyStops() {
@@ -2200,6 +2503,7 @@ function skillToTrainerAction(skillId) {
   if (skillId === "wordGames") return "russianGames";
   if (skillId === "wordPuzzles") return "wordPuzzles";
   if (skillId === "proverbs") return "proverbs";
+  if (skillId === "worldFacts") return "worldQuest";
   return "daily";
 }
 
@@ -2315,13 +2619,14 @@ function getFunBreakLine(showAfter = "any") {
   return pickFunBreakItem(showAfter, "main")?.text || sample(ACADEMY_JOKES);
 }
 
-function startTrainer(modeId, variant) {
+function startTrainer(modeId, variant, houseId = "") {
   const mode = TRAINER_MODES.find((item) => item.id === modeId);
-  const tasks = buildTrainerTasks(modeId, variant);
+  const tasks = buildTrainerTasks(modeId, variant, houseId ? DAILY_HOUSE_TASK_COUNT : 0);
   startSession({
     mode: "trainer",
-    title: mode ? mode.title : "Тренажер",
-    tasks
+    title: mode ? mode.title : (modeId === "worldQuest" ? "Лесная экспедиция" : "Тренажер"),
+    tasks,
+    houseId
   });
 }
 
@@ -2335,6 +2640,7 @@ function startSession(options = {}) {
     questionStartedAt: Date.now(),
     index: 0,
     tasks,
+    houseId: options.houseId || "",
     plannedLength: tasks.length,
     results: [],
     shownFunBreakIds: [],
@@ -2371,32 +2677,34 @@ function buildDailySession() {
     makeReadingTask,
     makeRussianGameTask,
     makeWordPuzzleTask,
-    makeProverbTask
+    makeProverbTask,
+    makeWorldFactTask
   ];
   return buildAdaptiveTasks(10, freshFactories, "daily", { maxReviews: 3 });
 }
 
-function buildTrainerTasks(modeId, variant) {
+function buildTrainerTasks(modeId, variant, countOverride = 0) {
   const builders = {
-    fast10: () => buildAdaptiveTasks(10, [() => makeFastArithmeticTask("within10")], "fast10", { maxReviews: 2 }),
-    fast100: () => buildAdaptiveTasks(12, [
+    fast10: () => buildAdaptiveTasks(countOverride || 10, [() => makeFastArithmeticTask("within10")], "fast10", { maxReviews: 2 }),
+    fast100: () => buildAdaptiveTasks(countOverride || 12, [
       () => makeFastArithmeticTask("within20"),
       () => makeFastArithmeticTask("within100"),
       () => makeFastArithmeticTask("roundTens"),
       () => makeFastArithmeticTask("compare"),
       () => makeFastArithmeticTask("unknown")
     ], "fast100", { maxReviews: 3 }),
-    multiply: () => buildAdaptiveTasks(12, [() => makeMultiplicationTask(variant)], "multiply", { maxReviews: 3 }),
-    mixedMath: () => buildAdaptiveTasks(12, [makeMixedMathTask], "mixedMath", { maxReviews: 3 }),
-    lifeMath: () => buildAdaptiveTasks(8, [makeLifeMathTask], "lifeMath", { maxReviews: 2 }),
-    mathStories: () => buildAdaptiveTasks(8, [makeMathStoryTask], "mathStories", { maxReviews: 2 }),
-    dictionary: () => buildAdaptiveTasks(12, [makeDictionaryTask, makeDictionaryMissingTask, makeDictionaryWriteTask], "dictionary", { maxReviews: 3 }),
-    wordDetective: () => buildAdaptiveTasks(10, [makeWordDetectiveTask], "wordDetective", { maxReviews: 3 }),
-    playroom: () => buildAdaptiveTasks(8, [makeRussianGameTask, makeWordPuzzleTask], "playroom", { maxReviews: 2 }),
-    russianGames: () => buildAdaptiveTasks(8, [makeRussianGameTask], "russianGames", { maxReviews: 2 }),
-    wordPuzzles: () => buildAdaptiveTasks(6, [makeWordPuzzleTask], "wordPuzzles", { maxReviews: 1 }),
-    proverbs: () => buildAdaptiveTasks(8, [makeProverbTask], "proverbs", { maxReviews: 2 }),
-    readingQuest: () => buildAdaptiveTasks(8, [makeReadingTask], "readingQuest", { maxReviews: 2 })
+    multiply: () => buildAdaptiveTasks(countOverride || 12, [() => makeMultiplicationTask(variant)], "multiply", { maxReviews: 3 }),
+    mixedMath: () => buildAdaptiveTasks(countOverride || 12, [makeMixedMathTask], "mixedMath", { maxReviews: 3 }),
+    lifeMath: () => buildAdaptiveTasks(countOverride || 8, [makeLifeMathTask], "lifeMath", { maxReviews: 2 }),
+    mathStories: () => buildAdaptiveTasks(countOverride || 8, [makeMathStoryTask], "mathStories", { maxReviews: 2 }),
+    dictionary: () => buildAdaptiveTasks(countOverride || 12, [makeDictionaryTask, makeDictionaryMissingTask, makeDictionaryWriteTask], "dictionary", { maxReviews: 3 }),
+    wordDetective: () => buildAdaptiveTasks(countOverride || 10, [makeWordDetectiveTask], "wordDetective", { maxReviews: 3 }),
+    playroom: () => buildAdaptiveTasks(countOverride || 8, [makeRussianGameTask, makeWordPuzzleTask], "playroom", { maxReviews: 2 }),
+    russianGames: () => buildAdaptiveTasks(countOverride || 8, [makeRussianGameTask], "russianGames", { maxReviews: 2 }),
+    wordPuzzles: () => buildAdaptiveTasks(countOverride || 6, [makeWordPuzzleTask], "wordPuzzles", { maxReviews: 1 }),
+    proverbs: () => buildAdaptiveTasks(countOverride || 8, [makeProverbTask], "proverbs", { maxReviews: 2 }),
+    readingQuest: () => buildAdaptiveTasks(countOverride || 8, [makeReadingTask], "readingQuest", { maxReviews: 2 }),
+    worldQuest: () => buildAdaptiveTasks(countOverride || DAILY_HOUSE_TASK_COUNT, [makeWorldFactTask], "worldQuest", { maxReviews: 1 })
   };
   return (builders[modeId] || builders.fast100)();
 }
@@ -2566,7 +2874,7 @@ function createTaskBySkill(skillId) {
     soundLetters: makeWordDetectiveTask,
     sentenceText: makeWordDetectiveTask,
     readingMeaning: makeReadingTask,
-    worldFacts: makeReadingTask
+    worldFacts: makeWorldFactTask
   };
   return (factories[skillId] || makeAddSubTask)();
 }
@@ -2661,6 +2969,7 @@ function checkAnswer(rawAnswer, sourceElement) {
   const attempt = {
     id: cryptoRandomId(),
     sessionId: session.id,
+    houseId: session.houseId || "",
     date: dateKey(new Date()),
     timestamp: new Date().toISOString(),
     subject: SKILLS[task.skillId].subject,
@@ -2722,6 +3031,7 @@ function finishSession() {
     state.dailySessions.push({
       id: session.id,
       mode: session.mode,
+      houseId: session.houseId || "",
       title: session.title,
       date: dateKey(new Date()),
       startedAt: new Date(session.startedAt).toISOString(),
@@ -3016,7 +3326,7 @@ function renderMap() {
           return `
             <button class="world-island ${isActive ? "world-island--active" : ""}" type="button" data-island-id="${island.id}" aria-pressed="${isActive}" style="--island-color:${subject.color}; --island-x:${island.position?.x || 50}%; --island-y:${island.position?.y || 50}%">
               <span class="world-island__marker">${island.icon}</span>
-              <span class="world-island__label">${island.title}</span>
+              <span class="world-island__label">${getIslandDisplayTitle(island)}</span>
               <small>${stats.status}</small>
             </button>
           `;
@@ -3038,23 +3348,23 @@ function renderIslandDrawer(island, nextStopId = "") {
         <div class="island-icon">${island.icon}</div>
         <div>
           <p class="eyebrow">${island.landmark}</p>
-          <h3>${island.title}</h3>
+          <h3>${getIslandDisplayTitle(island)}</h3>
           <p>${island.text}</p>
         </div>
       </div>
-      <div class="skill-meter" aria-label="${island.title}: ${islandStats.doneLabel}"><span style="width:${islandStats.accuracy}%"></span></div>
+      <div class="skill-meter" aria-label="${getIslandDisplayTitle(island)}: ${islandStats.doneLabel}"><span style="width:${islandStats.accuracy}%"></span></div>
       <div class="island-meta">
         <span>${islandStats.doneLabel}</span>
         <span>${islandStats.status}</span>
       </div>
       <div class="route-map">
-        ${island.routes.map((route) => renderRoutePath(route, nextStopId)).join("")}
+        ${island.routes.map((route) => renderRoutePath(route, nextStopId, island)).join("")}
       </div>
     </article>
   `;
 }
 
-function renderRoutePath(route, nextStopId = "") {
+function renderRoutePath(route, nextStopId = "", island = null) {
   const routeStats = getAcademyGroupStats(getRouteSkillIds(route));
   return `
     <section class="island-route">
@@ -3070,7 +3380,7 @@ function renderRoutePath(route, nextStopId = "") {
           const stateName = getAcademyStopState(stop);
           const isNext = nextStopId === stop.id;
           return `
-            <button class="path-node path-node--${stateName} ${isNext ? "path-node--next" : ""}" type="button" data-academy-action="${stop.action}" data-academy-variant="${stop.variant || ""}" ${isNext ? 'aria-current="step"' : ""}>
+            <button class="path-node path-node--${stateName} ${isNext ? "path-node--next" : ""}" type="button" data-academy-action="${stop.action}" data-academy-variant="${stop.variant || ""}" data-academy-house="${getHouseIdForStop(island, stop)}" ${isNext ? 'aria-current="step"' : ""}>
               <span class="path-node__dot">${getPathNodeIcon(stateName, index)}</span>
               <span>
                 <strong>${stop.label}</strong>
@@ -3098,6 +3408,11 @@ function getPathNodeIcon(stateName, index) {
   if (stateName === "review") return "!";
   if (stateName === "active") return String(index + 1);
   return "•";
+}
+
+function getHouseIdForStop(island, stop) {
+  if (!island || !stop || stop.action === "funBreak") return "";
+  return `${island.id}:${stop.id}`;
 }
 
 function getAcademyGroupStats(skillIds) {
@@ -4058,6 +4373,62 @@ function inferReadingQuestionType(question, index) {
   if (normalized.includes("что было") || normalized.includes("когда") || normalized.includes("после того")) return "sequence";
   if (normalized.includes("вывод") || normalized.includes("характер") || normalized.includes("какой можно") || normalized.includes("как измени")) return "inference";
   return READING_QUESTION_TYPES[index] || "detail";
+}
+
+const WORLD_FACT_TASKS = [
+  {
+    prompt: "Какие птицы не умеют летать, но отлично плавают?",
+    answer: "пингвины",
+    choices: ["пингвины", "воробьи", "ласточки", "синицы"],
+    explanation: "Пингвины - птицы, но вместо полета они отлично плавают."
+  },
+  {
+    prompt: "Почему на Луне следы могут сохраняться очень долго?",
+    answer: "там нет ветра и дождя",
+    choices: ["там нет ветра и дождя", "там всегда снег", "там много травы", "там идут реки"],
+    explanation: "На Луне нет ветра и дождя, поэтому следы не стираются так быстро."
+  },
+  {
+    prompt: "Когда чаще всего появляется радуга?",
+    answer: "когда солнечный свет проходит через капли воды",
+    choices: ["когда солнечный свет проходит через капли воды", "когда идет снег", "когда темно", "когда нет облаков и воды"],
+    explanation: "Радуга появляется, когда свет проходит через капли воды."
+  },
+  {
+    prompt: "Что деревья дают городу?",
+    answer: "тень и чистый воздух",
+    choices: ["тень и чистый воздух", "сахар и соль", "камни и песок", "книги и тетради"],
+    explanation: "Деревья дают тень, очищают воздух и делают город красивее."
+  },
+  {
+    prompt: "Как улитка защищает свое мягкое тело?",
+    answer: "носит домик с собой",
+    choices: ["носит домик с собой", "летает высоко", "рычит", "строит забор"],
+    explanation: "Улитка носит раковину-домик с собой."
+  },
+  {
+    prompt: "Что помогает осьминогу прятаться?",
+    answer: "он меняет цвет",
+    choices: ["он меняет цвет", "он поет", "он строит гнездо", "он светит фонарем"],
+    explanation: "Осьминог умеет менять цвет и сливаться с местом вокруг."
+  },
+  {
+    prompt: "Что работает у человека днем и ночью, даже во сне?",
+    answer: "сердце",
+    choices: ["сердце", "портфель", "карандаш", "звонок"],
+    explanation: "Сердце работает постоянно, даже когда человек спит."
+  },
+  {
+    prompt: "Чем бабочки могут чувствовать вкус?",
+    answer: "лапками",
+    choices: ["лапками", "крыльями", "усами", "хвостом"],
+    explanation: "У бабочек вкус помогают чувствовать лапки."
+  }
+];
+
+function makeWorldFactTask() {
+  const item = sample(WORLD_FACT_TASKS);
+  return choiceTask("worldFacts", item.prompt, item.answer, item.choices, item.explanation);
 }
 
 function makeReadingTask() {

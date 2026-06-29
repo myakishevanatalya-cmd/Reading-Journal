@@ -266,6 +266,243 @@ h3 {
   gap: 12px;
 }
 
+.daily-island-grid {
+  align-items: stretch;
+}
+
+.daily-route-panel {
+  display: grid;
+  gap: 12px;
+  border: 1px solid rgba(37, 48, 68, 0.08);
+  border-radius: 24px;
+  padding: 16px;
+  background:
+    linear-gradient(135deg, rgba(246, 180, 67, 0.24), rgba(125, 185, 223, 0.18)),
+    #fff;
+  box-shadow: var(--shadow);
+}
+
+.daily-route-panel h3,
+.daily-route-panel p {
+  margin-bottom: 0;
+}
+
+.daily-route-panel__date {
+  width: fit-content;
+  border-radius: 999px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.76);
+  color: var(--muted);
+  font-weight: 850;
+}
+
+.daily-island {
+  position: relative;
+  display: grid;
+  min-height: 330px;
+  align-content: space-between;
+  gap: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(37, 48, 68, 0.08);
+  border-radius: 30px;
+  padding: 16px;
+  background:
+    radial-gradient(circle at 20% 18%, color-mix(in srgb, var(--island-color) 24%, transparent), transparent 8rem),
+    linear-gradient(180deg, #eaf7ff 0%, #fff8dd 58%, #dff0e8 100%);
+  box-shadow: 0 14px 34px rgba(56, 64, 82, 0.12);
+  isolation: isolate;
+}
+
+.daily-island::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(37, 48, 68, var(--island-dim));
+  pointer-events: none;
+  z-index: 1;
+}
+
+.daily-island__sky,
+.daily-island__land {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.daily-island__sky::before {
+  content: "";
+  position: absolute;
+  left: 18px;
+  top: 22px;
+  width: 68px;
+  height: 28px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.62);
+  box-shadow: 48px 16px 0 -6px rgba(255, 255, 255, 0.48);
+}
+
+.daily-island__land::before {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 18px;
+  height: 46%;
+  border-radius: 55% 45% 38% 42%;
+  background:
+    radial-gradient(circle at 24% 34%, color-mix(in srgb, var(--island-color) 44%, #ffffff), transparent 4rem),
+    linear-gradient(135deg, color-mix(in srgb, var(--island-color) 58%, #f2e6a3), #8fcf9d);
+  box-shadow: inset 0 -18px 0 rgba(77, 139, 100, 0.12), 0 16px 28px rgba(56, 64, 82, 0.12);
+}
+
+.daily-island__mountain {
+  position: absolute;
+  left: 15%;
+  bottom: 28%;
+  width: 86px;
+  height: 78px;
+  background: #aebbd0;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  opacity: 0.55;
+}
+
+.daily-island--russian .daily-island__mountain {
+  display: none;
+}
+
+.daily-island--reading .daily-island__mountain {
+  left: auto;
+  right: 16%;
+  width: 72px;
+  height: 56px;
+  background: #c8a66a;
+}
+
+.daily-island__forest {
+  position: absolute;
+  right: 15%;
+  bottom: 27%;
+  width: 92px;
+  height: 48px;
+  background:
+    radial-gradient(circle at 15% 80%, #4f996b 0 16px, transparent 17px),
+    radial-gradient(circle at 42% 60%, #3f865e 0 20px, transparent 21px),
+    radial-gradient(circle at 70% 76%, #63aa75 0 18px, transparent 19px);
+}
+
+.daily-island--math .daily-island__forest {
+  opacity: 0.45;
+}
+
+.daily-island--world .daily-island__forest {
+  right: 10%;
+  width: 136px;
+  transform: scale(1.1);
+}
+
+.daily-island__shore {
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: rgba(244, 204, 119, 0.72);
+}
+
+.daily-island__header {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  gap: 10px;
+  align-items: center;
+  border-radius: 20px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(8px);
+}
+
+.daily-island__header > span {
+  display: grid;
+  width: 50px;
+  height: 50px;
+  place-items: center;
+  border-radius: 18px;
+  background: #fff;
+  font-size: 1.45rem;
+}
+
+.daily-island__header h3,
+.daily-island__header small {
+  display: block;
+  margin: 0;
+}
+
+.daily-island__header small {
+  color: var(--muted);
+  font-weight: 850;
+}
+
+.daily-house-list {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 8px;
+}
+
+.daily-house {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 9px;
+  align-items: center;
+  border-radius: 16px;
+  padding: 9px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: inset 0 0 0 1px rgba(37, 48, 68, 0.08);
+  text-align: left;
+}
+
+.daily-house__icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--island-color) 26%, #ffffff);
+  font-weight: 950;
+}
+
+.daily-house strong,
+.daily-house small {
+  display: block;
+}
+
+.daily-house small {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.daily-house--today {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--island-color) 46%, #ffffff), 0 8px 20px rgba(56, 64, 82, 0.12);
+}
+
+.daily-house--catchup {
+  background: #fff4df;
+  box-shadow: inset 0 0 0 2px rgba(246, 180, 67, 0.5);
+}
+
+.daily-house--lit {
+  background: #fff8df;
+  box-shadow: inset 0 0 0 2px rgba(246, 180, 67, 0.72), 0 0 24px rgba(246, 180, 67, 0.34);
+}
+
+.daily-house--quiet {
+  opacity: 0.78;
+}
+
 .subject-card {
   position: relative;
   display: grid;
@@ -903,6 +1140,8 @@ button:disabled,
 
 .trainer-island,
 .subject-card,
+.daily-island,
+.daily-house,
 .route-action,
 .path-node,
 .world-island,
@@ -1473,6 +1712,16 @@ button:disabled,
     grid-template-columns: repeat(3, 1fr);
   }
 
+  .daily-island-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .daily-route-panel {
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+
   .academy-map {
     grid-template-columns: 1fr;
   }
@@ -1518,12 +1767,14 @@ button:disabled,
 
 @media (hover: hover) {
   .trainer-island:hover,
-  .subject-card:hover {
+  .subject-card:hover,
+  .daily-island:hover {
     transform: translateY(-2px);
   }
 
   .route-action:hover,
-  .path-node:hover {
+  .path-node:hover,
+  .daily-house:hover {
     transform: translateY(-1px);
   }
 
