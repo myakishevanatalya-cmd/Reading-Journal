@@ -1884,7 +1884,7 @@ function renderDailyIslandMap() {
       const islandHouses = housesByIsland[island.id] || [];
       const light = getIslandLightPercent(island);
       return `
-        <article class="daily-island daily-island--${island.id}" style="--island-color:${subject.color}; --island-light:${light}%; --island-dim:${Math.max(0.05, 0.32 - light * 0.0028)}">
+        <article class="daily-island daily-island--${island.id}" style="--island-color:${subject.color}; --island-bg:url('${getIslandAsset(island.id)}'); --island-light:${light}%; --island-dim:${Math.max(0.05, 0.32 - light * 0.0028)}">
           <div class="daily-island__sky" aria-hidden="true"></div>
           <div class="daily-island__land" aria-hidden="true">
             <span class="daily-island__mountain"></span>
@@ -2093,6 +2093,15 @@ function getIslandTerrain(islandId) {
     reading: "Книжная бухта",
     world: "Лес наблюдений"
   }[islandId] || "Остров";
+}
+
+function getIslandAsset(islandId) {
+  return {
+    math: "assets/islands/math-island.png",
+    russian: "assets/islands/russian-island.png",
+    reading: "assets/islands/reading-island.png",
+    world: "assets/islands/world-island.png"
+  }[islandId] || "assets/islands/world-island.png";
 }
 
 function getHouseMapPoint(islandId, index, total) {
